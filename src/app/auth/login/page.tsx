@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  signInWithEmailAndPassword,
-  User as FirebaseUser,
-} from "firebase/auth";
-import { auth, db } from "../../../firebase/firebaseConfig";
+// import {
+//   signInWithEmailAndPassword,
+//   User as FirebaseUser,
+// } from "firebase/auth";
+//import { auth, db } from "../../../firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import useStore from "@/store";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import Image from "next/image";
+//import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>("");
@@ -23,52 +24,52 @@ export default function LoginPage() {
     initializeUser();
   }, [initializeUser]);
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
+  // const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   try {
+  //     // const userCredential = await signInWithEmailAndPassword(
+  //     //   auth,
+  //     //   email,
+  //     //   password
+  //     // );
+  //     const user = userCredential.user;
 
-      // Fetch additional user details from Firestore if available
-      const userDocRef = doc(db, "users", user.uid); // Create a reference to the user document
-      const userDoc = await getDoc(userDocRef);
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        setUser({
-          ...user,
-          profilePicture: userData?.profilePicture || null,
-        });
-      } else {
-        // Create user document if it doesn't exist
-        await setDoc(userDocRef, {
-          email: user.email,
-          displayName: user.displayName,
-          profilePicture: null,
-        });
-        setUser(user);
-      }
+  //     // Fetch additional user details from Firestore if available
+  //     const userDocRef = doc(db, "users", user.uid); // Create a reference to the user document
+  //     const userDoc = await getDoc(userDocRef);
+  //     if (userDoc.exists()) {
+  //       const userData = userDoc.data();
+  //       setUser({
+  //         ...user,
+  //         profilePicture: userData?.profilePicture || null,
+  //       });
+  //     } else {
+  //       // Create user document if it doesn't exist
+  //       await setDoc(userDocRef, {
+  //         email: user.email,
+  //         displayName: user.displayName,
+  //         profilePicture: null,
+  //       });
+  //       setUser(user);
+  //     }
 
-      setError(null);
-      router.push("/profile");
-    } catch (error) {
-      setError("🤔 hmmm did you forget your password?");
-      if (error instanceof Error) {
-        console.error("Error signing in:", error.message);
-      } else {
-        console.error("Error signing in:", error);
-      }
-    }
-  };
+  //     setError(null);
+  //     router.push("/profile");
+  //   } catch (error) {
+  //     setError("🤔 hmmm did you forget your password?");
+  //     if (error instanceof Error) {
+  //       console.error("Error signing in:", error.message);
+  //     } else {
+  //       console.error("Error signing in:", error);
+  //     }
+  //   }
+  // };
 
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <img
+          <Image
             className="mx-auto h-10 w-auto"
             src="/images/adammeditate.png"
             alt="a logo"
@@ -80,7 +81,7 @@ export default function LoginPage() {
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-            <form className="space-y-6" onSubmit={handleLogin}>
+            <form className="space-y-6" onSubmit={() => {}}>
               <div>
                 <label
                   htmlFor="email"
