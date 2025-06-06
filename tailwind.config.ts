@@ -13,6 +13,15 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors:{
+        primary: "#a60d12",
+        secondary: "#aeafb1",
+        tertiary: "#0000",
+        accent: "#f2f0f0",
+        accent_contrast: "#2e2e2f",
+        color_mix_primary: "color-mix(in srgb, #a60d12 70%, transparent)",
+        color_mix_secondary: "color-mix(in srgb, #aeafb1 90%, transparent)",
+      }
     },
   },
   plugins: [require("@tailwindcss/forms")],

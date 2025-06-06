@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Next + Firebase starter",
-  description: "Next 14 with Firebase SDK auth boilerplate starter",
+  title: "Gestión de ventas - SOAT",
+  description: "Software de gestión de ventas para SOAT",
 };
 
 export default function RootLayout({

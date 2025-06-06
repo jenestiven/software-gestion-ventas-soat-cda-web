@@ -3,11 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --color-primary: #a60d12;
+  --color-secondary: #aeafb1;
+  --color-tertiary: #0000;
+  --color-accent: #f2f0f0;
+  --color-accent-contrast: #2e2e2f;
 }
 
+/* hay que revisar se le va a poner dark mode como un plus*/
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -21,9 +24,9 @@ body {
   background: linear-gradient(
       to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
+      rgb(var(--color-secondary))
     )
-    rgb(var(--background-start-rgb));
+    rgb(var(--color-accent));
 }
 
 @layer utilities {
