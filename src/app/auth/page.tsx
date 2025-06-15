@@ -66,8 +66,8 @@ export default function LoginPage() {
   // };
 
   return (
-    <>
-      <header className="flex min-w-full border-b-2 py-2 px-4 text-accent_contrast items-center justify-start gap-4">
+    <main>
+      <header className="bg-white flex min-w-full border-b-2 py-2 px-4 text-accent_contrast items-center justify-start gap-4">
         <Image
           width={32}
           height={32}
@@ -90,8 +90,7 @@ export default function LoginPage() {
             Inicia sesión en tu cuenta
           </h2>
         </div>
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[460px] bg-white">
           <div className="px-6 py-12 shadow sm:rounded-lg sm:px-12">
             <form className="space-y-6" onSubmit={() => {}}>
               <div>
@@ -146,7 +145,6 @@ export default function LoginPage() {
                   </Link>
                 </div>
               </div>
-              |
               <div>
                 <button
                   type="submit"
@@ -160,6 +158,6 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-    </>
+    </main>
   );
 }

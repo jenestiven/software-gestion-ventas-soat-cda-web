@@ -5,7 +5,6 @@
 :root {
   --color-primary: #a60d12;
   --color-secondary: #aeafb1;
-  --color-tertiary: #0000;
   --color-accent: #f2f0f0;
   --color-accent-contrast: #2e2e2f;
 }
@@ -20,13 +19,11 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--color-secondary))
-    )
-    rgb(var(--color-accent));
+  color: rgb(var(--color-accent-contrast));
+  background: var(--color-accent);
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
 }
 
 @layer utilities {

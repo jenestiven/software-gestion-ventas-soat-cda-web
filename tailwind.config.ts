@@ -15,8 +15,8 @@ const config: Config = {
       },
       colors:{
         primary: "#a60d12",
+        primary_transparent: "#a60d12cc",
         secondary: "#aeafb1",
-        tertiary: "#0000",
         accent: "#f2f0f0",
         accent_contrast: "#2e2e2f",
         color_mix_primary: "color-mix(in srgb, #a60d12 70%, transparent)",
