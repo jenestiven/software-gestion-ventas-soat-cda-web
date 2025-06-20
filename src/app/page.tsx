@@ -1,5 +1,5 @@
-import PageCarousel from "./components/PageCarousel";
-import PageHeader from "./components/PageHeader";
+import PageCarousel from "@/app/components/page/PageCarousel";
+import PageHeader from "@/app/components/page/PageHeader";
 
 export default function WebHomePage() {
 

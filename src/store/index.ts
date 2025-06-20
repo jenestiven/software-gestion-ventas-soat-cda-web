@@ -1,20 +1,5 @@
 import { create } from "zustand";
-
-interface CustomUser {
-  uid?: string;
-  email: string | null;
-  name?: string;
-  thumbnail?: string | null;
-  role?: string;
-}
-
-interface UserState {
-  user: CustomUser | null;
-  isAuthenticated: boolean;
-  setUser: (user: CustomUser) => void;
-  clearUser: () => void;
-  initializeUser: () => void;
-}
+import { CustomUser, UserState } from "@/types/types";
 
 const useStore = create<UserState>((set, get) => ({
   user: null,
