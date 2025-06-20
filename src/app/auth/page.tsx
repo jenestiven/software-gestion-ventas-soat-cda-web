@@ -1,69 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
-// import {
-//   signInWithEmailAndPassword,
-//   User as FirebaseUser,
-// } from "firebase/auth";
-//import { auth, db } from "../../../firebase/firebaseConfig";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
-import useStore from "@/store";
 import Image from "next/image";
-//import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useLogin } from "@/hooks/useLogin";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  // const setUser = useStore((state) => state.setUser);
-  // const initializeUser = useStore((state) => state.initializeUser);
   const [error, setError] = useState<string | null>(null);
-  // const router = useRouter();
 
-  // useEffect(() => {
-  //   initializeUser();
-  // }, [initializeUser]);
+  const { login } = useLogin();
 
-  // const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   try {
-  //     // const userCredential = await signInWithEmailAndPassword(
-  //     //   auth,
-  //     //   email,
-  //     //   password
-  //     // );
-  //     const user = userCredential.user;
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
 
-  //     // Fetch additional user details from Firestore if available
-  //     const userDocRef = doc(db, "users", user.uid); // Create a reference to the user document
-  //     const userDoc = await getDoc(userDocRef);
-  //     if (userDoc.exists()) {
-  //       const userData = userDoc.data();
-  //       setUser({
-  //         ...user,
-  //         profilePicture: userData?.profilePicture || null,
-  //       });
-  //     } else {
-  //       // Create user document if it doesn't exist
-  //       await setDoc(userDocRef, {
-  //         email: user.email,
-  //         displayName: user.displayName,
-  //         profilePicture: null,
-  //       });
-  //       setUser(user);
-  //     }
-
-  //     setError(null);
-  //     router.push("/profile");
-  //   } catch (error) {
-  //     setError("🤔 hmmm did you forget your password?");
-  //     if (error instanceof Error) {
-  //       console.error("Error signing in:", error.message);
-  //     } else {
-  //       console.error("Error signing in:", error);
-  //     }
-  //   }
-  // };
+    try {
+      await login(email, password);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
 
   return (
     <main>
@@ -92,7 +50,7 @@ export default function LoginPage() {
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[460px] bg-white">
           <div className="px-6 py-12 shadow sm:rounded-lg sm:px-12">
-            <form className="space-y-6" onSubmit={() => {}}>
+            <form className="space-y-6" onSubmit={(e) => handleLogin(e)}>
               <div>
                 <label
                   htmlFor="email"

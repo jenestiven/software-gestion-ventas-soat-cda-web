@@ -3,6 +3,7 @@ import { User as FirebaseUser } from "firebase/auth";
 
 interface CustomUser extends FirebaseUser {
   profilePicture?: string | null;
+  role?: string; // 👈 Agregado aquí
 }
 
 interface UserState {
