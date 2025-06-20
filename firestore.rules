@@ -2,8 +2,13 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+
+    // Solo el usuario autenticado puede leer su propio documento
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
     }
+
+    // Puedes permitir escritura si tienes formularios tipo "editar perfil":
+    // allow write: if request.auth != null && request.auth.uid == userId;
   }
 }

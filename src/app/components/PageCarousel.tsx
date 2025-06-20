@@ -1,7 +1,7 @@
 import React from "react";
 import { Carousel } from "antd";
-import Image from "next/image";
-import headerSectionOne from "@/images/hero-image-1.jpg";
+//import Image from "next/image";
+//import headerSectionOne from "@/images/hero-image-1.jpg";
 
 type Props = {};
 
@@ -18,15 +18,8 @@ export default function PageCarousel({}: Props) {
   return (
     <section className="w-full mx-auto">
       <Carousel autoplay={{ dotDuration: true }} autoplaySpeed={10000}>
-        <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[96dvh] flex items-center justify-center">
-          <Image
-            src={headerSectionOne}
-            alt=""
-            fill
-            priority
-            className="object-cover"
-            sizes="100vw"
-          />
+        <div>
+          <h3 style={contentStyle}>2</h3>
         </div>
         <div>
           <h3 style={contentStyle}>2</h3>

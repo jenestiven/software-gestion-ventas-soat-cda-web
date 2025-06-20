@@ -48,7 +48,7 @@ export default function LoginPage() {
             Inicia sesión en tu cuenta
           </h2>
         </div>
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[460px] bg-white">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[460px] bg-white rounded-md">
           <div className="px-6 py-12 shadow sm:rounded-lg sm:px-12">
             <form className="space-y-6" onSubmit={(e) => handleLogin(e)}>
               <div>

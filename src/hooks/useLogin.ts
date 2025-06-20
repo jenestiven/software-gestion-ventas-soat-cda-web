@@ -37,7 +37,7 @@ export function useLogin() {
 
     // Redirección por rol
     if (role === "admin" || role === "superadmin") {
-      router.push("/admin/dashboard");
+      router.push("/app");
     } else if (role === "asesor") {
       router.push("/asesor/dashboard");
     } else {

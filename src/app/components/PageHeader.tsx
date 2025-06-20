@@ -14,7 +14,7 @@ export default function PageHeader({}: Props) {
   const router = useRouter();
 
   const handleLogin = () => {
-    router.push("/app");
+    router.push("/auth");
   };
 
   return (
@@ -44,7 +44,7 @@ export default function PageHeader({}: Props) {
         </nav>
         <button
           onClick={() => handleLogin()}
-          className="bg-accent text-accent_contrast font-bold px-6 py-2 rounded-lg shadow transition-colors duration-200 cursor-pointer"
+          className="bg-accent text-accent_contrast font-bold px-6 py-2 rounded-lg shadow transition-colors duration-200 cursor-pointer "
         >
           Ingresar
         </button>
