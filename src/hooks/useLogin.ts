@@ -16,7 +16,6 @@ export function useLogin() {
     );
 
     const firebaseUser = userCredential.user;
-
     const userDocRef = doc(db, "users", firebaseUser.uid);
     const userDoc = await getDoc(userDocRef);
 
@@ -26,22 +25,23 @@ export function useLogin() {
     }
 
     const userData = userDoc.data();
-
     const { role } = userData;
 
     setUser({
-      ...firebaseUser,
-      role,
-      profilePicture: firebaseUser.photoURL || null,
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
+      name: userData.name,
+      thumbnail: userData.thumbnail,
+      role: role,
     });
 
-    // Redirección por rol
-    if (role === "admin" || role === "superadmin") {
-      router.push("/app");
+    if (role === "admin") {
+      router.push("/admin");
     } else if (role === "asesor") {
-      router.push("/asesor/dashboard");
+      router.push("/asesor");
     } else {
-      throw new Error("Rol no autorizado.");
+      console.error("❌ Rol no autorizado para ingresar a la plataforma.");
+      throw new Error("No tienes permisos para acceder a la plataforma.");
     }
   };
 

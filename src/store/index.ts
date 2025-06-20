@@ -1,9 +1,11 @@
 import { create } from "zustand";
-import { User as FirebaseUser } from "firebase/auth";
 
-interface CustomUser extends FirebaseUser {
-  profilePicture?: string | null;
-  role?: string; // 👈 Agregado aquí
+interface CustomUser {
+  uid?: string;
+  email: string | null;
+  name?: string;
+  thumbnail?: string | null;
+  role?: string;
 }
 
 interface UserState {
@@ -24,8 +26,9 @@ const useStore = create<UserState>((set, get) => ({
         JSON.stringify({
           uid: user.uid,
           email: user.email,
-          displayName: user.displayName,
-          profilePicture: user.profilePicture,
+          name: user.name,
+          thumbnail: user.thumbnail,
+          role: user.role,
         })
       )}; path=/; max-age=${7 * 24 * 60 * 60}`;
     }
@@ -58,8 +61,6 @@ const useStore = create<UserState>((set, get) => ({
             refreshToken: "",
             tenantId: "",
             delete: async () => {},
-            getIdToken: async (forceRefresh) => "",
-            getIdTokenResult: async (forceRefresh) => ({} as any),
             reload: async () => {},
             toJSON: () => ({} as any),
           } as CustomUser;
