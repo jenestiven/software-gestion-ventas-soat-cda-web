@@ -3,7 +3,7 @@ import { DollarOutlined, FundViewOutlined } from "@ant-design/icons";
 
 export const asesorNavRoutes: AppRoute[] = [
   {
-    path: "/sells",
+    path: "sells",
     handle: {
       title: "Modulo de ventas",
       navIcon: DollarOutlined,
@@ -14,7 +14,7 @@ export const asesorNavRoutes: AppRoute[] = [
 
 export const adminNavRoutes: AppRoute[] = [
   {
-    path: "/dashboard",
+    path: "dashboard",
     handle: {
       title: "Tablero de control",
       navIcon: FundViewOutlined,
