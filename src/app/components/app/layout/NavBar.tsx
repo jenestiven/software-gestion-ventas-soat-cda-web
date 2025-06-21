@@ -1,59 +1,63 @@
-import { Tooltip } from 'antd';
-import Link from 'next/link';
-import React from 'react'
+"use client";
+import React from "react";
+import { Tooltip, Typography } from "antd";
+import Link from "next/link";
+import useStore from "@/store";
+import { adminNavRoutes, asesorNavRoutes } from "@/utils/nav-routes";
+import Image from "next/image";
+import LOGO from "@/images/logo.png";
+import "./nav.css";
 
-type AppRoute = {
-  path: string;
-  handle?: {
-    title?: string;
-    navIcon?: React.ComponentType<{ className?: string }>;
-    isChildren?: boolean;
-  };
-};
+type Props = {};
 
-type Props = {}
-
-const keyPathName = 'selectedPath';
+//const keyPathName = "selectedPath";
 
 export default function NavBar({}: Props) {
-    const appRoutes: AppRoute[] = [
-        {
-            path: 'home',
-            handle: {
-                title: 'Home',  
-                navIcon: () => <span className="icon-home" />,
-                isChildren: false
-            },
-        }
-    ];
+  // Use a selector for zustand store
+  const { Text } = Typography;
+  const user = useStore((state) => state.user);
+  const appRoutes =
+    user && user.role === "admin" ? adminNavRoutes : asesorNavRoutes;
 
   return (
     <nav className="layout-nav">
+      <Link href="/" className="nav-logo">
+        <Image
+          width={30}
+          src={LOGO}
+          alt="CDA Moto GP Logo"
+          className="nav-logo-image"
+        />
+        <Text strong>CDA Moto GP</Text>
+      </Link>
       <ul className="nav-list">
         {appRoutes?.map((route, index) => {
           const { path, handle } = route;
 
-          if (!handle || handle?.isChildren) {
+          if (!handle) {
             return null;
-                  href={`/${path}`}
-                  className={`nav-list-item${isSelected}`}
-                  onClick={() => {
-                    localStorage.setItem(keyPathName, path);
-                  }}
-            : "";
+          }
+
+          const { title, navIcon: NavIcon } = handle;
+          // // Determine if this route is selected
+          // const isSelected =
+          //   typeof window !== "undefined" &&
+          //   localStorage.getItem(keyPathName) === path
+          //     ? " selected"
+          //     : "";
 
           return (
             <li key={index}>
               <Tooltip title={title ?? ""} placement="right">
                 <Link
-                  to={`/${path}`}
-                  className={`nav-list-item${isSelected}`}
-                  onClick={() => {
-                    localStorage.setItem(keyPathName, path);
-                  }}
+                  href={`/${path}`}
+                  className={`nav-list-item selected`}
+                  // onClick={() => {
+                  //   localStorage.setItem(keyPathName, path);
+                  // }}
                 >
                   {NavIcon && <NavIcon className="item-icon" />}
-                  <span className="item-title">{title}</span>
+                  <Text className="item-title">{title}</Text>
                 </Link>
               </Tooltip>
             </li>

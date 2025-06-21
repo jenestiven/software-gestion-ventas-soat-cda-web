@@ -1,24 +1,48 @@
 import { AppRoute } from "@/types/types";
-import { DollarOutlined, FundViewOutlined } from "@ant-design/icons";
+import {
+  DollarOutlined,
+  FundViewOutlined,
+  ReconciliationOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 export const asesorNavRoutes: AppRoute[] = [
   {
-    path: "sells",
+    path: "asesor",
     handle: {
       title: "Modulo de ventas",
       navIcon: DollarOutlined,
-      isChildren: false,
     },
   },
 ];
 
 export const adminNavRoutes: AppRoute[] = [
   {
-    path: "dashboard",
+    path: "admin",
     handle: {
       title: "Tablero de control",
       navIcon: FundViewOutlined,
-      isChildren: false,
+    },
+  },
+  {
+    path: "admin/managment",
+    handle: {
+      title: "Gestión de ventas",
+      navIcon: DollarOutlined,
+    },
+  },
+  {
+    path: "admin/users",
+    handle: {
+      title: "Usuarios",
+      navIcon: UserOutlined,
+    },
+  },
+  {
+    path: "admin/reports",
+    handle: {
+      title: "Reportes",
+      navIcon: ReconciliationOutlined,
     },
   },
 ];

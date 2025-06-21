@@ -7,6 +7,8 @@
   --color-secondary: #aeafb1;
   --color-accent: #f2f0f0;
   --color-accent-contrast: #2e2e2f;
+  --icon-nav-size: 24px;
+  --nav-title-display: inline-block;
 }
 
 /* hay que revisar se le va a poner dark mode como un plus*/
@@ -29,5 +31,11 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+.ant-typography {
+  &.ant-typography {
+    font-family: "Inter", sans-serif;
   }
 }
