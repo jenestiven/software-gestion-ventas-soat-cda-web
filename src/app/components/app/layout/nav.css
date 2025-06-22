@@ -31,7 +31,6 @@
             gap: 12px;
             line-height: normal;
             text-box: cap alphabetic;
-            letter-spacing: 0.5px;
             font-weight: 500;
             word-break: break-word;
             user-select: none;
@@ -45,7 +44,7 @@
 
             &:where(.selected) {
                 color: var(--active-color);
-                background-color: color-mix(in srgb, transparent, var(--color-secondary) 30%);
+                background-color: #fff;
             }
 
             & .item-icon {

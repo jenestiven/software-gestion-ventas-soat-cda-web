@@ -1,0 +1,37 @@
+[
+    {
+        "id": "p1",
+        "name": "Datafono/Tarjeta de credito",
+        "description": "Pago realizado mediante datáfono o tarjeta de crédito.",
+        "createdAt": "2025-06-01T09:00:00Z",
+        "isActive": true
+    },
+    {
+        "id": "p2",
+        "name": "Sistecredito",
+        "description": "Financiación del pago con Sistecrédito.",
+        "createdAt": "2025-06-01T09:05:00Z",
+        "isActive": true
+    },
+    {
+        "id": "p3",
+        "name": "Efectivo",
+        "description": "Pago realizado en efectivo directamente en el punto de venta.",
+        "createdAt": "2025-06-01T09:10:00Z",
+        "isActive": true
+    },
+    {
+        "id": "p4",
+        "name": "Addi",
+        "description": "Financiación del pago con Addi.",
+        "createdAt": "2025-06-01T09:15:00Z",
+        "isActive": true
+    },
+    {
+        "id": "p5",
+        "name": "Brilla",
+        "description": "Pago cargado a través del programa Brilla.",
+        "createdAt": "2025-06-01T09:20:00Z",
+        "isActive": true
+    }
+]

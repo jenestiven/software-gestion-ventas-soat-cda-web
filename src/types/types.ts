@@ -1,4 +1,3 @@
-//user types
 export interface CustomUser {
   uid?: string;
   email: string | null;
@@ -24,3 +23,23 @@ export interface AppRoute {
   };
   children?: AppRoute[];
 }
+
+export interface PaymentMethod {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  isActive: boolean;
+}
+
+export interface Sell {
+  id: string;
+  date: string;
+  client: string;
+  vehicle_license_plate: string;
+  vehicle_type: string;
+  soat_value: number;
+  payment_method: string;
+  doc_state: string;
+}
+

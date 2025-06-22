@@ -19,4 +19,6 @@
 
 .admin-content{
     grid-area: content;
+    height: 100%;
+    overflow: hidden;
 }

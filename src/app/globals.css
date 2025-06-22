@@ -9,6 +9,12 @@
   --color-accent-contrast: #2e2e2f;
   --icon-nav-size: 24px;
   --nav-title-display: inline-block;
+  --first-stat-color: #666cff;
+  --second-stat-color: #72e128;
+  --third-stat-color: #26c6f9;
+  --fourt-stat-color: #fdb528;
+  --positive-growth-color: #72e128;
+  --negative-growth-color: #ff4d4f;
 }
 
 /* hay que revisar se le va a poner dark mode como un plus*/
@@ -26,6 +32,7 @@ body {
   height: 100dvh;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 @layer utilities {
@@ -38,4 +45,18 @@ body {
   &.ant-typography {
     font-family: "Inter", sans-serif;
   }
+}
+
+.ant-btn-primary {
+  font-family: "Inter", sans-serif;
+  background-color: var(--color-primary);
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--color-primary) 90%, transparent 20%) !important;
+  }
+}
+
+.ant-radio-checked .ant-radio-inner {
+  background-color: color-mix(in srgb, var(--color-primary) 90%, transparent 40%) !important;
+  border-color: var(--color-primary) !important;
 }
