@@ -23,7 +23,7 @@ export default function NavBar({}: Props) {
     <nav className="layout-nav">
       <Link href="/" className="nav-logo">
         <Image
-          width={30}
+          width={40}
           src={LOGO}
           alt="CDA Moto GP Logo"
           className="nav-logo-image"

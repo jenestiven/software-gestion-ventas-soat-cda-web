@@ -1,19 +1,15 @@
+"use client";
+
 import { Table, Tag } from "antd";
 import React from "react";
 import "@/app/components/app/asesor/table/asesor-table.css";
 import { Sell } from "@/types/types";
-import { headers } from "next/headers";
 
-export default async function AsesorSellsTableServer() {
-  const host = headers().get("host");
-  const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
-  const baseUrl = `${protocol}://${host}`;
+interface Props {
+  data: Sell[];
+}
 
-  const res = await fetch(`${baseUrl}/api/local/asesor-sells`, {
-    cache: "no-store",
-  });
-  const data: Sell[] = await res.json();
-
+export default function AsesorSellsTable({ data }: Props) {
   return (
     <Table dataSource={data} rowKey="id">
       <Table.Column title="Fecha" dataIndex="date" key="date" />
