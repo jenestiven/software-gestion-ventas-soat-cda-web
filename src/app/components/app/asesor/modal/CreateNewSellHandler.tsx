@@ -4,12 +4,26 @@ import React, { useState } from "react";
 import { Button, Modal, Radio, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import PAYMENTS_METHODS from "@/app/api/local/payments-types/payments-types.json";
-//aqui no necesito hacer un fetch porque es un archivo local, apesar que estar en db, voy a usar el json directamente
+import { PaymentMethod } from "@/types/types";
+import SellFormLauncher from "./SellFormLauncher";
 
 const { Title } = Typography;
 
 export default function CreateNewSellHandler() {
   const [openModal, setOpenModal] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState<PaymentMethod | null>(null);
+  const [openFormModal, setOpenFormModal] = useState(false);
+
+  const onCloseModal = () => {
+    setOpenFormModal(false);
+    setSelectedPaymentMethod(null);
+  };
+
+  const handleChoosePaymentMethod = () => {
+    setOpenModal(false);
+    setOpenFormModal(true);
+  };
 
   return (
     <>
@@ -28,13 +42,20 @@ export default function CreateNewSellHandler() {
       >
         <div className="flex flex-col gap-6 items-center justify-center text-center">
           <Title level={4}>Selecciona el tipo de pago</Title>
-          <Radio.Group>
+          <Radio.Group
+            onChange={(e) => {
+              const id = e.target.value;
+              const selectedMethod = PAYMENTS_METHODS.find(
+                (method: PaymentMethod) => method.id === id
+              );
+              setSelectedPaymentMethod(selectedMethod || null);
+            }}
+            value={selectedPaymentMethod?.id}
+          >
             <ul className="grid grid-cols-2 gap-2 text-left">
-              {PAYMENTS_METHODS.map((method) => (
+              {PAYMENTS_METHODS.map((method: PaymentMethod) => (
                 <li className="border rounded-md p-3" key={method.id}>
-                  <Radio className="" value={method.id}>
-                    {method.name}
-                  </Radio>
+                  <Radio value={method.id}>{method.name}</Radio>
                 </li>
               ))}
             </ul>
@@ -42,12 +63,22 @@ export default function CreateNewSellHandler() {
           <Button
             className="w-24"
             type="primary"
-            onClick={() => setOpenModal(false)}
+            disabled={!selectedPaymentMethod}
+            onClick={() => {
+              if (selectedPaymentMethod) {
+                handleChoosePaymentMethod();
+              }
+            }}
           >
             Confirmar
           </Button>
         </div>
       </Modal>
+      <SellFormLauncher
+        method={selectedPaymentMethod}
+        openFormModal={openFormModal}
+        onCloseModal={onCloseModal}
+      />
     </>
   );
 }

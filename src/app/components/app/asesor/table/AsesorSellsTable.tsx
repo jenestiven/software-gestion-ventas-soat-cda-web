@@ -1,9 +1,10 @@
 "use client";
 
-import { Table, Tag } from "antd";
+import { Button, Table, Tag } from "antd";
 import React from "react";
 import "@/app/components/app/asesor/table/asesor-table.css";
 import { Sell } from "@/types/types";
+import { CloudUploadOutlined, EditOutlined, FilePdfOutlined } from "@ant-design/icons";
 
 interface Props {
   data: Sell[];
@@ -43,7 +44,17 @@ export default function AsesorSellsTable({ data }: Props) {
           <Tag color={item === "Pendiente" ? "volcano" : "green"}>{item}</Tag>
         )}
       />
-      <Table.Column title="Acciones" dataIndex="actions" key="actions" />
+      <Table.Column
+        title="Acciones"
+        key="actions"
+        render={() => (
+          <span className="flex gap-2">
+            <Button icon={<EditOutlined />} />
+            <Button icon={<FilePdfOutlined />} />
+            <Button icon={<CloudUploadOutlined />} />
+          </span>
+        )}
+      />
     </Table>
   );
 }
