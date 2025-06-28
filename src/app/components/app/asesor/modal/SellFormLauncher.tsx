@@ -43,7 +43,7 @@ export default function SellFormLauncher({
 
   return (
     <Modal
-      width={1200}
+      width={800}
       open={openFormModal}
       onCancel={() => onCloseModal(false)}
       footer={null}

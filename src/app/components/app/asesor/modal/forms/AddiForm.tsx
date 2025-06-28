@@ -1,5 +1,6 @@
 "use client";
 
+import { DeliveredProcedureOutlined } from "@ant-design/icons";
 import {
   Form,
   Input,
@@ -66,98 +67,74 @@ export default function AddiForm() {
         creditDate: dayjs(),
         status: "pending",
         soatPaid: "no",
-        vehicleType: "moto",
+        vehicleType: "motorbike",
       }}
     >
       <Row gutter={16}>
         <Col xs={24} sm={12}>
-          <Form.Item name="creditDate" label="Credit Date">
+          <Form.Item name="creditDate" label="Fecha de Crédito">
             <DatePicker style={{ width: "100%" }} />
           </Form.Item>
 
-          <Form.Item name="vehicleType" label="Vehicle Type">
+          <Form.Item name="vehicleType" label="Tipo de Vehículo">
             <Select
               options={[
-                { label: "Motorbike", value: "moto" },
-                { label: "Car", value: "carro" },
-                { label: "SUV", value: "camioneta" },
+                { label: "Moto", value: "motorbike" },
+                { label: "Carro", value: "car" },
+                { label: "Camioneta", value: "suv" },
                 { label: "Taxi", value: "taxi" },
               ]}
             />
           </Form.Item>
 
-          <Form.Item name="customerName" label="Customer Name">
-            <Input />
+          <Form.Item name="customerName" label="Nombre del Cliente">
+            <Input className="h-8 rounded-md" />
           </Form.Item>
 
-          <Form.Item name="idNumber" label="ID Number">
-            <Input />
+          <Form.Item name="idNumber" label="No. identificación">
+            <Input className="h-8 rounded-md" />
           </Form.Item>
 
-          <Form.Item name="licensePlate" label="License Plate">
-            <Input />
+          <Form.Item name="licensePlate" label="Placa">
+            <Input className="h-8 rounded-md" />
           </Form.Item>
 
-          <Form.Item name="financedAmount" label="Financed Amount">
+          <Form.Item name="financedAmount" label="Valor Financiado">
             <InputNumber
               style={{ width: "100%" }}
               onChange={calculateDerivedValues}
             />
           </Form.Item>
-        </Col>
 
-        <Col xs={24} sm={12}>
-          <Form.Item name="fixedCommission" label="Fixed Commission">
-            <InputNumber
-              style={{ width: "100%" }}
-              value={fixedCommission}
-              disabled
-            />
-          </Form.Item>
-
-          <Form.Item name="totalToPay" label="Total to Pay">
-            <InputNumber style={{ width: "100%" }} disabled />
-          </Form.Item>
-
-          <Form.Item name="grossProfit" label="Gross Profit">
-            <InputNumber style={{ width: "100%" }} disabled />
-          </Form.Item>
-
-          <Form.Item name="netProfit" label="Net Profit">
-            <InputNumber style={{ width: "100%" }} disabled />
-          </Form.Item>
-
-          <Form.Item name="status" label="SOAT Status">
+          <Form.Item name="status" label="Estado">
             <Select
               options={[
-                { label: "Pending", value: "pending" },
-                { label: "Delivered", value: "delivered" },
+                { label: "Pendiente", value: "pending" },
+                { label: "Entregado", value: "delivered" },
               ]}
             />
           </Form.Item>
 
-          <Form.Item name="soatPaid" label="SOAT Paid">
+          <Form.Item name="soatPaid" label="¿Ha pagado el SOAT?">
             <Select
               options={[
-                { label: "Yes", value: "yes" },
+                { label: "Si", value: "yes" },
                 { label: "No", value: "no" },
               ]}
             />
           </Form.Item>
+        </Col>
 
-          <Form.Item name="invoiceNumber" label="Invoice Number">
-            <Input />
+        <Col xs={24} sm={12}>
+          <Form.Item name="invoiceNumber" label="Número de Factura">
+            <Input className="h-8 rounded-md" />
           </Form.Item>
-
-          <Form.Item name="remarks" label="Remarks">
+          <Form.Item name="remarks" label="Observaciones">
             <Input.TextArea rows={4} />
           </Form.Item>
-        </Col>
-      </Row>
-
-      <Divider orientation="left">Summary</Divider>
-      <Row gutter={16}>
-        <Col xs={24} sm={12}>
+          <Divider orientation="right">Resumen</Divider>
+          <Text strong>Comision fija:</Text> $15000
+          <br />
           <Text strong>SOAT Value:</Text> ${soatValue.toLocaleString()}
           <br />
           <Text strong>Addi Commission:</Text> $
@@ -165,19 +142,19 @@ export default function AddiForm() {
           <br />
           <Text strong>Partners Commission:</Text> $
           {partnersCommission.toLocaleString()}
-        </Col>
-        <Col xs={24} sm={12}>
-          <Form.Item name="amountToDeposit" label="Amount to Deposit">
-            <InputNumber style={{ width: "100%" }} disabled />
+          <Divider />
+          <Text strong>Total a pagar:</Text> $340000
+          <Form.Item>
+            <Button
+              icon={<DeliveredProcedureOutlined />}
+              type="primary"
+              htmlType="submit"
+            >
+              Guardar venta
+            </Button>
           </Form.Item>
         </Col>
       </Row>
-
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Save
-        </Button>
-      </Form.Item>
     </Form>
   );
 }
