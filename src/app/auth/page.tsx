@@ -4,24 +4,31 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useLogin } from "@/hooks/useLogin";
+import LoadingScreen from "./loading/page";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
-  const { login } = useLogin();
+  const { login, setLoading, loading } = useLogin();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
 
     try {
       await login(email, password);
     } catch (err: any) {
       setError(err.message);
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <main>

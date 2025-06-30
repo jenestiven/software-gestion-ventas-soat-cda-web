@@ -3,8 +3,10 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/firebase/firebaseConfig";
 import useStore from "@/store";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function useLogin() {
+  const [loading, setLoading] = useState(false);
   const { setUser } = useStore();
   const router = useRouter();
 
@@ -45,5 +47,5 @@ export function useLogin() {
     }
   };
 
-  return { login };
+  return { login, setLoading, loading };
 }
