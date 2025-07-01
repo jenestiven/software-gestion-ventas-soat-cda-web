@@ -8,6 +8,7 @@ type Props = {};
 
 export default function Header({}: Props) {
   const user = useStore((state) => state.user);
+  
   const { Title, Text } = Typography;
 
   return (

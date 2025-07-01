@@ -1,6 +1,6 @@
 "use client";
 
-import { DeliveredProcedureOutlined } from "@ant-design/icons";
+import { DeliveredProcedureOutlined, UploadOutlined } from "@ant-design/icons";
 import {
   Form,
   Input,
@@ -12,11 +12,12 @@ import {
   Select,
   Typography,
   Divider,
+  Upload,
 } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 export default function AddiForm() {
   const [form] = Form.useForm();
@@ -59,102 +60,134 @@ export default function AddiForm() {
   };
 
   return (
-    <Form
-      form={form}
-      onFinish={handleSubmit}
-      layout="vertical"
-      initialValues={{
-        creditDate: dayjs(),
-        status: "pending",
-        soatPaid: "no",
-        vehicleType: "motorbike",
-      }}
-    >
-      <Row gutter={16}>
-        <Col xs={24} sm={12}>
-          <Form.Item name="creditDate" label="Fecha de Crédito">
-            <DatePicker style={{ width: "100%" }} />
-          </Form.Item>
+    <div>
+      <Title level={5} className="mb-4 text-center">
+        Registrar venta con Addi
+      </Title>
 
-          <Form.Item name="vehicleType" label="Tipo de Vehículo">
-            <Select
-              options={[
-                { label: "Moto", value: "motorbike" },
-                { label: "Carro", value: "car" },
-                { label: "Camioneta", value: "suv" },
-                { label: "Taxi", value: "taxi" },
-              ]}
-            />
-          </Form.Item>
+      <Form
+        form={form}
+        onFinish={handleSubmit}
+        layout="vertical"
+        initialValues={{
+          creditDate: dayjs(),
+          SOAT_state: "pending",
+          soat_payed: false,
+        }}
+      >
+        <Row gutter={16}>
+          <Col xs={24} sm={12}>
+            <Form.Item name="date" label="Fecha">
+              <DatePicker style={{ width: "100%" }} />
+            </Form.Item>
 
-          <Form.Item name="customerName" label="Nombre del Cliente">
-            <Input className="h-8 rounded-md" />
-          </Form.Item>
+            <Form.Item name="vehicle_type" label="Tipo de vehículo">
+              <Select
+                options={[
+                  { label: "Moto", value: "motorbike" },
+                  { label: "Carro", value: "car" },
+                  { label: "Camioneta", value: "suv" },
+                  { label: "Taxi", value: "taxi" },
+                ]}
+              />
+            </Form.Item>
 
-          <Form.Item name="idNumber" label="No. identificación">
-            <Input className="h-8 rounded-md" />
-          </Form.Item>
+            <Form.Item name="client_name" label="Nombre del cliente">
+              <Input className="h-8 rounded-md" />
+            </Form.Item>
 
-          <Form.Item name="licensePlate" label="Placa">
-            <Input className="h-8 rounded-md" />
-          </Form.Item>
+            <Form.Item name="client_id" label="No. Identificación">
+              <Input className="h-8 rounded-md" />
+            </Form.Item>
 
-          <Form.Item name="financedAmount" label="Valor Financiado">
-            <InputNumber
-              style={{ width: "100%" }}
-              onChange={calculateDerivedValues}
-            />
-          </Form.Item>
+            <Form.Item name="plate" label="Placa">
+              <Input className="h-8 rounded-md" />
+            </Form.Item>
 
-          <Form.Item name="status" label="Estado">
-            <Select
-              options={[
-                { label: "Pendiente", value: "pending" },
-                { label: "Entregado", value: "delivered" },
-              ]}
-            />
-          </Form.Item>
+            <Form.Item name="financed_amount" label="Valor financiado">
+              <InputNumber
+                style={{ width: "100%" }}
+                onChange={calculateDerivedValues}
+              />
+            </Form.Item>
 
-          <Form.Item name="soatPaid" label="¿Ha pagado el SOAT?">
-            <Select
-              options={[
-                { label: "Si", value: "yes" },
-                { label: "No", value: "no" },
-              ]}
-            />
-          </Form.Item>
-        </Col>
+            <Form.Item name="SOAT_state" label="Estado">
+              <Select
+                options={[
+                  { label: "SOAT Pendiente", value: "pending" },
+                  { label: "SOAT Entregado", value: "delivered" },
+                ]}
+              />
+            </Form.Item>
 
-        <Col xs={24} sm={12}>
-          <Form.Item name="invoiceNumber" label="Número de Factura">
-            <Input className="h-8 rounded-md" />
-          </Form.Item>
-          <Form.Item name="remarks" label="Observaciones">
-            <Input.TextArea rows={4} />
-          </Form.Item>
-          <Divider orientation="right">Resumen</Divider>
-          <Text strong>Comision fija:</Text> $15000
-          <br />
-          <Text strong>SOAT Value:</Text> ${soatValue.toLocaleString()}
-          <br />
-          <Text strong>Addi Commission:</Text> $
-          {addiCommission.toLocaleString()}
-          <br />
-          <Text strong>Partners Commission:</Text> $
-          {partnersCommission.toLocaleString()}
-          <Divider />
-          <Text strong>Total a pagar:</Text> $340000
-          <Form.Item>
-            <Button
-              icon={<DeliveredProcedureOutlined />}
-              type="primary"
-              htmlType="submit"
-            >
-              Guardar venta
-            </Button>
-          </Form.Item>
-        </Col>
-      </Row>
-    </Form>
+            <Form.Item name="soat_payed" label="¿Ha pagado el SOAT?">
+              <Select
+                options={[
+                  { label: "Pagado", value: true },
+                  { label: "Pendiente", value: false },
+                ]}
+              />
+            </Form.Item>
+          </Col>
+
+          <Col xs={24} sm={12}>
+            <Form.Item name="invoice_number" label="Número de Factura">
+              <Input className="h-8 rounded-md" />
+            </Form.Item>
+
+            <Form.Item name="remarks" label="Observaciones">
+              <Input.TextArea rows={7} />
+            </Form.Item>
+
+            <Upload>
+              <Button icon={<UploadOutlined />}>Subir factura</Button>
+            </Upload>
+
+            <Divider orientation="left">Resumen de venta</Divider>
+
+            <section className="px-4 flex flex-col gap-1">
+              <div className="flex justify-between">
+                <Text>Comision fija:</Text> $15000
+              </div>
+              <div className="flex justify-between">
+                <Text>Comisión Addi:</Text> ${addiCommission.toLocaleString()}
+              </div>
+              <div className="flex justify-between">
+                <Text>Utilidad:</Text> ${partnersCommission.toLocaleString()}
+              </div>
+              <div className="flex justify-between">
+                <Text>Utilidad neta:</Text> $
+                {partnersCommission.toLocaleString()}
+              </div>
+              <div className="flex justify-between">
+                <Text>Valor SOAT:</Text> ${soatValue.toLocaleString()}
+              </div>
+              <div className="flex justify-between">
+                <Text>Valor a consignar:</Text> $
+                {addiCommission.toLocaleString()}
+              </div>
+              <Divider />
+              <div className="flex justify-between">
+                <Text strong>Total a pagar:</Text> $340000
+              </div>
+              <Divider />
+            </section>
+          </Col>
+          <Col xs={24} md={24}>
+            <Form.Item>
+              <div className="flex justify-end w-full">
+                <Button
+                  icon={<DeliveredProcedureOutlined />}
+                  type="primary"
+                  htmlType="submit"
+                >
+                  Registrar venta
+                </Button>
+              </div>
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
+    </div>
   );
 }
