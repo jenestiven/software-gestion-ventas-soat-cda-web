@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "month": "Enero",
+    "sells-quantity": 100,
+    "sells-amount": 5000
+  },
+  {
+    "id": 2,
+    "month": "Febrero",
+    "sells-quantity": 120,
+    "sells-amount": 6000
+  },
+  {
+    "id": 3,
+    "month": "Marzo",
+    "sells-quantity": 150,
+    "sells-amount": 7500
+  },
+  {
+    "id": 4,
+    "month": "Abril",
+    "sells-quantity": 130,
+    "sells-amount": 6500
+  },
+  {
+    "id": 5,
+    "month": "Mayo",
+    "sells-quantity": 180,
+    "sells-amount": 9000
+  },
+  {
+    "id": 6,
+    "month": "Junio",
+    "sells-quantity": 200,
+    "sells-amount": 10000
+  },
+  {
+    "id": 7,
+    "month": "Julio",
+    "sells-quantity": 220,
+    "sells-amount": 11000
+  }
+]

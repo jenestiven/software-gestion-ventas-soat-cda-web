@@ -1,0 +1,11 @@
+.admin-home-css {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, auto);
+    grid-template-areas:
+        "sell-card sell-card sell-card"
+        "monthly-sales-compare monthly-sales-compare monthly-sales-compare"
+        "better-seller sell-by-place sell-by-place"
+        "sells-by-pay-method sells-by-pay-method sells-by-pay-method";
+    gap: 20px;
+}
