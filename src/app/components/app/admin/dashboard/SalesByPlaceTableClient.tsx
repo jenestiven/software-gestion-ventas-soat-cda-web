@@ -32,9 +32,7 @@ export default function SalesByPlaceTableClient({ dataSource }: Props) {
       dataIndex: "growth",
       key: "growth",
       render: (growth: number) => (
-        <span style={{ color: growth > 0 ? "green" : "red" }}>
-          {growth}%
-        </span>
+        <span style={{ color: growth > 0 ? "green" : "red" }}>{growth}%</span>
       ),
     },
   ];
@@ -44,7 +42,11 @@ export default function SalesByPlaceTableClient({ dataSource }: Props) {
       <Title level={5} style={{ margin: 0 }}>
         Ventas por sede
       </Title>
-      <Table dataSource={dataSource} columns={columns} pagination={false} />
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        pagination={{ pageSize: 5 }}
+      />
     </div>
   );
 }

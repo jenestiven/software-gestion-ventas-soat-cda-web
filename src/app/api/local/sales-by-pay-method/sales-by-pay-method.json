@@ -22,14 +22,14 @@
     },
     {
         "id": "pm4",
-        "pay_method": "Cash",
+        "pay_method": "Efectivo",
         "sales_quantity": 150,
         "sales_amount": 15000000,
         "growth": 20.0
     },
     {
         "id": "pm5",
-        "pay_method": "Datafono/Credit-card",
+        "pay_method": "Datafono/Tarjeta de crédito",
         "sales_quantity": 100,
         "sales_amount": 10000000,
         "growth": 12.0
