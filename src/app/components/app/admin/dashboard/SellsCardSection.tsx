@@ -3,6 +3,7 @@
 import React from "react";
 import { DollarOutlined, PieChartOutlined } from "@ant-design/icons";
 import { DatePicker, Divider, Typography } from "antd";
+import "@/app/admin/page.css"; 
 import "@/app/asesor/page.css";
 
 type Props = {};
@@ -11,7 +12,7 @@ const { Title, Text } = Typography;
 
 export default function SellsCardSection({}: Props) {
   return (
-    <section className="grid-area-sells-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-4">
+    <section className="sell-card grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pt-4">
       <article className="asesor-stat-card">
         <PieChartOutlined className="icon utility" />
         <span>

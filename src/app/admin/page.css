@@ -1,11 +1,34 @@
-.admin-home-css {
+.admin-home-page {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, auto);
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
     grid-template-areas:
-        "sell-card sell-card sell-card"
+        "sellcard sellcard sellcard"
         "monthly-sales-compare monthly-sales-compare monthly-sales-compare"
-        "better-seller sell-by-place sell-by-place"
-        "sells-by-pay-method sells-by-pay-method sells-by-pay-method";
+        "betterseller byplace bypaymethod";
     gap: 20px;
+    height: 100%;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+}
+
+.sell-card {
+    grid-area: sellcard;
+}
+
+.month-graph {
+    grid-area: monthly-sales-compare;
+}
+
+.better-seller {
+    grid-area: betterseller;
+}
+
+.by-place {
+    grid-area: byplace;
+}
+
+.by-pay-method {
+    grid-area: bypaymethod;
 }

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Typography } from "antd";
+import "@/app/admin/page.css";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -30,7 +31,6 @@ const CompareSellsGraphClient: React.FC<CompareSellsGraphClientProps> = ({
 
     const months = salesData.map((sale) => sale.month);
     const sales = salesData.map((sale) => sale["sells-quantity"]);
-    const salesAmount = salesData.map((sale) => sale["sells-amount"]);
 
     setChartOptions({
       chart: {
@@ -73,7 +73,7 @@ const CompareSellsGraphClient: React.FC<CompareSellsGraphClientProps> = ({
   }, [salesData]);
 
   return (
-    <div className="grid-area-monthly-sales-compare bg-white rounded-lg shadow p-4">
+    <div className="month-graph bg-white rounded-lg shadow p-4">
       <Title level={4}>Ventas mensuales</Title>
       <Title level={1} style={{ margin: 0 }}>
         +15%
