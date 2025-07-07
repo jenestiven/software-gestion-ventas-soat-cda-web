@@ -1,0 +1,37 @@
+[
+    {
+        "id": "pm1",
+        "pay_method": "Addi",
+        "sales_quantity": 80,
+        "sales_amount": 8000000,
+        "growth": 10.0
+    },
+    {
+        "id": "pm2",
+        "pay_method": "Sistecredito",
+        "sales_quantity": 65,
+        "sales_amount": 6500000,
+        "growth": 5.5
+    },
+    {
+        "id": "pm3",
+        "pay_method": "Brilla",
+        "sales_quantity": 50,
+        "sales_amount": 5000000,
+        "growth": -3.2
+    },
+    {
+        "id": "pm4",
+        "pay_method": "Cash",
+        "sales_quantity": 150,
+        "sales_amount": 15000000,
+        "growth": 20.0
+    },
+    {
+        "id": "pm5",
+        "pay_method": "Datafono/Credit-card",
+        "sales_quantity": 100,
+        "sales_amount": 10000000,
+        "growth": 12.0
+    }
+]

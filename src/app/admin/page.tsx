@@ -2,7 +2,9 @@ import { Suspense } from "react";
 import SellsCardSection from "../components/app/admin/dashboard/SellsCardSection";
 import CompareSellsGraph from "../components/app/admin/dashboard/CompareSellsGraph";
 import BetterSellerTable from "../components/app/admin/dashboard/BetterSellerTable";
+import SalesByPlaceTable from "../components/app/admin/dashboard/SalesByPlaceTable";
 import "./page.css";
+import SalesByPayMethod from "../components/app/admin/dashboard/SalesByPayMethod";
 
 export default async function AdminHomePage() {
   return (
@@ -14,8 +16,12 @@ export default async function AdminHomePage() {
       <Suspense fallback={<div>Cargando ...</div>}>
         <BetterSellerTable />
       </Suspense>
-      <div className="by-place">b</div>
-      <div className="by-pay-method">c</div>
+      <Suspense fallback={<div>Cargando ...</div>}>
+        <SalesByPlaceTable />
+      </Suspense>
+      <Suspense fallback={<div>Cargando ...</div>}>
+        <SalesByPayMethod />
+      </Suspense>
     </div>
   );
 }

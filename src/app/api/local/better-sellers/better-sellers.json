@@ -1,0 +1,42 @@
+[
+    {
+        "id": "s1",
+        "photo": "https://i.pravatar.cc/150?u=s1",
+        "name": "Leanne Graham",
+        "sells": 50,
+        "amount": 5000000,
+        "growth": 12.5
+    },
+    {
+        "id": "s2",
+        "photo": "https://i.pravatar.cc/150?u=s2",
+        "name": "Ervin Howell",
+        "sells": 45,
+        "amount": 4500000,
+        "growth": -5.2
+    },
+    {
+        "id": "s3",
+        "photo": "https://i.pravatar.cc/150?u=s3",
+        "name": "Clementine Bauch",
+        "sells": 40,
+        "amount": 4000000,
+        "growth": 8.0
+    },
+    {
+        "id": "s4",
+        "photo": "https://i.pravatar.cc/150?u=s4",
+        "name": "Patricia Lebsack",
+        "sells": 35,
+        "amount": 3500000,
+        "growth": 2.1
+    },
+    {
+        "id": "s5",
+        "photo": "https://i.pravatar.cc/150?u=s5",
+        "name": "Chelsey Dietrich",
+        "sells": 30,
+        "amount": 3000000,
+        "growth": -1.5
+    }
+]

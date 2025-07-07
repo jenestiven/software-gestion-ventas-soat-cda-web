@@ -11,7 +11,16 @@
     overflow-y: auto;
     scroll-behavior: smooth;
     scrollbar-width: thin;
+    padding: 20px 10px;
 }
+
+.table-card {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
 
 .sell-card {
     grid-area: sellcard;

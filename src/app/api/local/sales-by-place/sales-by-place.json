@@ -1,0 +1,51 @@
+[
+    {
+        "id": "p1",
+        "place_name": "Moto GP",
+        "sales_quantity": 120,
+        "sales_amount": 12000000,
+        "growth": 15.0
+    },
+    {
+        "id": "p2",
+        "place_name": "Punto vial",
+        "sales_quantity": 90,
+        "sales_amount": 9000000,
+        "growth": -2.5
+    },
+    {
+        "id": "p3",
+        "place_name": "CEA TTC",
+        "sales_quantity": 75,
+        "sales_amount": 7500000,
+        "growth": 10.0
+    },
+    {
+        "id": "p4",
+        "place_name": "Asesorias KG",
+        "sales_quantity": 60,
+        "sales_amount": 6000000,
+        "growth": 5.0
+    },
+    {
+        "id": "p5",
+        "place_name": "Ruta segura",
+        "sales_quantity": 45,
+        "sales_amount": 4500000,
+        "growth": -1.0
+    },
+    {
+        "id": "p6",
+        "place_name": "Tu licencia",
+        "sales_quantity": 45,
+        "sales_amount": 4500000,
+        "growth": -1.0
+    },
+    {
+        "id": "p7",
+        "place_name": "CDA Autogo",
+        "sales_quantity": 45,
+        "sales_amount": 4500000,
+        "growth": -1.0
+    }
+]
