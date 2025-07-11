@@ -21,8 +21,13 @@ type StatCardProps = {
 
 const StatCard: React.FC<StatCardProps> = ({ icon, title, value, growth }) => (
   <article className="asesor-stat-card">
+    <span className="flex items-center justify-between w-full">
     {icon}
-    <span>
+    <Title level={3} style={{ margin: 0 }}>
+      ${Number(value).toLocaleString()}
+    </Title>
+    </span>
+    <span className="flex items-center justify-between w-full">
       <Text type="secondary">{title}</Text>
       <Text
         className={`stat-growth ${growth.startsWith("-") ? "negative" : ""}`}
@@ -31,9 +36,6 @@ const StatCard: React.FC<StatCardProps> = ({ icon, title, value, growth }) => (
         {growth}%
       </Text>
     </span>
-    <Title level={3} style={{ margin: 0 }}>
-      ${Number(value).toLocaleString()}
-    </Title>
   </article>
 );
 
