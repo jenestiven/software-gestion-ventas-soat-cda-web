@@ -41,12 +41,12 @@ export default function SellsCardSection({}: Props) {
         </span>
       </article>
       <article className="stat-3 flex items-center justify-between bg-white p-5 rounded-lg shadow">
-        <span className="flex flex-col items-center justify-between w-full">
+        <span className="flex flex-col items-start justify-between w-full pl-2">
           <Text type="secondary">Filtrar por mes</Text>
           <DatePicker placeholder="Seleccionar mes" picker="month" />
         </span>
         <Divider type="vertical" />
-        <span className="flex flex-col items-center justify-between w-full">
+        <span className="flex flex-col items-start justify-between w-full pl-4">
           <Text type="secondary">Periodo</Text>
           <Title level={3} style={{ margin: 0 }}>
             Ultimos 4 meses

@@ -13,30 +13,28 @@ type Props = {
 export default function SalesByPayMethodClient({ dataSource }: Props) {
   const columns = [
     {
-      title: "Método de pago",
+      title: "Método",
       dataIndex: "pay_method",
       key: "pay_method",
     },
     {
-      title: "No. de ventas",
+      title: "Ventas",
       dataIndex: "sales_quantity",
       key: "sales_quantity",
     },
     {
       title: "Monto",
-      dataIndex: "sales_amount",
+      dataIndex: "",
       key: "sales_amount",
-    },
-    {
-      title: "Crecimiento",
-      dataIndex: "growth",
-      key: "growth",
-      render: (growth: number) => (
-        <span style={{ color: growth > 0 ? "green" : "red" }}>
-          {growth}%
-        </span>
+      render: (item: { sales_amount: number; growth: number }) => (
+        <div className="flex items-center justify-between gap-4">
+          <span>${item.sales_amount.toLocaleString()}</span>
+          <span style={{ color: item.growth > 0 ? "green" : "red" }}>
+            {item.growth}%
+          </span>
+        </div>
       ),
-    },
+    }
   ];
 
   return (

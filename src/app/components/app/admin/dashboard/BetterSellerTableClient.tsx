@@ -24,21 +24,26 @@ export default function BetterSellerTableClient({ dataSource }: Props) {
       ),
     },
     {
-      title: "No. de ventas",
+      title: "Ventas",
       dataIndex: "sells",
       key: "sells",
     },
     {
-      title: "Monto",
-      dataIndex: "amount",
-      key: "amount",
+      title: "Sede",
+      dataIndex: "place",
+      key: "place",
     },
     {
-      title: "Crecimiento",
-      dataIndex: "growth",
-      key: "growth",
-      render: (growth: number) => (
-        <span style={{ color: growth > 0 ? "green" : "red" }}>{growth}%</span>
+      title: "Monto",
+      dataIndex: "",
+      key: "amount",
+      render: (item: { amount: number; growth: number }) => (
+        <div className="flex items-center justify-between gap-4">
+          <span>${item.amount.toLocaleString()}</span>
+          <span style={{ color: item.growth > 0 ? "green" : "red" }}>
+            {item.growth}%
+          </span>
+        </div>
       ),
     },
   ];

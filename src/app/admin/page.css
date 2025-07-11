@@ -4,11 +4,10 @@
     grid-template-rows: 1fr auto auto;
     grid-template-areas:
         "stat1 stat2 stat3"
-        "monthly-sales-compare monthly-sales-compare monthly-sales-compare"
-        "betterseller bypaymethod byplace";
+        "monthly-sales-compare monthly-sales-compare bypaymethod"
+        "betterseller betterseller byplace" ;
     gap: 20px;
     height: 100%;
-    width: 100%;
     overflow-y: auto;
     scroll-behavior: smooth;
     scrollbar-width: thin;
@@ -75,8 +74,7 @@
 }
 .stat-2 {
     grid-area: stat2;
-}
-.stat-3 {
+}.stat-3 {
     grid-area: stat3;
 }
 
@@ -85,7 +83,7 @@
 }
 
 .better-seller {
-    grid-area: betterseller;
+    grid-area: betterseller  ;
 }
 
 .by-place {
