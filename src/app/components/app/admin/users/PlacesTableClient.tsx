@@ -1,52 +1,99 @@
 "use client";
 
-import { Table } from "antd";
-import React from "react";
+import { MoreOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { Button, Dropdown, Input, Menu, Table } from "antd";
+import React, { useState } from "react";
 
 type Props = {};
 
 const dataSource = [
   {
     key: "1",
-    placeName: "Plaza Central",
-    placeAddress: "Calle Falsa 123",
-    asesorsNumber: 5,
+    place_name: "Plaza Central",
+    place_address: "Calle Falsa 123",
+    asesors_number: 5,
     active: true,
   },
   {
     key: "2",
-    placeName: "Centro Mayor",
-    placeAddress: "Avenida Siempre Viva 742",
-    asesorsNumber: 8,
+    place_name: "Centro Mayor",
+    place_address: "Avenida Siempre Viva 742",
+    asesors_number: 8,
     active: false,
   },
 ];
 
 export default function PlacesTableClient({}: Props) {
+  const [searchText, setSearchText] = useState("");
+
+  const filteredDataSource = dataSource.filter((place) =>
+    place.place_name.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   const columns = [
     {
-      title: "Place Name",
-      dataIndex: "placeName",
+      title: "Nombre de la sede",
+      dataIndex: "place_name",
       key: "placeName",
     },
     {
-      title: "Place Address",
-      dataIndex: "placeAddress",
+      title: "Dirección",
+      dataIndex: "place_address",
       key: "placeAddress",
     },
     {
-      title: "Asesors Number",
-      dataIndex: "asesorsNumber",
+      title: "No. de asesores",
+      dataIndex: "asesors_number",
       key: "asesorsNumber",
     },
     {
-      title: "Active Status",
+      title: "Estado",
       dataIndex: "active",
       key: "active",
       render: (active) => (active ? "Active" : "Inactive"),
+      filters: [
+        { text: "Activo", value: true },
+        { text: "Inactivo", value: false },
+      ],
+      onFilter: (value: string, record: any) => record.active === value,
+    },
+    {
+      title: "Acciones",
+      key: "action",
+      render: () => (
+        <Dropdown overlay={menu} trigger={["click"]}>
+          <Button icon={<MoreOutlined />} />
+        </Dropdown>
+      ),
     },
   ];
 
-  return <Table dataSource={dataSource} columns={columns} />;
+  const menu = (
+    <Menu>
+      <Menu.Item key="1">Editar</Menu.Item>
+      <Menu.Item key="2">Eliminar</Menu.Item>
+    </Menu>
+  );
+
+  return (
+    <div className="p-5 bg-white rounded-lg shadow">
+      <div className="mb-4 flex justify-end items-center gap-4">
+        <Input
+          prefix={<SearchOutlined />}
+          placeholder="Buscar sede"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="h-8 rounded-md w-1/4"
+        />
+        <Button type="primary" icon={<PlusOutlined />}>
+          Crear nueva sede
+        </Button>
+      </div>
+      <Table
+        dataSource={filteredDataSource}
+        columns={columns}
+        pagination={{ pageSize: 10 }}
+      />
+    </div>
+  );
 }

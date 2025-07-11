@@ -26,6 +26,11 @@
   }
 }
 
+.scroll-bar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-secondary) transparent;
+}
+
 body {
   color: rgb(var(--color-accent-contrast));
   background: var(--color-accent);

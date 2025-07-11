@@ -35,7 +35,7 @@
             word-break: break-word;
             user-select: none;
             padding: 10px;
-            border-radius: 20px;
+            border-radius: 8px;
             border: solid 1px transparent;
 
             &:hover {

@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
-import { MoreOutlined, PlusOutlined } from "@ant-design/icons";
-import { Table, Button, Dropdown, Menu, Input, Space, Avatar } from "antd";
+import React, { useState } from "react";
+import { MoreOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { Table, Button, Dropdown, Menu, Input, Avatar } from "antd";
 
 type Props = {};
 
@@ -28,94 +28,62 @@ const dataSource = [
 ];
 
 export default function UsersTableClient({}: Props) {
+  const [searchText, setSearchText] = useState("");
+
+  const filteredDataSource = dataSource.filter((user) =>
+    user.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "Usuario",
+      dataIndex: "",
       key: "name",
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div style={{ padding: 8 }}>
-          <Input
-            placeholder="Search name"
-            value={selectedKeys[0]}
-            onChange={(e) =>
-              setSelectedKeys(e.target.value ? [e.target.value] : [])
-            }
-            onPressEnter={() => confirm()}
-            style={{ marginBottom: 8, display: "block" }}
+      render: (item: { name: string; thumbnail: string }) => (
+        <span className="flex items-center gap-2">
+          <Avatar
+            src={item.thumbnail}
+            alt="thumbnail"
+            className="rouded-full w-10 h-10"
           />
-          <Space>
-            <Button
-              type="primary"
-              onClick={() => confirm()}
-              size="small"
-              style={{ width: 90 }}
-            >
-              Search
-            </Button>
-            <Button
-              onClick={() => clearFilters()}
-              size="small"
-              style={{ width: 90 }}
-            >
-              Reset
-            </Button>
-          </Space>
-        </div>
-      ),
-      onFilter: (value, record) =>
-        record.name.toLowerCase().includes(value.toLowerCase()),
-    },
-    {
-      title: "Thumbnail",
-      dataIndex: "thumbnail",
-      key: "thumbnail",
-      render: (text: string) => (
-        <Avatar
-          src={text}
-          alt="thumbnail"
-          style={{ width: 40, height: 40, borderRadius: "50%" }}
-        />
+          {item.name}
+        </span>
       ),
     },
     {
-      title: "Tel",
+      title: "Telefono",
       dataIndex: "tel",
       key: "tel",
     },
     {
-      title: "Email",
+      title: "Correo electrónico",
       dataIndex: "email",
       key: "email",
     },
     {
-      title: "Active Status",
+      title: "Estado",
       dataIndex: "active",
       key: "active",
-      render: (active) => (active ? "Active" : "Inactive"),
+      render: (active: "Active" | "Inactive") =>
+        active ? "Active" : "Inactive",
       filters: [
-        { text: "Active", value: true },
-        { text: "Inactive", value: false },
+        { text: "Activo", value: true },
+        { text: "Inactivo", value: false },
       ],
-      onFilter: (value, record) => record.active === value,
+      onFilter: (value: string, record: any) => record.active === value,
     },
     {
-      title: "Role",
+      title: "Rol",
       dataIndex: "role",
       key: "role",
       filters: [
-        { text: "Admin", value: "Admin" },
+        { text: "Administrador", value: "Admin" },
         { text: "Asesor", value: "Asesor" },
       ],
-      onFilter: (value, record) => record.role.includes(value),
+      onFilter: (value: string, record: any) => record.role.includes(value),
     },
     {
-      title: "Action",
+      title: "Acciones",
       key: "action",
       render: () => (
         <Dropdown overlay={menu} trigger={["click"]}>
@@ -127,25 +95,30 @@ export default function UsersTableClient({}: Props) {
 
   const menu = (
     <Menu>
-      <Menu.Item key="1">Edit</Menu.Item>
-      <Menu.Item key="2">Delete</Menu.Item>
+      <Menu.Item key="1">Editar</Menu.Item>
+      <Menu.Item key="2">Eliminar</Menu.Item>
     </Menu>
   );
 
   return (
-    <div>
-      <div
-        style={{
-          marginBottom: 16,
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      >
+    <div className="p-5 bg-white rounded-lg shadow">
+      <div className="mb-4 flex justify-end items-center gap-4">
+        <Input
+          prefix={<SearchOutlined />}
+          placeholder="Buscar usuario"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="h-8 rounded-md w-1/4"
+        />
         <Button type="primary" icon={<PlusOutlined />}>
-          Create New User
+          Crear nuevo usuario
         </Button>
       </div>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table
+        dataSource={filteredDataSource}
+        columns={columns}
+        pagination={{ pageSize: 10 }}
+      />
     </div>
   );
 }
