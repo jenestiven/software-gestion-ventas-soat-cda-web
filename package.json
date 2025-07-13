@@ -19,6 +19,7 @@
     "react": "^18",
     "react-apexcharts": "^1.7.0",
     "react-dom": "^18",
+    "sharp": "^0.34.3",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

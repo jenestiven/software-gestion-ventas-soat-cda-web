@@ -83,3 +83,21 @@ export interface Sale {
     }
   ];
 }
+
+export interface PlacesDataType {
+  key: React.Key;
+  place_name: string;
+  place_address: string;
+  asesors_number: number;
+  active: boolean;
+}
+
+export interface UserDataType {
+  key: React.Key;
+  name: string;
+  thumbnail: string;
+  tel: string;
+  email: string;
+  role: string;
+  active: boolean;
+}

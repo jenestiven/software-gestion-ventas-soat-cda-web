@@ -4,10 +4,12 @@ import React, { useState } from "react";
 import { MoreOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Table, Button, Dropdown, Menu, Input, Avatar } from "antd";
 import UserCreationModal from "./UserCreationModal";
+import type { TableProps } from "antd";
+import { UserDataType } from "@/types/types";
 
 type Props = {};
 
-const dataSource = [
+const dataSource: UserDataType[] = [
   {
     key: "1",
     name: "John Brown",
@@ -36,7 +38,7 @@ export default function UsersTableClient({}: Props) {
     user.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  const columns = [
+  const columns: TableProps<UserDataType>["columns"] = [
     {
       title: "Usuario",
       dataIndex: "",
@@ -72,7 +74,7 @@ export default function UsersTableClient({}: Props) {
         { text: "Activo", value: true },
         { text: "Inactivo", value: false },
       ],
-      onFilter: (value: string, record: any) => record.active === value,
+      onFilter: (value, record) => record.active === value,
     },
     {
       title: "Rol",
@@ -82,7 +84,7 @@ export default function UsersTableClient({}: Props) {
         { text: "Administrador", value: "Admin" },
         { text: "Asesor", value: "Asesor" },
       ],
-      onFilter: (value: string, record: any) => record.role.includes(value),
+      onFilter: (value, record: any) => record.role.includes(value),
     },
     {
       title: "Acciones",

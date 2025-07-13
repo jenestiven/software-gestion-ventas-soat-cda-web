@@ -2,12 +2,14 @@
 
 import { MoreOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Input, Menu, Table } from "antd";
+import type { TableProps } from "antd";
 import React, { useState } from "react";
 import PlaceCreationModal from "./PlaceCreationModal";
+import { PlacesDataType } from "@/types/types";
 
 type Props = {};
 
-const dataSource = [
+const dataSource: PlacesDataType[] = [
   {
     key: "1",
     place_name: "Plaza Central",
@@ -32,7 +34,7 @@ export default function PlacesTableClient({}: Props) {
     place.place_name.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  const columns = [
+  const columns: TableProps<PlacesDataType>["columns"] = [
     {
       title: "Nombre de la sede",
       dataIndex: "place_name",
@@ -57,7 +59,7 @@ export default function PlacesTableClient({}: Props) {
         { text: "Activo", value: true },
         { text: "Inactivo", value: false },
       ],
-      onFilter: (value: string, record: any) => record.active === value,
+      onFilter: (value, record) => record.active === value,
     },
     {
       title: "Acciones",
