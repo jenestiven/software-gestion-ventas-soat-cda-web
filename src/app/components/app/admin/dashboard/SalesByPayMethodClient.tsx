@@ -42,7 +42,7 @@ export default function SalesByPayMethodClient({ dataSource }: Props) {
       <Title level={5} style={{ margin: 0 }}>
         Ventas por método de pago
       </Title>
-      <Table dataSource={dataSource} columns={columns} pagination={false} />
+      <Table dataSource={dataSource} columns={columns} pagination={false} rowKey="pay_method"/>
     </div>
   );
 }

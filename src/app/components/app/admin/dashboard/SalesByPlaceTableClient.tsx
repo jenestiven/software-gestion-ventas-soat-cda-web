@@ -46,6 +46,7 @@ export default function SalesByPlaceTableClient({ dataSource }: Props) {
         dataSource={dataSource}
         columns={columns}
         pagination={{ pageSize: 5 }}
+        rowKey="place_name"
       />
     </div>
   );
