@@ -102,7 +102,7 @@
         "receipt_status": "delivered",
         "receipts": [
             {
-                "id": "receipt-1",
+                "id": "receipt-204",
                 "uploaded_at": "2025-08-01T10:00:00Z",
                 "receipt_type": "brilla-contract",
                 "receipt_url": "https://example.com/receipts/receipt-1.pdf"
@@ -187,7 +187,7 @@
         "receipt_status": "delivered",
         "receipts": [
             {
-                "id": "receipt-1",
+                "id": "receipt-103",
                 "uploaded_at": "2025-09-01T10:00:00Z",
                 "receipt_type": "invoice",
                 "receipt_url": "https://example.com/receipts/receipt-1.pdf"

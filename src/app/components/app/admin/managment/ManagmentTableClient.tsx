@@ -89,6 +89,14 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
         data = data.filter((item) => item?.receipt_status === "pending");
       }
     }
+    if (filters.receipts) {
+      data = data.filter((item) =>
+        item?.receipts
+          ?.at(0)
+          ?.id.toLowerCase()
+          .includes(filters.receipts.toLowerCase())
+      );
+    }
 
     return data;
   }, [initialData, filters]);
@@ -303,6 +311,14 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
             <Option value="delivered">Entregado</Option>
             <Option value="pending">Pendiente</Option>
           </Select>
+        </Col>
+        <Col>
+          <Input
+            className="h-8 rounded-md"
+            placeholder="No. de comprobante"
+            onChange={(e) => handleFilterChange("receipts", e.target.value)}
+            style={{ width: 180 }}
+          />
         </Col>
       </Row>
       <Table
