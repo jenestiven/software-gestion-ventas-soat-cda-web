@@ -87,82 +87,82 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
           <Divider />
           <div>
             {sale?.sale_sumary?.asesor_sale_commission !== undefined && (
-              <p className="font-light flex gap-2 justify-between w-full">
-                Comisión aliados:
+              <span className="flex gap-2 justify-between w-full">
+                <p className="font-light">Comisión aliados:</p>
                 <h2>
                   ${sale?.sale_sumary.asesor_sale_commission.toLocaleString()}
                 </h2>
-              </p>
+              </span>
             )}
             {sale?.sale_sumary?.fixed_comission !== undefined && (
-              <p className="font-light flex justify-between w-full">
-                Comisión fija:
+              <span className="flex gap-2 justify-between w-full">
+                <p className="font-light">Comisión fija:</p>
                 <h2>${sale?.sale_sumary.fixed_comission.toLocaleString()}</h2>
-              </p>
+              </span>
             )}
             {sale?.sale_sumary?.profit && (
-              <p className="font-light flex gap-2 justify-between w-full">
-                Utilidad:
+              <span className="flex gap-2 justify-between w-full">
+                <p className="font-light">Utilidad:</p>
                 <h2>${sale?.sale_sumary.profit.toLocaleString()}</h2>
-              </p>
+              </span>
             )}
             {sale?.sale_sumary?.gross_profit !== undefined && (
-              <p className="font-light flex gap-2 justify-between w-full">
-                Utilidad bruta:
+              <span className="flex gap-2 justify-between w-full">
+                <p className="font-light">Utilidad bruta:</p>
                 <h2>${sale.sale_sumary.gross_profit.toLocaleString()}</h2>
-              </p>
+              </span>
             )}
             {sale?.sale_sumary?.bold_to_be_deposited_value !== undefined && (
-              <p className="font-light flex gap-2 justify-between w-full">
-                Valor a consignar (Bold):
+              <span className="flex gap-2 justify-between w-full">
+                <p className="font-light">Valor a consignar (Bold):</p>
                 <h2>
                   $
                   {sale.sale_sumary.bold_to_be_deposited_value.toLocaleString()}
                 </h2>
-              </p>
+              </span>
             )}
             {sale?.sale_sumary?.datafono_commission !== undefined && (
-              <p className="font-light flex gap-2 justify-between w-full">
-                Comisión datáfono:
+              <span className="flex gap-2 justify-between w-full">
+                <p className="font-light">Comisión datáfono: $</p>
                 <h2>
                   ${sale.sale_sumary.datafono_commission.toLocaleString()}
                 </h2>
-              </p>
+              </span>
             )}
             {sale?.sale_sumary?.datafono_value !== undefined && (
-              <p className="font-light flex gap-2 justify-between w-full">
-                Valor datáfono:
+              <span className="flex gap-2 justify-between w-full">
+                <p className="font-light">Valor datáfono:</p>
                 <h2>${sale.sale_sumary.datafono_value.toLocaleString()}</h2>
-              </p>
+              </span>
             )}
             {sale?.sale_sumary?.reteica !== undefined && (
-              <p className="font-light flex gap-2 justify-between w-full">
-                ReteICA:
+              <span className="flex gap-2 justify-between w-full">
+                <p className="font-light">ReteICA:</p>
                 <h2>${sale.sale_sumary.reteica.toLocaleString()}</h2>
-              </p>
+              </span>
             )}
             {sale?.sale_sumary?.total_to_tranfer_costs !== undefined && (
-              <p className="font-light flex gap-2 justify-between w-full">
-                Total a transferir (costos):
+              <span className="flex gap-2 justify-between w-full">
+                <p className="font-light">Total a transferir (costos):</p>
                 <h2>
                   ${sale.sale_sumary.total_to_tranfer_costs.toLocaleString()}
                 </h2>
-              </p>
+              </span>
             )}
 
             {sale?.sale_sumary?.value_to_be_deposited !== undefined && (
-              <p className="font-light flex gap-2 justify-between w-full">
-                Valor a consignar:
+              <span className="flex gap-2 justify-between w-full">
+                <p className="font-light ">Valor a consignar:</p>
                 <h2>
                   ${sale.sale_sumary.value_to_be_deposited.toLocaleString()}
                 </h2>
-              </p>
+              </span>
             )}
             {sale?.sale_sumary?.soat_value !== undefined && (
-              <p className="font-light flex gap-2 justify-between w-full">
-                Valor SOAT:
+              <span className="flex gap-2 justify-between w-full">
+                <p className="font-light ">Valor SOAT:</p>
                 <h2>${sale.sale_sumary.soat_value.toLocaleString()}</h2>
-              </p>
+              </span>
             )}
           </div>
         </div>

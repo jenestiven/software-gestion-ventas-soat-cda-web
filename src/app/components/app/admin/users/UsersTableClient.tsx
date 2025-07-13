@@ -89,26 +89,25 @@ export default function UsersTableClient({}: Props) {
     {
       title: "Acciones",
       key: "action",
-      render: () => (
-        <Dropdown menu={{items: menu}} trigger={["click"]}>
-          <Button icon={<MoreOutlined />} />
-        </Dropdown>
-      ),
+      render: () => {
+        const menu = [
+          {
+            key: "1",
+            label: <a onClick={() => {}}>Editar</a>,
+          },
+          {
+            key: "2",
+            label: <a onClick={() => {}}>Eliminar</a>,
+          },
+        ];
+        return (
+          <Dropdown menu={{ items: menu }} trigger={["click"]}>
+            <Button icon={<MoreOutlined />} />
+          </Dropdown>
+        );
+      },
     },
   ];
-
-  const menu = {
-    items: [
-      {
-        key: "1",
-        label: "Editar",
-      },
-      {
-        key: "2",
-        label: "Eliminar",
-      },
-    ],
-  };
 
   return (
     <>

@@ -65,25 +65,23 @@ export default function PlacesTableClient({}: Props) {
       title: "Acciones",
       key: "action",
       render: () => (
-        <Dropdown menu={{items: menu}} trigger={["click"]}>
+        <Dropdown menu={{ items: menu }} trigger={["click"]}>
           <Button icon={<MoreOutlined />} />
         </Dropdown>
       ),
     },
   ];
 
-  const menu = {
-    items: [
-      {
-        key: "1",
-        label: "Editar",
-      },
-      {
-        key: "2",
-        label: "Eliminar",
-      },
-    ],
-  };
+  const menu = [
+    {
+      key: "1",
+      label: "Editar",
+    },
+    {
+      key: "2",
+      label: "Eliminar",
+    },
+  ];
 
   return (
     <>
