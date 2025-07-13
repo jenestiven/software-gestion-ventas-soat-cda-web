@@ -26,7 +26,7 @@ export default function Header({}: Props) {
         <Avatar
           size="large"
           className="header-avatar"
-          src="https://api.dicebear.com/7.x/miniavs/svg?seed=6"
+          src="https://i.pravatar.cc/150?img=4"
         />
       </div>
     </header>

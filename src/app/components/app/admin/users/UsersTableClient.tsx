@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { MoreOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Table, Button, Dropdown, Menu, Input, Avatar } from "antd";
+import UserCreationModal from "./UserCreationModal";
 
 type Props = {};
 
@@ -29,6 +30,7 @@ const dataSource = [
 
 export default function UsersTableClient({}: Props) {
   const [searchText, setSearchText] = useState("");
+  const [openUserCreationModal, setOpenUserCreationModal] = useState(false);
 
   const filteredDataSource = dataSource.filter((user) =>
     user.name.toLowerCase().includes(searchText.toLowerCase())
@@ -101,24 +103,34 @@ export default function UsersTableClient({}: Props) {
   );
 
   return (
-    <div className="p-5 bg-white rounded-lg shadow">
-      <div className="mb-4 flex justify-end items-center gap-4">
-        <Input
-          prefix={<SearchOutlined />}
-          placeholder="Buscar usuario"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          className="h-8 rounded-md w-1/4"
+    <>
+      <div className="p-5 bg-white rounded-lg shadow">
+        <div className="mb-4 flex justify-end items-center gap-4">
+          <Input
+            prefix={<SearchOutlined />}
+            placeholder="Buscar usuario"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="h-8 rounded-md w-1/4"
+          />
+          <Button
+            onClick={() => setOpenUserCreationModal(true)}
+            type="primary"
+            icon={<PlusOutlined />}
+          >
+            Crear nuevo usuario
+          </Button>
+        </div>
+        <Table
+          dataSource={filteredDataSource}
+          columns={columns}
+          pagination={{ pageSize: 10 }}
         />
-        <Button type="primary" icon={<PlusOutlined />}>
-          Crear nuevo usuario
-        </Button>
       </div>
-      <Table
-        dataSource={filteredDataSource}
-        columns={columns}
-        pagination={{ pageSize: 10 }}
+      <UserCreationModal
+        open={openUserCreationModal}
+        onClose={() => setOpenUserCreationModal(false)}
       />
-    </div>
+    </>
   );
 }

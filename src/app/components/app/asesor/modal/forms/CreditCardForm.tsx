@@ -68,6 +68,10 @@ export default function CreditCardForm() {
               <InputNumber style={{ width: "100%" }} />
             </Form.Item>
 
+            <Form.Item name="financed_amount" label="Valor financiado">
+              <InputNumber style={{ width: "100%" }} />
+            </Form.Item>
+
             <Form.Item name="credit_type" label="Tipo de tarjeta">
               <Select
                 options={[
@@ -80,10 +84,6 @@ export default function CreditCardForm() {
                   { label: "Olimpica", value: "olimpica" },
                 ]}
               />
-            </Form.Item>
-
-            <Form.Item name="financed_amount" label="Valor financiado">
-              <InputNumber style={{ width: "100%" }} />
             </Form.Item>
           </Col>
           <Col xs={24} sm={12}>

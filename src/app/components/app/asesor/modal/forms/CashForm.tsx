@@ -45,6 +45,10 @@ export default function CashForm() {
               <Input className="h-8 rounded-md" />
             </Form.Item>
 
+            <Form.Item name="client_id" label="No. Identificación">
+              <Input className="h-8 rounded-md" />
+            </Form.Item>
+
             <Form.Item name="vehicle_type" label="Tipo de vehículo">
               <Select
                 options={[

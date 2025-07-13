@@ -3,6 +3,7 @@
 import { MoreOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Input, Menu, Table } from "antd";
 import React, { useState } from "react";
+import PlaceCreationModal from "./PlaceCreationModal";
 
 type Props = {};
 
@@ -25,6 +26,7 @@ const dataSource = [
 
 export default function PlacesTableClient({}: Props) {
   const [searchText, setSearchText] = useState("");
+  const [openPlaceCreationModal, setOpenCreationModal] = useState(false);
 
   const filteredDataSource = dataSource.filter((place) =>
     place.place_name.toLowerCase().includes(searchText.toLowerCase())
@@ -76,24 +78,34 @@ export default function PlacesTableClient({}: Props) {
   );
 
   return (
-    <div className="p-5 bg-white rounded-lg shadow">
-      <div className="mb-4 flex justify-end items-center gap-4">
-        <Input
-          prefix={<SearchOutlined />}
-          placeholder="Buscar sede"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          className="h-8 rounded-md w-1/4"
+    <>
+      <div className="p-5 bg-white rounded-lg shadow">
+        <div className="mb-4 flex justify-end items-center gap-4">
+          <Input
+            prefix={<SearchOutlined />}
+            placeholder="Buscar sede"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="h-8 rounded-md w-1/4"
+          />
+          <Button
+            onClick={() => setOpenCreationModal(true)}
+            type="primary"
+            icon={<PlusOutlined />}
+          >
+            Crear nueva sede
+          </Button>
+        </div>
+        <Table
+          dataSource={filteredDataSource}
+          columns={columns}
+          pagination={{ pageSize: 10 }}
         />
-        <Button type="primary" icon={<PlusOutlined />}>
-          Crear nueva sede
-        </Button>
       </div>
-      <Table
-        dataSource={filteredDataSource}
-        columns={columns}
-        pagination={{ pageSize: 10 }}
+      <PlaceCreationModal
+        open={openPlaceCreationModal}
+        onClose={() => setOpenCreationModal(false)}
       />
-    </div>
+    </>
   );
 }
