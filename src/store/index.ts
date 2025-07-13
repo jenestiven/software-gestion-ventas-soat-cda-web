@@ -16,16 +16,14 @@ const useStore = create<UserState>((set, get) => ({
   setUser: (user) => {
     set({ user, isAuthenticated: !!user });
     if (typeof window !== "undefined") {
-      document.cookie = `user=${encodeURIComponent(
-        JSON.stringify(user)
-      )}; path=/; max-age=${7 * 24 * 60 * 60}`;
+      document.cookie = `user=${encodeURIComponent(JSON.stringify(user))}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax; Secure`;
     }
   },
 
   clearUser: () => {
     set({ user: null, isAuthenticated: false });
     if (typeof window !== "undefined") {
-      document.cookie = "user=; path=/; max-age=0";
+      document.cookie = "user=; path=/; max-age=0; SameSite=Lax; Secure";
     }
   },
 

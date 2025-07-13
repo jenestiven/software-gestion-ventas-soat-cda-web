@@ -3,10 +3,12 @@ import SellsCardSection from "../components/app/admin/dashboard/SellsCardSection
 import CompareSellsGraph from "../components/app/admin/dashboard/CompareSellsGraph";
 import BetterSellerTable from "../components/app/admin/dashboard/BetterSellerTable";
 import SalesByPlaceTable from "../components/app/admin/dashboard/SalesByPlaceTable";
+import SalesByPayMehod from "../components/app/admin/dashboard/SalesByPayMethod";
 import "./page.css";
-import SalesByPayMethod from "../components/app/admin/dashboard/SalesByPayMethod";
 
-export default async function AdminHomePage() {
+type Props = {};
+
+export default async function AdminHomePage({}: Props) {
   return (
     <div className="admin-home-page">
       <SellsCardSection />
@@ -20,7 +22,7 @@ export default async function AdminHomePage() {
         <SalesByPlaceTable />
       </Suspense>
       <Suspense fallback={<div>Cargando ...</div>}>
-        <SalesByPayMethod />
+        <SalesByPayMehod />
       </Suspense>
     </div>
   );

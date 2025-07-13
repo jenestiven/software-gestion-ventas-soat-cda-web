@@ -1,7 +1,9 @@
 import { headers } from "next/headers";
 import CompareSellsGraphClient from "./CompareSellsGraphClient";
 
-const CompareSellsGraph = async () => {
+type Props = {};
+
+const CompareSellsGraph = async ({}: Props) => {
   const host = headers().get("host");
   const protocol = headers().get("x-forwarded-proto") || "http";
   const baseUrl = `${protocol}://${host}`;

@@ -1,9 +1,12 @@
 import React from "react";
 import ManagmentTableClient from "@/app/components/app/admin/managment/ManagmentTableClient";
-import { Button } from "antd";
+import { headers } from "next/headers";
 
 async function getData() {
-  const res = await fetch("http://localhost:3000/api/local/all-sells", {
+  const host = headers().get("host");
+  const protocol = headers().get("x-forwarded-proto") || "http";
+  const baseUrl = `${protocol}://${host}`;
+  const res = await fetch(`${baseUrl}/api/local/all-sells`, {
     cache: "no-store",
   });
   if (!res.ok) {
