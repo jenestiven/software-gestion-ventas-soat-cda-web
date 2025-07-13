@@ -100,7 +100,7 @@
         },
         "receipt_required": true,
         "receipt_status": "delivered",
-        "recepits": [
+        "receipts": [
             {
                 "id": "receipt-1",
                 "uploaded_at": "2025-08-01T10:00:00Z",
@@ -146,7 +146,7 @@
         "remarks": "Venta de taxi con Sistecredito",
         "receipt_required": true,
         "receipt_status": "pending",
-        "recepits": [],
+        "receipts": [],
         "asesor_data": {
             "name": "Catalina Camacho",
             "thumnail": "https://i.pravatar.cc/150?img=2"
@@ -185,7 +185,7 @@
         "remarks": "Venta de taxi con Sistecredito",
         "receipt_required": true,
         "receipt_status": "delivered",
-        "recepits": [
+        "receipts": [
             {
                 "id": "receipt-1",
                 "uploaded_at": "2025-09-01T10:00:00Z",

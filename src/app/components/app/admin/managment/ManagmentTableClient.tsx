@@ -17,27 +17,11 @@ import {
 } from "antd";
 import type { TableProps } from "antd";
 import { AuditOutlined, MoreOutlined } from "@ant-design/icons";
+import { Sale } from "@/types/types";
+import SaleDetail from "./SaleDetail";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
-
-interface Sale {
-  id: string;
-  created_at: string;
-  payment_method_id: string;
-  payment_method_name: string;
-  client_data: { client_name: string };
-  vehicle_data: {
-    vehicle_type_name: string;
-    vehicle_type_id: string;
-    vehicle_plate: string;
-  };
-  sale_place: { place_name: string };
-  asesor_data: { name: string; thumnail: string };
-  sale_sumary: { total_payed: number };
-  receipt_required: boolean;
-  receipt_status: "delivered" | "pending";
-}
 
 interface ManagmentTableClientProps {
   initialData: Sale[];
@@ -191,6 +175,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       dataIndex: ["sale_sumary", "total_payed"],
       key: "total_payed",
       sorter: (a, b) => a.sale_sumary.total_payed - b.sale_sumary.total_payed,
+      render: (total: number) => `$${total.toLocaleString("es-CO")}`,
     },
     {
       title: "Compobante",
@@ -221,7 +206,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
           </Menu>
         );
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown overlay={menu} trigger={["click"]} placement="bottomRight">
             <Button icon={<MoreOutlined />} />
           </Dropdown>
         );
@@ -326,14 +311,15 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
         rowKey="id"
         pagination={{ pageSize: 10 }}
       />
+
       <Modal
-        title="Sale Details"
+        title="Detalle de la venta"
         open={isModalVisible}
         onCancel={handleCancel}
         footer={null}
-        width={800}
+        centered
       >
-        {selectedRecord && <pre>{JSON.stringify(selectedRecord, null, 2)}</pre>}
+        <SaleDetail sale={selectedRecord} />
       </Modal>
     </div>
   );

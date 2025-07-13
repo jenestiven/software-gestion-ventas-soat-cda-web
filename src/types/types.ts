@@ -43,3 +43,43 @@ export interface Sell {
   doc_state: string;
 }
 
+export interface Sale {
+  id: string;
+  created_at: string;
+  payment_method_id: string;
+  payment_method_name: string;
+  client_data: { client_name: string; client_id: string };
+  vehicle_data: {
+    vehicle_type_name: string;
+    vehicle_type_id: string;
+    vehicle_plate: string;
+  };
+  sale_place: { place_name: string };
+  asesor_data: { name: string; thumnail: string };
+  paid_in_cash_value: number;
+  sale_sumary: {
+    total_payed: number;
+    fixed_comission: number;
+    profit: number;
+    soat_value: number;
+    asesor_sale_commission: number;
+    bold_to_be_deposited_value: number;
+    datafono_commission: number;
+    datafono_value: number;
+    reteica: number;
+    total_to_tranfer_costs: number;
+    gross_profit: number;
+    value_to_be_deposited: number;
+  };
+  receipt_required: boolean;
+  receipt_status: "delivered" | "pending" | null;
+  remarks: string;
+  receipts: [
+    {
+      id: string;
+      uploaded_at: string;
+      receipt_url: string;
+      receipt_type: "brilla-contract" | "pagare" | "invoice";
+    }
+  ];
+}
