@@ -1,0 +1,204 @@
+[
+    {
+        "id": "sales-1",
+        "created_at": "2025-06-01T10:00:00Z",
+        "payment_method_id": "cash",
+        "payment_method_name": "Efectivo",
+        "client_data": {
+            "client_name": "Juan Pérez",
+            "client_id": "client-123"
+        },
+        "vehicle_data": {
+            "vehicle_plate": "ABC123",
+            "vehicle_type_name": "Carro",
+            "vehicle_type_id": "car"
+        },
+        "paid_in_cash_value": 340000,
+        "remarks": "Venta de vehículo en efectivo",
+        "sale_sumary": {
+            "fixed_comission": 15000,
+            "profit": 20000,
+            "soat_value": 320000,
+            "total_payed": 385000
+        },
+        "receipt_required": false,
+        "asesor_data": {
+            "name": "Carlos López",
+            "thumnail": null
+        },
+        "sale_place": {
+            "place_name": "Punto vial"
+        }
+    },
+    {
+        "id": "sales-2",
+        "created_at": "2025-07-01T10:00:00Z",
+        "payment_method_name": "Datafono",
+        "payment_method_id": "datafono",
+        "client_data": {
+            "client_name": "Juliana Paez",
+            "client_id": "client-456"
+        },
+        "vehicle_data": {
+            "vehicle_plate": "XYZ789",
+            "vehicle_type_name": "Moto",
+            "vehicle_type_id": "motorcycle"
+        },
+        "paid_in_cash_value": 0,
+        "remarks": "Venta de motocicleta con tarjeta de crédito",
+        "financed_value": 500000,
+        "credit_card_type": "debit",
+        "soat_status": "delivered",
+        "sale_sumary": {
+            "datafono_commission": 5000,
+            "datafono_value": 20000,
+            "fixed_comission": 10000,
+            "reteica": 30000,
+            "asesor_sale_commission": 20000,
+            "bold_to_be_deposited_value": 450000,
+            "soat_value": 250000,
+            "profit": 15000,
+            "total_to_tranfer_costs": 50000,
+            "total_payed": 275000
+        },
+        "receipt_required": false,
+        "asesor_data": {
+            "name": "Carlos López",
+            "thumnail": null
+        },
+        "sale_place": {
+            "place_name": "Punto vial"
+        }
+    },
+    {
+        "id": "sales-3",
+        "created_at": "2025-08-01T10:00:00Z",
+        "payment_method_name": "Brilla",
+        "payment_method_id": "brilla",
+        "client_data": {
+            "client_name": "Jhon Morales",
+            "client_id": "client-256"
+        },
+        "vehicle_data": {
+            "vehicle_plate": "XYZ789",
+            "vehicle_type_name": "Camioneta",
+            "vehicle_type_id": "suv"
+        },
+        "financed_value": 500000,
+        "soat_status": "delivered",
+        "has_payed_soat": true,
+        "brilla_pay_status": "paid",
+        "brilla_contract": "624355",
+        "acts": 197776,
+        "sale_sumary": {
+            "fixed_comission": 10000,
+            "asesor_sale_commission": 20000,
+            "gross_profit": 5000,
+            "profit": 15000,
+            "soat_value": 250000,
+            "total_payed": 275000
+        },
+        "receipt_required": true,
+        "receipt_status": "delivered",
+        "receipts": [
+            {
+                "id": "receipt-204",
+                "uploaded_at": "2025-08-01T10:00:00Z",
+                "receipt_type": "brilla-contract",
+                "receipt_url": "https://example.com/receipts/receipt-1.pdf"
+            }
+        ],
+        "asesor_data": {
+            "name": "Sandra Hurtado",
+            "thumnail": null
+        },
+        "sale_place": {
+            "place_name": "Asesorias KG"
+        }
+    },
+    {
+        "id": "sales-4",
+        "created_at": "2025-08-01T10:00:00Z",
+        "payment_method_name": "Sistecredito",
+        "payment_method_id": "sistecredito",
+        "client_data": {
+            "client_name": "Jesus Perdomo",
+            "client_id": "client-296"
+        },
+        "vehicle_data": {
+            "vehicle_plate": "XYZ789",
+            "vehicle_type_id": "taxi",
+            "vehicle_type_name": "Taxi"
+        },
+        "financed_value": 500000,
+        "soat_status": "delivered",
+        "has_payed_soat": true,
+        "sistecredito_pay_status": "paid",
+        "pagare": "624355",
+        "sale_sumary": {
+            "fixed_comission": 10000,
+            "asesor_sale_commission": 20000,
+            "gross_profit": 5000,
+            "profit": 15000,
+            "soat_value": 250000,
+            "total_payed": 275000
+        },
+        "remarks": "Venta de taxi con Sistecredito",
+        "receipt_required": true,
+        "receipt_status": "pending",
+        "receipts": [],
+        "asesor_data": {
+            "name": "Catalina Camacho",
+            "thumnail": "https://i.pravatar.cc/150?img=2"
+        },
+        "sale_place": {
+            "place_name": "Asesorias KG"
+        }
+    },
+    {
+        "id": "sales-5",
+        "created_at": "2025-10-01T10:00:00Z",
+        "payment_method_id": "addi",
+        "payment_method_name": "Addi",
+        "client_data": {
+            "client_name": "Armando Palomeque",
+            "client_id": "client-206"
+        },
+        "vehicle_data": {
+            "vehicle_plate": "XYZ389",
+            "vehicle_type_id": "taxi",
+            "vehicle_type_name": "Taxi"
+        },
+        "financed_value": 500000,
+        "soat_status": "delivered",
+        "has_payed_soat": true,
+        "invoice_number": "624355",
+        "sale_sumary": {
+            "fixed_comission": 10000,
+            "asesor_sale_commission": 20000,
+            "gross_profit": 5000,
+            "profit": 15000,
+            "soat_value": 250000,
+            "value_to_be_deposited": 450000,
+            "total_payed": 275000
+        },
+        "remarks": "Venta de taxi con Sistecredito",
+        "receipt_required": true,
+        "receipt_status": "delivered",
+        "receipts": [
+            {
+                "id": "receipt-103",
+                "uploaded_at": "2025-09-01T10:00:00Z",
+                "receipt_type": "invoice",
+                "receipt_url": "https://example.com/receipts/receipt-1.pdf"
+            }
+        ],
+        "asesor_data": {
+            "name": "Catalina Camacho",
+            "thumnail": "https://i.pravatar.cc/150?img=2"
+        },
+        "sale_place": {
+            "place_name": "Asesorias KG"
+        }
+    }
+]
