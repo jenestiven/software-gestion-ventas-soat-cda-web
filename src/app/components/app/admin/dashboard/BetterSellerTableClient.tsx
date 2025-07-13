@@ -53,7 +53,12 @@ export default function BetterSellerTableClient({ dataSource }: Props) {
       <Title level={5} style={{ margin: 0 }}>
         Mejores vendedores
       </Title>
-      <Table dataSource={dataSource} columns={columns} pagination={false} />
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        pagination={false}
+        rowKey={(record) => record.id || record.name}
+      />
     </div>
   );
 }

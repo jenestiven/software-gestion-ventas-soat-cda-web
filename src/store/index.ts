@@ -15,15 +15,31 @@ const useStore = create<UserState>((set, get) => ({
 
   setUser: (user) => {
     set({ user, isAuthenticated: !!user });
+
     if (typeof window !== "undefined") {
-      document.cookie = `user=${encodeURIComponent(JSON.stringify(user))}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax; Secure`;
+      const domain = process.env.NEXT_PUBLIC_COOKIE_DOMAIN;
+      let cookieString = `user=${encodeURIComponent(
+        JSON.stringify(user)
+      )}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
+
+      if (domain && domain !== "localhost") {
+        cookieString += `; domain=${domain}; Secure`;
+      }
+
+      document.cookie = cookieString;
     }
   },
 
   clearUser: () => {
     set({ user: null, isAuthenticated: false });
     if (typeof window !== "undefined") {
-      document.cookie = "user=; path=/; max-age=0; SameSite=Lax; Secure";
+      const domain = process.env.NEXT_PUBLIC_COOKIE_DOMAIN;
+      let cookieString = "user=; path=/; max-age=0; SameSite=Lax";
+
+      if (domain && domain !== "localhost") {
+        cookieString += "; Secure";
+      }
+      document.cookie = cookieString;
     }
   },
 

@@ -179,7 +179,7 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
                   ? "Factura: "
                   : "Pagare: "
               }`}{" "}
-              <h2>{sale?.receipts.at(0)?.id}</h2>
+              {sale?.receipts.at(0)?.id}
             </p>
             <Button type="primary" icon={<DownloadOutlined />}>
               Descargar{" "}

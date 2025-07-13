@@ -10,7 +10,6 @@ import {
   Avatar,
   Row,
   Col,
-  Menu,
   Dropdown,
   Tag,
   Divider,
@@ -206,15 +205,16 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       title: "Acciones",
       key: "actions",
       render: (_, record) => {
-        const menu = (
-          <Menu>
-            <Menu.Item onClick={() => handleViewMore(record)} key="1">
-              ver detalle
-            </Menu.Item>
-          </Menu>
-        );
+        const menu = [
+          {
+            key: "1",
+            label: (
+              <a onClick={() => handleViewMore(record)}>ver detalle</a>
+            ),
+          },
+        ];
         return (
-          <Dropdown overlay={menu} trigger={["click"]} placement="bottomRight">
+          <Dropdown menu={{items: menu}} trigger={["click"]} placement="bottomRight">
             <Button icon={<MoreOutlined />} />
           </Dropdown>
         );
