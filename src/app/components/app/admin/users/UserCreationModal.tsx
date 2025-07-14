@@ -1,22 +1,45 @@
 "use client";
+
 import { Button, Col, Form, Input, Modal, Row, Select, message } from "antd";
-import React from "react";
-import { AntdUpload } from "./AntdUpload";
+import React, { useState } from "react";
+import { AntdUpload, getBase64 } from "./AntdUpload";
+import type { GetProp, UploadFile, UploadProps } from "antd";
+import { createUserApi } from "@/lib/api/users";
 
 type Props = {
   open: boolean;
   onClose: () => void;
 };
 
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+
 export default function UserCreationModal({ open, onClose }: Props) {
   const [form] = Form.useForm();
-  const [rol, setRol] = React.useState<"admin" | "asesor">();
+  const [rol, setRol] = useState<"admin" | "asesor">();
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-    message.success("Usuario creado con exito");
-    onClose();
-    form.resetFields();
+  const onFinish = async (values: any) => {
+    try {
+      const file = await getBase64(fileList[0].originFileObj as FileType);
+
+      const userData = {
+        email: values.email,
+        name: values.name,
+        tel: values.tel,
+        rol: values.rol,
+        place: values?.place || "",
+        file: file ?? [],
+      };
+
+      await createUserApi(userData);
+      message.success("Usuario creado con exito");
+      form.resetFields();
+      onClose();
+    } catch (error) {
+      console.error("Error creating user:", error);
+      message.error("Error al crear el usuario");
+      return;
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -50,6 +73,17 @@ export default function UserCreationModal({ open, onClose }: Props) {
           </Col>
           <Col span={12}>
             <Form.Item
+              name="cc"
+              label="Cédula"
+              rules={[{ required: true, message: "La cédula es requerida" }]}
+            >
+              <Input className="h-8 rounded-md" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
               name="tel"
               label="Telefono"
               rules={[{ required: true, message: "El telefono es requerido" }]}
@@ -57,8 +91,6 @@ export default function UserCreationModal({ open, onClose }: Props) {
               <Input className="h-8 rounded-md" />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
           <Col span={12}>
             <Form.Item
               name="email"
@@ -86,9 +118,7 @@ export default function UserCreationModal({ open, onClose }: Props) {
               </Select>
             </Form.Item>
           </Col>
-        </Row>
-        {rol === "asesor" && (
-          <Row gutter={16}>
+          {rol === "asesor" && (
             <Col span={12}>
               <Form.Item
                 name="place"
@@ -107,12 +137,12 @@ export default function UserCreationModal({ open, onClose }: Props) {
                 </Select>
               </Form.Item>
             </Col>
-          </Row>
-        )}
+          )}
+        </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item name="thumbnail" label="Foto de perfil">
-              <AntdUpload />
+            <Form.Item label="Foto de perfil">
+              <AntdUpload fileList={fileList} setFileList={setFileList} />
             </Form.Item>
           </Col>
         </Row>

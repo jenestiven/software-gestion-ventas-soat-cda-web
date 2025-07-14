@@ -5,7 +5,7 @@ import type { GetProp, UploadFile, UploadProps } from "antd";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-const getBase64 = (file: FileType): Promise<string> =>
+export const getBase64 = (file: FileType): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -13,16 +13,19 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 
-export const AntdUpload: React.FC = () => {
+interface AntdUploadProps {
+  fileList: UploadFile[];
+  setFileList: (files: UploadFile[]) => void;
+}
+
+export const AntdUpload: React.FC<AntdUploadProps> = ({ fileList, setFileList }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as FileType);
     }
-
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
   };
@@ -36,6 +39,7 @@ export const AntdUpload: React.FC = () => {
       <div style={{ marginTop: 8 }}>Subir foto</div>
     </button>
   );
+
   return (
     <>
       <Upload

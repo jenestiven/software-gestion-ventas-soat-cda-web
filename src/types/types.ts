@@ -102,3 +102,13 @@ export interface UserDataType {
   role: string;
   active: boolean;
 }
+
+export interface UserForCreate {
+  email: string;
+  name: string;
+  tel: string;
+  rol: string;
+  cc: string;
+  place?: string | null;
+  file?: string | null;
+}

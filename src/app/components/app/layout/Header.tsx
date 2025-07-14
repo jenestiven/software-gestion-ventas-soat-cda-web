@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import "./header.css";
 import { Avatar, Button, Dropdown, Typography } from "antd";
 import useStore from "@/store";
 import type { MenuProps } from "antd";
 import { logout } from "@/firebase/firebaseClient";
+import "./header.css";
 
 type Props = {};
 
