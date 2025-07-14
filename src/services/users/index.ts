@@ -5,12 +5,14 @@ import { NextResponse } from "next/server";
 
 export async function createUser(data: UserForCreate) {
   try {
-    const { email, name, tel, place, rol, file, cc } = data;
-
+    const { email, name, tel, sales_place, rol, file, cc } = data;
     const userRecord = await auth.createUser({
       email,
       password: cc,
       displayName: name,
+      providerToLink: {
+        email: email,
+      },
     });
 
     const thumbnailUrl = file
@@ -29,7 +31,7 @@ export async function createUser(data: UserForCreate) {
       tel,
       role: rol,
       active: true,
-      sales_place: place || null,
+      sales_place: sales_place || null,
       thumbnail: file ? thumbnailUrl : null,
       created_at: new Date().toISOString(),
     });

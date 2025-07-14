@@ -33,7 +33,7 @@ export function useLogin() {
       name: userData.name,
       thumbnail: userData.thumbnail,
       role: role,
-      sales_place: userData.place ?? "moto gp",
+      sales_place: userData.sales_place ?? "moto gp",
     });
 
     return role;

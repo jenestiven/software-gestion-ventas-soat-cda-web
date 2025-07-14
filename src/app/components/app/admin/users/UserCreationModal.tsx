@@ -27,6 +27,7 @@ export default function UserCreationModal({ open, onClose }: Props) {
         name: values.name,
         tel: values.tel,
         rol: values.rol,
+        cc: values.cc,
         place: values?.place || "",
         file: file ?? [],
       };

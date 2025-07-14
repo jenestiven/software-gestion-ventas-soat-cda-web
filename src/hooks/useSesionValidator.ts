@@ -24,7 +24,7 @@ export function useSessionValidator() {
               name: userData.name,
               thumbnail: userData.thumbnail,
               role: userData.role,
-              sales_place: userData.place ?? "moto gp",
+              sales_place: userData.sales_place ?? "moto gp",
             });
           } else {
             console.error(

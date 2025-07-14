@@ -10,7 +10,7 @@ import "./header.css";
 type Props = {};
 
 export default function Header({}: Props) {
-  const user = useStore((state) => state.user);  
+  const user = useStore((state) => state.user);
   const { Title, Text } = Typography;
 
   const headerTitle = useStore((state) => state.headerTitle);
@@ -62,7 +62,7 @@ export default function Header({}: Props) {
           <Avatar
             size="large"
             className="header-avatar cursor-pointer"
-            src="https://i.pravatar.cc/150?img=4"
+            src={user?.thumbnail || "https://i.pravatar.cc/150?img=4"}
           />
         </Dropdown>
       </div>

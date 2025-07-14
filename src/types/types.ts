@@ -109,6 +109,6 @@ export interface UserForCreate {
   tel: string;
   rol: string;
   cc: string;
-  place?: string | null;
+  sales_place?: string | null;
   file?: string | null;
 }
