@@ -43,18 +43,14 @@
             }
 
             &:where(.selected) {
-                color: var(--active-color);
-                background-color: #fff;
+                background: var(--color-primary);
+                color: #fff;
             }
 
             & .item-icon {
                 min-height: var(--icon-nav-size);
                 min-width: var(--icon-nav-size);
                 font-size: 26px;
-            }
-
-            & .item-title {
-                display: var(--nav-title-display);
             }
         }
     }

@@ -1,14 +1,12 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "@/firebase/firebaseConfig";
+import { auth, db } from "@/firebase/firebaseClient";
 import useStore from "@/store";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function useLogin() {
   const [loading, setLoading] = useState(false);
   const { setUser } = useStore();
-  const router = useRouter();
 
   const login = async (email: string, password: string) => {
     const userCredential = await signInWithEmailAndPassword(
@@ -35,16 +33,10 @@ export function useLogin() {
       name: userData.name,
       thumbnail: userData.thumbnail,
       role: role,
+      sales_place: userData.place ?? "moto gp",
     });
 
-    if (role === "admin") {
-      router.push("/admin");
-    } else if (role === "asesor") {
-      router.push("/asesor");
-    } else {
-      console.error("❌ Rol no autorizado para ingresar a la plataforma.");
-      throw new Error("No tienes permisos para acceder a la plataforma.");
-    }
+    return role;
   };
 
   return { login, setLoading, loading };

@@ -4,14 +4,17 @@ import { CustomUser } from "@/types/types";
 interface UserState {
   user: CustomUser | null;
   isAuthenticated: boolean;
+  headerTitle: string;
   setUser: (user: CustomUser) => void;
   clearUser: () => void;
   initializeUser: () => void;
+  setTitle: (title: string) => void;
 }
 
 const useStore = create<UserState>((set, get) => ({
   user: null,
   isAuthenticated: false,
+  headerTitle: "",
 
   setUser: (user) => {
     set({ user, isAuthenticated: !!user });
@@ -27,6 +30,13 @@ const useStore = create<UserState>((set, get) => ({
       }
 
       document.cookie = cookieString;
+    }
+  },
+
+  setTitle: (title: string) => {
+    set({ headerTitle: title });
+    if (typeof window !== "undefined") {
+      localStorage.setItem("headerTitle", title);
     }
   },
 

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "@/firebase/firebaseConfig";
+import { auth, db } from "@/firebase/firebaseClient";
 import { doc, getDoc } from "firebase/firestore";
 import useStore from "@/store";
 
@@ -24,6 +24,7 @@ export function useSessionValidator() {
               name: userData.name,
               thumbnail: userData.thumbnail,
               role: userData.role,
+              sales_place: userData.place ?? "moto gp",
             });
           } else {
             console.error(

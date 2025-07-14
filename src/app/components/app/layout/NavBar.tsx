@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Tooltip, Typography } from "antd";
 import Link from "next/link";
 import useStore from "@/store";
@@ -10,14 +10,37 @@ import "./nav.css";
 
 type Props = {};
 
-//const keyPathName = "selectedPath";
+const keyPathName = "selectedPath";
 
 export default function NavBar({}: Props) {
-  // Use a selector for zustand store
   const { Text } = Typography;
   const user = useStore((state) => state.user);
+  const { setTitle } = useStore();
+
   const appRoutes =
     user && user.role === "admin" ? adminNavRoutes : asesorNavRoutes;
+
+  useEffect(() => {
+    if (user && user.role === "admin") {
+      setTitle("Tablero de control");
+      setSelectedPath("admin");
+    } else {
+      setTitle("Modulo de ventas SOAT");
+      setSelectedPath("asesor");
+    }
+  }, [user]); //eslint-disable-line react-hooks/exhaustive-deps
+
+  const [selectedPath, setSelectedPath] = useState<string>("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setSelectedPath(localStorage.getItem(keyPathName) || "");
+    }
+  }, []);
+
+  const handleSelect = (path: string) => {
+    setSelectedPath(path);
+  };
 
   return (
     <nav className="layout-nav">
@@ -39,25 +62,23 @@ export default function NavBar({}: Props) {
           }
 
           const { title, navIcon: NavIcon } = handle;
-          // // Determine if this route is selected
-          // const isSelected =
-          //   typeof window !== "undefined" &&
-          //   localStorage.getItem(keyPathName) === path
-          //     ? " selected"
-          //     : "";
+          const isSelected = selectedPath === path;
 
           return (
             <li key={index}>
               <Tooltip title={title ?? ""} placement="right">
                 <Link
                   href={`/${path}`}
-                  className={`nav-list-item selected`}
-                  // onClick={() => {
-                  //   localStorage.setItem(keyPathName, path);
-                  // }}
+                  className={`nav-list-item ${
+                    isSelected ? "selected" : ""
+                  } transition-colors`}
+                  onClick={() => {
+                    handleSelect(path);
+                    setTitle(title || "Ventas SOAT");
+                  }}
                 >
                   {NavIcon && <NavIcon className="item-icon" />}
-                  <Text className="item-title">{title}</Text>
+                  <p className="font-light text-sm">{title}</p>
                 </Link>
               </Tooltip>
             </li>

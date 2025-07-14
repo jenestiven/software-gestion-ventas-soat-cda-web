@@ -4,6 +4,7 @@ export interface CustomUser {
   name?: string;
   thumbnail?: string | null;
   role?: string;
+  sales_place?: string;
 }
 
 export interface UserState {

@@ -1,15 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+// import Link from "next/link";
 import Image from "next/image";
 import { useLogin } from "@/hooks/useLogin";
 import LoadingScreen from "./loading/page";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const { login, setLoading, loading } = useLogin();
 
@@ -19,7 +21,17 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await login(email, password);
+      const role = await login(email, password);
+      
+      if (role === "admin") {
+        router.push("/admin");
+      } else if (role === "asesor") {
+        router.push("/asesor");
+      } else {
+        console.error("❌ Rol no autorizado para ingresar a la plataforma.");
+        throw new Error("No tienes permisos para acceder a la plataforma.");
+      }
+
     } catch (err: any) {
       setError(err.message);
       setLoading(false);
@@ -100,7 +112,7 @@ export default function LoginPage() {
                   />
                 </div>
               </div>
-              <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
                 <div className="text-sm leading-6">
                   <Link
                     href="/auth/forgotpassword"
@@ -109,7 +121,7 @@ export default function LoginPage() {
                     ¿Olvidaste tu contraseña?
                   </Link>
                 </div>
-              </div>
+              </div> */}
               <div>
                 <button
                   type="submit"
