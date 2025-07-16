@@ -5,32 +5,13 @@ import { MoreOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Table, Button, Dropdown, Menu, Input, Avatar } from "antd";
 import UserCreationModal from "./UserCreationModal";
 import type { TableProps } from "antd";
-import { UserDataType } from "@/types/types";
+import { DbUser, UserDataType } from "@/types/types";
 
-type Props = {};
+type Props = {
+  dataSource: DbUser[];
+};
 
-const dataSource: UserDataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    thumbnail: "https://i.pravatar.cc/150?img=1",
-    tel: "123-456-7890",
-    email: "john.brown@example.com",
-    active: true,
-    role: "Admin",
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    thumbnail: "https://i.pravatar.cc/150?img=2",
-    tel: "098-765-4321",
-    email: "jim.green@example.com",
-    active: false,
-    role: "Asesor",
-  },
-];
-
-export default function UsersTableClient({}: Props) {
+export default function UsersTableClient({ dataSource }: Props) {
   const [searchText, setSearchText] = useState("");
   const [openUserCreationModal, setOpenUserCreationModal] = useState(false);
 
@@ -38,7 +19,7 @@ export default function UsersTableClient({}: Props) {
     user.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  const columns: TableProps<UserDataType>["columns"] = [
+  const columns: TableProps<DbUser>["columns"] = [
     {
       title: "Usuario",
       dataIndex: "",

@@ -112,3 +112,15 @@ export interface UserForCreate {
   sales_place?: string | null;
   file?: string | null;
 }
+
+export interface DbUser {
+  uid: string;
+  email: string;
+  name: string;
+  tel: string;
+  role: string;
+  active: boolean;
+  sales_place?: string | null;
+  thumbnail?: string | null;
+  created_at?: string;
+}

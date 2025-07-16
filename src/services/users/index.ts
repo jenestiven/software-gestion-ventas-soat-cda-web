@@ -1,5 +1,5 @@
 import { auth, db } from "@/firebase/firebaseAdmin";
-import { UserForCreate } from "@/types/types";
+import { DbUser, UserForCreate } from "@/types/types";
 import { uploadBase64FileAndGetUrl } from "../storage";
 import { NextResponse } from "next/server";
 
@@ -60,6 +60,35 @@ export async function createUser(data: UserForCreate) {
       );
     }
 
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function getUsers() {
+  try {
+    const userCollection = db.collection("users");
+    const snapshot = await userCollection.get();
+    const users: DbUser[] = [];
+    snapshot.forEach((doc) => {
+      const userData = doc.data();
+      const user: DbUser = {
+        uid: doc.id,
+        email: userData.email,
+        name: userData.name,
+        tel: userData.tel,
+        role: userData.role,
+        active: userData.active,
+        sales_place: userData.sales_place || null,
+        thumbnail: userData.thumbnail,
+      };
+      users.push(user);
+    });
+    return users;
+  } catch (error) {
+    console.error("Error fetching users:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
