@@ -143,3 +143,21 @@ export async function updateUser(data: UserForUpdate) {
     );
   }
 }
+
+export async function deleteUser(uid: string) {
+  try {
+    // Eliminar de Firebase Authentication
+    await auth.deleteUser(uid);
+
+    // Eliminar de Firestore
+    await db.collection("users").doc(uid).delete();
+
+    return NextResponse.json({ message: "User deleted successfully" }, { status: 200 });
+  } catch (error: any) {
+    console.error("Error deleting user:", error);
+    if (error.code === "auth/user-not-found") {
+      throw new Error("User not found");
+    }
+    throw new Error("Failed to delete user");
+  }
+}

@@ -32,9 +32,11 @@ export async function updateUserApi(userData: any) {
 
 export async function deleteUserApi(uid: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/users/delete-user/${uid}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/users/delete-user`,
     {
       method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid }),
     }
   );
   if (!res.ok) throw new Error("Error eliminando usuario");

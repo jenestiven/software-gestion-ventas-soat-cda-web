@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react';
 import { MoreOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
-import { Table, Button, Dropdown, Input, Avatar, Menu } from 'antd';
+import { Table, Button, Dropdown, Input, Avatar, Modal, message } from 'antd';
 import UserCreationModal from './UserCreationModal';
 import type { TableProps } from 'antd';
 import { DbUser } from '@/types/types';
 import { useRouter } from 'next/navigation';
+import { deleteUserApi } from '@/lib/api/users';
 
 type Props = {
   dataSource: DbUser[];
@@ -36,6 +37,27 @@ export default function UsersTableClient({ dataSource }: Props) {
   const handleCreate = () => {
     setEditingUser(null);
     setIsModalOpen(true);
+  };
+
+  const handleDelete = (user: DbUser) => {
+    Modal.confirm({
+      title: `¿Estás seguro de que quieres eliminar a ${user.name}?`,
+      content: 'Esta acción no se puede deshacer.',
+      okText: 'Sí, eliminar',
+      okType: 'danger',
+      centered: true,
+      cancelText: 'No, cancelar',
+      async onOk() {
+        try {
+          await deleteUserApi(user.uid);
+          message.success('Usuario eliminado exitosamente');
+          router.refresh();
+        } catch (error) {
+          message.error('Error al eliminar el usuario');
+          console.error('Error deleting user:', error);
+        }
+      },
+    });
   };
 
   const filteredDataSource = dataSource.filter((user) =>
@@ -102,7 +124,7 @@ export default function UsersTableClient({ dataSource }: Props) {
           {
             key: '2',
             label: 'Eliminar',
-            onClick: () => { /* Lógica de eliminar */ },
+            onClick: () => handleDelete(record),
           },
         ];
 
