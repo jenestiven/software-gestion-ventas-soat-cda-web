@@ -9,18 +9,23 @@ import { createUserApi } from "@/lib/api/users";
 type Props = {
   open: boolean;
   onClose: () => void;
+  onUserCreated: () => void;
 };
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-export default function UserCreationModal({ open, onClose }: Props) {
+export default function UserCreationModal({ open, onClose, onUserCreated }: Props) {
   const [form] = Form.useForm();
   const [rol, setRol] = useState<"admin" | "asesor">();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const onFinish = async (values: any) => {
     try {
-      const file = await getBase64(fileList[0].originFileObj as FileType);
+      message.loading("Creando usuario...");
+      let file = null;
+      if (fileList.length > 0) {
+        file = await getBase64(fileList[0].originFileObj as FileType);
+      }
 
       const userData = {
         email: values.email,
@@ -29,13 +34,13 @@ export default function UserCreationModal({ open, onClose }: Props) {
         rol: values.rol,
         cc: values.cc,
         place: values?.place || "",
-        file: file ?? [],
+        file: file ?? null,
       };
 
       await createUserApi(userData);
       message.success("Usuario creado con exito");
       form.resetFields();
-      onClose();
+      onUserCreated();
     } catch (error) {
       console.error("Error creating user:", error);
       message.error("Error al crear el usuario");

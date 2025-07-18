@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import { MoreOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { Table, Button, Dropdown, Menu, Input, Avatar } from "antd";
+import { Table, Button, Dropdown, Input, Avatar } from "antd";
 import UserCreationModal from "./UserCreationModal";
 import type { TableProps } from "antd";
-import { DbUser, UserDataType } from "@/types/types";
+import { DbUser } from "@/types/types";
+import { useRouter } from "next/navigation";
 
 type Props = {
   dataSource: DbUser[];
@@ -14,6 +15,12 @@ type Props = {
 export default function UsersTableClient({ dataSource }: Props) {
   const [searchText, setSearchText] = useState("");
   const [openUserCreationModal, setOpenUserCreationModal] = useState(false);
+  const router = useRouter();
+
+  const handleUserCreated = () => {
+    setOpenUserCreationModal(false);
+    router.refresh();
+  };
 
   const filteredDataSource = dataSource.filter((user) =>
     user.name.toLowerCase().includes(searchText.toLowerCase())
@@ -30,7 +37,9 @@ export default function UsersTableClient({ dataSource }: Props) {
             src={item.thumbnail}
             alt="thumbnail"
             className="rouded-full w-10 h-10"
-          />
+          >
+            {!item.thumbnail && item.name.charAt(0).toUpperCase()}
+          </Avatar>
           {item.name}
         </span>
       ),
@@ -50,7 +59,7 @@ export default function UsersTableClient({ dataSource }: Props) {
       dataIndex: "active",
       key: "active",
       render: (active: "Active" | "Inactive") =>
-        active ? "Active" : "Inactive",
+        active ? "Activo" : "Inactivo",
       filters: [
         { text: "Activo", value: true },
         { text: "Inactivo", value: false },
@@ -61,9 +70,11 @@ export default function UsersTableClient({ dataSource }: Props) {
       title: "Rol",
       dataIndex: "role",
       key: "role",
+      render: (role: "asesor" | "admin") =>
+        role === "asesor" ? "Asesor" : "Administrador",
       filters: [
-        { text: "Administrador", value: "Admin" },
-        { text: "Asesor", value: "Asesor" },
+        { text: "Administrador", value: "admin" },
+        { text: "Asesor", value: "asesor" },
       ],
       onFilter: (value, record: any) => record.role.includes(value),
     },
@@ -119,6 +130,7 @@ export default function UsersTableClient({ dataSource }: Props) {
       <UserCreationModal
         open={openUserCreationModal}
         onClose={() => setOpenUserCreationModal(false)}
+        onUserCreated={handleUserCreated}
       />
     </>
   );
