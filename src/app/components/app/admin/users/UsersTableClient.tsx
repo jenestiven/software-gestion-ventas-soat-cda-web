@@ -113,6 +113,7 @@ export default function UsersTableClient({ dataSource }: Props) {
           dataSource={filteredDataSource}
           columns={columns}
           pagination={{ pageSize: 10 }}
+          rowKey={"uid"}
         />
       </div>
       <UserCreationModal

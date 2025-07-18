@@ -1,11 +1,11 @@
 import React from "react";
 import UsersTableClient from "./UsersTableClient";
-import { getUsersApi } from "@/lib/api/users";
+import { getUsers } from "@/services/users";
 
 type Props = {};
 
 export default async function UsersTable({}: Props) {
-  const data = await getUsersApi();
+  const data = await getUsers();
 
   return <UsersTableClient dataSource={data} />;
 }

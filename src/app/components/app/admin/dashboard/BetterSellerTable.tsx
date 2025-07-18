@@ -1,26 +1,9 @@
 import React from "react";
 import BetterSellerTableClient from "./BetterSellerTableClient";
-import { headers } from "next/headers";
-
-async function getBetterSellers() {
-  const host = headers().get("host");
-  const protocol = headers().get("x-forwarded-proto") || "http";
-  const cookie = headers().get("cookie");
-  const baseUrl = `${protocol}://${host}`;
-  const res = await fetch(`${baseUrl}/api/local/better-sellers`, {
-    cache: "no-store",
-    headers: {
-      cookie: cookie || "",
-    },
-  });
-  const data = await res.json();
-  return data;
-}
+import sells from "@/app/api/local/better-sellers/better-sellers.json";
 
 type Props = {};
 
-export default async function BetterSellerTable({}: Props) {
-  const betterSellers = await getBetterSellers();
-
-  return <BetterSellerTableClient dataSource={betterSellers} />;
+export default function BetterSellerTable({}: Props) {
+  return <BetterSellerTableClient dataSource={sells} />;
 }

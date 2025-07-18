@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   UserOutlined,
@@ -7,8 +9,8 @@ import {
 } from "@ant-design/icons";
 import { Typography } from "antd";
 
-type Props = {};
 const { Title, Text } = Typography;
+type Props = {};
 
 export default function UsersCards({}: Props) {
   return (
