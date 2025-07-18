@@ -2,6 +2,7 @@ import { auth, db } from "@/firebase/firebaseAdmin";
 import { DbUser, UserForCreate, UserForUpdate } from "@/types/types";
 import { uploadBase64FileAndGetUrl } from "../storage";
 import { NextResponse } from "next/server";
+import { getSalesPlaces } from "../sales-places";
 
 export async function createUser(data: UserForCreate) {
   try {
@@ -152,12 +153,52 @@ export async function deleteUser(uid: string) {
     // Eliminar de Firestore
     await db.collection("users").doc(uid).delete();
 
-    return NextResponse.json({ message: "User deleted successfully" }, { status: 200 });
+    return NextResponse.json(
+      { message: "User deleted successfully" },
+      { status: 200 }
+    );
   } catch (error: any) {
     console.error("Error deleting user:", error);
     if (error.code === "auth/user-not-found") {
       throw new Error("User not found");
     }
     throw new Error("Failed to delete user");
+  }
+}
+
+export async function getUsersStats() {
+  try {
+    const users = await getUsers();
+    const places = await getSalesPlaces();
+
+    let adminUsers = 0;
+    let asesorUsers = 0;
+    let activeUsers = 0;
+    let salesPlacesCount = 0;
+
+    if (Array.isArray(users)) {
+      adminUsers = users.filter((user: DbUser) => user.role === "admin").length;
+      asesorUsers = users.filter(
+        (user: DbUser) => user.role === "asesor"
+      ).length;
+      activeUsers = users.filter((user: DbUser) => user.active).length;
+    }
+
+    if (Array.isArray(places)) {
+      salesPlacesCount = places.length;
+    }
+
+    return {
+      activeUsers,
+      adminUsers,
+      asesorUsers,
+      salesPlacesCount,
+    };
+  } catch (error) {
+    console.error("Error fetching user stats:", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

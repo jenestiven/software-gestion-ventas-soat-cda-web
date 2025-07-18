@@ -122,7 +122,6 @@ export default function UserCreationModal({
       centered
     >
       <Form form={form} layout="vertical" onFinish={onFinish}>
-        {/* ... (resto del formulario sin cambios, con campos deshabilitados) ... */}
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
@@ -134,7 +133,11 @@ export default function UserCreationModal({
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="cc" label="Cédula">
+            <Form.Item
+              name="cc"
+              label="Cédula"
+              rules={[{ required: true, message: "La cédula es requerida" }]}
+            >
               <Input className="h-8 rounded-md" disabled={isEditMode} />
             </Form.Item>
           </Col>
@@ -150,7 +153,11 @@ export default function UserCreationModal({
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="email" label="Correo electronico">
+            <Form.Item
+              name="email"
+              label="Correo electronico"
+              rules={[{ required: true, message: "El correo electronico es requerido" }]}
+            >
               <Input className="h-8 rounded-md" disabled={isEditMode} />
             </Form.Item>
           </Col>
