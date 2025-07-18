@@ -1,145 +1,177 @@
-"use client";
+'use client';
 
-import { Button, Col, Form, Input, Modal, Row, Select, message } from "antd";
-import React, { useState } from "react";
-import { AntdUpload, getBase64 } from "./AntdUpload";
-import type { GetProp, UploadFile, UploadProps } from "antd";
-import { createUserApi } from "@/lib/api/users";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Select,
+  message,
+  UploadFile,
+  UploadProps,
+  GetProp,
+} from 'antd';
+import React, { useState, useEffect } from 'react';
+import { AntdUpload, getBase64 } from './AntdUpload';
+import { createUserApi, updateUserApi } from '@/lib/api/users';
+import { DbUser } from '@/types/types';
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  onUserCreated: () => void;
+  onUserCreated: () => void; // Re-used for both create and update
+  userToEdit?: DbUser | null;
 };
 
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-export default function UserCreationModal({ open, onClose, onUserCreated }: Props) {
+export default function UserCreationModal({
+  open,
+  onClose,
+  onUserCreated,
+  userToEdit,
+}: Props) {
   const [form] = Form.useForm();
-  const [rol, setRol] = useState<"admin" | "asesor">();
+  const [rol, setRol] = useState<'admin' | 'asesor'>();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const isEditMode = !!userToEdit;
+
+  useEffect(() => {
+    if (isEditMode && userToEdit) {
+      form.setFieldsValue({
+        name: userToEdit.name,
+        tel: userToEdit.tel,
+        email: userToEdit.email,
+        rol: userToEdit.role,
+        sales_place: userToEdit.sales_place,
+        // La cédula no se puede editar, pero la mostramos deshabilitada
+        cc: '********',
+      });
+      setRol(userToEdit.role as 'admin' | 'asesor');
+      if (userToEdit.thumbnail) {
+        setFileList([
+          {
+            uid: '-1',
+            name: 'image.png',
+            status: 'done',
+            url: userToEdit.thumbnail,
+          },
+        ]);
+      }
+    } else {
+      form.resetFields();
+      setFileList([]);
+    }
+  }, [userToEdit, form, isEditMode]);
 
   const onFinish = async (values: any) => {
     try {
-      message.loading("Creando usuario...");
+      const actionMessage = isEditMode ? 'Actualizando' : 'Creando';
+      message.loading(`${actionMessage} usuario...`);
+
       let file = null;
-      if (fileList.length > 0) {
+      if (fileList.length > 0 && fileList[0].originFileObj) {
         file = await getBase64(fileList[0].originFileObj as FileType);
       }
 
-      const userData = {
-        email: values.email,
-        name: values.name,
-        tel: values.tel,
-        rol: values.rol,
-        cc: values.cc,
-        place: values?.place || "",
-        file: file ?? null,
-      };
+      if (isEditMode) {
+        const userData = {
+          uid: userToEdit!.uid,
+          name: values.name,
+          tel: values.tel,
+          role: values.rol,
+          sales_place: values?.sales_place || null,
+          file: file ?? null,
+        };
+        await updateUserApi(userData);
+        message.success('Usuario actualizado con éxito');
+      } else {
+        const userData = {
+          email: values.email,
+          name: values.name,
+          tel: values.tel,
+          rol: values.rol,
+          cc: values.cc,
+          sales_place: values?.sales_place || '',
+          file: file ?? null,
+        };
+        await createUserApi(userData);
+        message.success('Usuario creado con éxito');
+      }
 
-      await createUserApi(userData);
-      message.success("Usuario creado con exito");
       form.resetFields();
-      onUserCreated();
+      onUserCreated(); // This will trigger router.refresh()
     } catch (error) {
-      console.error("Error creating user:", error);
-      message.error("Error al crear el usuario");
-      return;
+      const actionMessage = isEditMode ? 'actualizar' : 'crear';
+      console.error(`Error ${actionMessage} usuario:`, error);
+      message.error(`Error al ${actionMessage} el usuario`);
     }
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-    message.error("Error al crear el usuario");
   };
 
   return (
     <Modal
       open={open}
       onCancel={onClose}
-      title="Crear nuevo usuario"
+      title={isEditMode ? 'Editar Usuario' : 'Crear Nuevo Usuario'}
       footer={null}
       centered
     >
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
+      <Form form={form} layout='vertical' onFinish={onFinish}>
+        {/* ... (resto del formulario sin cambios, con campos deshabilitados) ... */}
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="name"
-              label="Nombre"
-              rules={[{ required: true, message: "El nombre es requerido" }]}
+              name='name'
+              label='Nombre'
+              rules={[{ required: true, message: 'El nombre es requerido' }]}
             >
-              <Input className="h-8 rounded-md" />
+              <Input className='h-8 rounded-md' />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item
-              name="cc"
-              label="Cédula"
-              rules={[{ required: true, message: "La cédula es requerida" }]}
-            >
-              <Input className="h-8 rounded-md" />
+            <Form.Item name='cc' label='Cédula'>
+              <Input className='h-8 rounded-md' disabled={isEditMode} />
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="tel"
-              label="Telefono"
-              rules={[{ required: true, message: "El telefono es requerido" }]}
+              name='tel'
+              label='Telefono'
+              rules={[{ required: true, message: 'El telefono es requerido' }]}
             >
-              <Input className="h-8 rounded-md" />
+              <Input className='h-8 rounded-md' />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item name='email' label='Correo electronico'>
+              <Input className='h-8 rounded-md' disabled={isEditMode} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="email"
-              label="Correo electronico"
-              rules={[
-                {
-                  required: true,
-                  message: "El email es requerido",
-                  type: "email",
-                },
-              ]}
-            >
-              <Input className="h-8 rounded-md" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name="rol"
-              label="Rol"
-              rules={[{ required: true, message: "El rol es requerido" }]}
+              name='rol'
+              label='Rol'
+              rules={[{ required: true, message: 'El rol es requerido' }]}
             >
               <Select onChange={(value) => setRol(value)}>
-                <Select.Option value="admin">Admin</Select.Option>
-                <Select.Option value="asesor">Asesor</Select.Option>
+                <Select.Option value='admin'>Admin</Select.Option>
+                <Select.Option value='asesor'>Asesor</Select.Option>
               </Select>
             </Form.Item>
           </Col>
-          {rol === "asesor" && (
+          {rol === 'asesor' && (
             <Col span={12}>
-              <Form.Item
-                name="place"
-                label="Punto de venta"
-                rules={[
-                  { required: true, message: "El punto de venta es requerido" },
-                ]}
-              >
+              <Form.Item name='sales_place' label='Punto de venta'>
                 <Select>
-                  <Select.Option value="Moto GP">Moto GP</Select.Option>
-                  <Select.Option value="Punto vial">Punto vial</Select.Option>
-                  <Select.Option value="asesorias KG">
-                    Asesorias KG
-                  </Select.Option>
-                  <Select.Option value="TCC">TCC</Select.Option>
+                  <Select.Option value='Moto GP'>Moto GP</Select.Option>
+                  <Select.Option value='Punto vial'>Punto vial</Select.Option>
+                  <Select.Option value='asesorias KG'>Asesorias KG</Select.Option>
+                  <Select.Option value='TCC'>TCC</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -147,15 +179,15 @@ export default function UserCreationModal({ open, onClose, onUserCreated }: Prop
         </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item label="Foto de perfil">
+            <Form.Item label='Foto de perfil'>
               <AntdUpload fileList={fileList} setFileList={setFileList} />
             </Form.Item>
           </Col>
         </Row>
         <Row>
-          <Col span={24} style={{ textAlign: "right" }}>
-            <Button type="primary" htmlType="submit">
-              Crear usuario
+          <Col span={24} style={{ textAlign: 'right' }}>
+            <Button type='primary' htmlType='submit'>
+              {isEditMode ? 'Actualizar Usuario' : 'Crear Usuario'}
             </Button>
           </Col>
         </Row>

@@ -1,43 +1,55 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { MoreOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { Table, Button, Dropdown, Input, Avatar } from "antd";
-import UserCreationModal from "./UserCreationModal";
-import type { TableProps } from "antd";
-import { DbUser } from "@/types/types";
-import { useRouter } from "next/navigation";
+import React, { useState } from 'react';
+import { MoreOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { Table, Button, Dropdown, Input, Avatar, Menu } from 'antd';
+import UserCreationModal from './UserCreationModal';
+import type { TableProps } from 'antd';
+import { DbUser } from '@/types/types';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   dataSource: DbUser[];
 };
 
 export default function UsersTableClient({ dataSource }: Props) {
-  const [searchText, setSearchText] = useState("");
-  const [openUserCreationModal, setOpenUserCreationModal] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<DbUser | null>(null);
   const router = useRouter();
 
-  const handleUserCreated = () => {
-    setOpenUserCreationModal(false);
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setEditingUser(null);
+  };
+
+  const handleUserAction = () => {
+    handleModalClose();
     router.refresh();
+  };
+
+  const handleEdit = (user: DbUser) => {
+    setEditingUser(user);
+    setIsModalOpen(true);
+  };
+
+  const handleCreate = () => {
+    setEditingUser(null);
+    setIsModalOpen(true);
   };
 
   const filteredDataSource = dataSource.filter((user) =>
     user.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  const columns: TableProps<DbUser>["columns"] = [
+  const columns: TableProps<DbUser>['columns'] = [
     {
-      title: "Usuario",
-      dataIndex: "",
-      key: "name",
+      title: 'Usuario',
+      dataIndex: '',
+      key: 'name',
       render: (item: { name: string; thumbnail: string }) => (
-        <span className="flex items-center gap-2">
-          <Avatar
-            src={item.thumbnail}
-            alt="thumbnail"
-            className="rouded-full w-10 h-10"
-          >
+        <span className='flex items-center gap-2'>
+          <Avatar src={item.thumbnail} alt='thumbnail' className='rouded-full w-10 h-10'>
             {!item.thumbnail && item.name.charAt(0).toUpperCase()}
           </Avatar>
           {item.name}
@@ -45,55 +57,57 @@ export default function UsersTableClient({ dataSource }: Props) {
       ),
     },
     {
-      title: "Telefono",
-      dataIndex: "tel",
-      key: "tel",
+      title: 'Telefono',
+      dataIndex: 'tel',
+      key: 'tel',
     },
     {
-      title: "Correo electrónico",
-      dataIndex: "email",
-      key: "email",
+      title: 'Correo electrónico',
+      dataIndex: 'email',
+      key: 'email',
     },
     {
-      title: "Estado",
-      dataIndex: "active",
-      key: "active",
-      render: (active: "Active" | "Inactive") =>
-        active ? "Activo" : "Inactivo",
+      title: 'Estado',
+      dataIndex: 'active',
+      key: 'active',
+      render: (active: boolean) => (active ? 'Activo' : 'Inactivo'),
       filters: [
-        { text: "Activo", value: true },
-        { text: "Inactivo", value: false },
+        { text: 'Activo', value: true },
+        { text: 'Inactivo', value: false },
       ],
       onFilter: (value, record) => record.active === value,
     },
     {
-      title: "Rol",
-      dataIndex: "role",
-      key: "role",
-      render: (role: "asesor" | "admin") =>
-        role === "asesor" ? "Asesor" : "Administrador",
+      title: 'Rol',
+      dataIndex: 'role',
+      key: 'role',
+      render: (role: 'asesor' | 'admin') =>
+        role === 'asesor' ? 'Asesor' : 'Administrador',
       filters: [
-        { text: "Administrador", value: "admin" },
-        { text: "Asesor", value: "asesor" },
+        { text: 'Administrador', value: 'admin' },
+        { text: 'Asesor', value: 'asesor' },
       ],
       onFilter: (value, record: any) => record.role.includes(value),
     },
     {
-      title: "Acciones",
-      key: "action",
-      render: () => {
-        const menu = [
+      title: 'Acciones',
+      key: 'action',
+      render: (record: DbUser) => {
+        const menuItems = [
           {
-            key: "1",
-            label: <a onClick={() => {}}>Editar</a>,
+            key: '1',
+            label: 'Editar',
+            onClick: () => handleEdit(record),
           },
           {
-            key: "2",
-            label: <a onClick={() => {}}>Eliminar</a>,
+            key: '2',
+            label: 'Eliminar',
+            onClick: () => { /* Lógica de eliminar */ },
           },
         ];
+
         return (
-          <Dropdown menu={{ items: menu }} trigger={["click"]}>
+          <Dropdown menu={{ items: menuItems }} trigger={['click']}>
             <Button icon={<MoreOutlined />} />
           </Dropdown>
         );
@@ -103,20 +117,16 @@ export default function UsersTableClient({ dataSource }: Props) {
 
   return (
     <>
-      <div className="p-5 bg-white rounded-lg shadow">
-        <div className="mb-4 flex justify-end items-center gap-4">
+      <div className='p-5 bg-white rounded-lg shadow'>
+        <div className='mb-4 flex justify-end items-center gap-4'>
           <Input
             prefix={<SearchOutlined />}
-            placeholder="Buscar usuario"
+            placeholder='Buscar usuario'
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            className="h-8 rounded-md w-1/4"
+            className='h-8 rounded-md w-1/4'
           />
-          <Button
-            onClick={() => setOpenUserCreationModal(true)}
-            type="primary"
-            icon={<PlusOutlined />}
-          >
+          <Button onClick={handleCreate} type='primary' icon={<PlusOutlined />}>
             Crear nuevo usuario
           </Button>
         </div>
@@ -124,13 +134,14 @@ export default function UsersTableClient({ dataSource }: Props) {
           dataSource={filteredDataSource}
           columns={columns}
           pagination={{ pageSize: 10 }}
-          rowKey={"uid"}
+          rowKey={'uid'}
         />
       </div>
       <UserCreationModal
-        open={openUserCreationModal}
-        onClose={() => setOpenUserCreationModal(false)}
-        onUserCreated={handleUserCreated}
+        open={isModalOpen}
+        onClose={handleModalClose}
+        onUserCreated={handleUserAction}
+        userToEdit={editingUser}
       />
     </>
   );

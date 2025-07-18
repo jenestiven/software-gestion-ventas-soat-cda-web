@@ -1,5 +1,5 @@
 import { auth, db } from "@/firebase/firebaseAdmin";
-import { DbUser, UserForCreate } from "@/types/types";
+import { DbUser, UserForCreate, UserForUpdate } from "@/types/types";
 import { uploadBase64FileAndGetUrl } from "../storage";
 import { NextResponse } from "next/server";
 
@@ -89,6 +89,54 @@ export async function getUsers() {
     return users;
   } catch (error) {
     console.error("Error fetching users:", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function updateUser(data: UserForUpdate) {
+  try {
+    const { uid, name, tel, role, sales_place, file } = data;
+
+    // Actualizar la foto de perfil si se proporcionó una nueva
+    const thumbnailUrl = file
+      ? await uploadBase64FileAndGetUrl(
+          file,
+          "image/jpeg",
+          `thumbnail_${uid}.jpg`,
+          uid
+        )
+      : null;
+
+    // Actualizar en Firebase Auth
+    await auth.updateUser(uid, {
+      displayName: name,
+      photoURL: thumbnailUrl || undefined,
+    });
+
+    // Actualizar en Firestore
+    const userRef = db.collection("users").doc(uid);
+    const updatedData: any = {
+      name,
+      tel,
+      role,
+      sales_place: sales_place || null,
+    };
+
+    if (thumbnailUrl) {
+      updatedData.thumbnail = thumbnailUrl;
+    }
+
+    await userRef.update(updatedData);
+
+    return NextResponse.json(
+      { message: "User updated successfully" },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("Error updating user:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

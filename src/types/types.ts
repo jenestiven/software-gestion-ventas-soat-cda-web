@@ -124,3 +124,12 @@ export interface DbUser {
   thumbnail?: string | null;
   created_at?: string;
 }
+
+export interface UserForUpdate {
+  uid: string;
+  name: string;
+  tel: string;
+  role: string;
+  sales_place?: string | null;
+  file?: string | null;
+}
