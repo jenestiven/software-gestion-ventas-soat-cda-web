@@ -1,38 +1,75 @@
 "use client";
 
 import { MoreOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Input, Menu, Table } from "antd";
+import { Button, Dropdown, Input, message, Modal, Table } from "antd";
 import type { TableProps } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PlaceCreationModal from "./PlaceCreationModal";
 import { PlacesDataType } from "@/types/types";
+import { useRouter } from "next/navigation";
+import { deleteSalesPlaceApi } from "@/lib/api/salesPlaces";
+import useStore from "@/store";
 
-type Props = {};
+type Props = {
+  dataSource: PlacesDataType[];
+};
 
-const dataSource: PlacesDataType[] = [
-  {
-    key: "1",
-    place_name: "Plaza Central",
-    place_address: "Calle Falsa 123",
-    asesors_number: 5,
-    active: true,
-  },
-  {
-    key: "2",
-    place_name: "Centro Mayor",
-    place_address: "Avenida Siempre Viva 742",
-    asesors_number: 8,
-    active: false,
-  },
-];
-
-export default function PlacesTableClient({}: Props) {
+export default function PlacesTableClient({ dataSource }: Props) {
   const [searchText, setSearchText] = useState("");
   const [openPlaceCreationModal, setOpenCreationModal] = useState(false);
+  const [editingPlace, setEditingPlace] = useState<PlacesDataType | null>(null);
+  
+  const { setSalesPlaces } = useStore();
+  const router = useRouter();
 
-  const filteredDataSource = dataSource.filter((place) =>
+  useEffect(() => {
+    setSalesPlaces(dataSource);
+  }, [dataSource]); //eslint-disable-line react-hooks/exhaustive-deps
+
+  const filteredDataSource = dataSource?.filter((place) =>
     place.place_name.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  const handleModalClose = () => {
+    setOpenCreationModal(false);
+    setEditingPlace(null);
+  };
+
+  const handleUserAction = () => {
+    handleModalClose();
+    router.refresh();
+  };
+
+  const handleCreate = () => {
+    setEditingPlace(null);
+    setOpenCreationModal(true);
+  };
+
+  const handleEdit = (place: PlacesDataType) => {
+    setEditingPlace(place);
+    setOpenCreationModal(true);
+  };
+
+  const handleDelete = (place: PlacesDataType) => {
+    Modal.confirm({
+      title: `¿Estás seguro de que quieres eliminar la sede ${place.place_name}?`,
+      content: "Esta acción no se puede deshacer.",
+      okText: "Sí, eliminar",
+      okType: "danger",
+      centered: true,
+      cancelText: "No, cancelar",
+      async onOk() {
+        try {
+          await deleteSalesPlaceApi(place.id);
+          message.success("Sede eliminada exitosamente");
+          router.refresh();
+        } catch (error) {
+          message.error("Error al eliminar la sede");
+          console.error("Error deleting place:", error);
+        }
+      },
+    });
+  };
 
   const columns: TableProps<PlacesDataType>["columns"] = [
     {
@@ -51,35 +88,47 @@ export default function PlacesTableClient({}: Props) {
       key: "asesorsNumber",
     },
     {
-      title: "Estado",
-      dataIndex: "active",
-      key: "active",
-      render: (active) => (active ? "Active" : "Inactive"),
-      filters: [
-        { text: "Activo", value: true },
-        { text: "Inactivo", value: false },
-      ],
-      onFilter: (value, record) => record.active === value,
+      title: "Comisión de Asesor",
+      dataIndex: "asesor_sale_commission",
+      key: "asesorSaleCommission",
+      render: (text) => `$${text.toLocaleString()}`,
+    },
+    {
+      title: "Fecha de creación",
+      dataIndex: "created_at",
+      key: "createdAt",
+      render: (text) =>
+        new Date(text).toLocaleDateString("es-CO", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
     },
     {
       title: "Acciones",
       key: "action",
-      render: () => (
-        <Dropdown menu={{ items: menu }} trigger={["click"]}>
-          <Button icon={<MoreOutlined />} />
-        </Dropdown>
-      ),
-    },
-  ];
+      render: (record: PlacesDataType) => {
+        const menuItems = [
+          {
+            key: "1",
+            label: "Editar",
+            onClick: () => handleEdit(record),
+          },
+          {
+            key: "2",
+            label: "Eliminar",
+            onClick: () => handleDelete(record),
+          },
+        ];
 
-  const menu = [
-    {
-      key: "1",
-      label: "Editar",
-    },
-    {
-      key: "2",
-      label: "Eliminar",
+        return (
+          <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
+            <Button icon={<MoreOutlined />} />
+          </Dropdown>
+        );
+      },
     },
   ];
 
@@ -94,11 +143,7 @@ export default function PlacesTableClient({}: Props) {
             onChange={(e) => setSearchText(e.target.value)}
             className="h-8 rounded-md w-1/4"
           />
-          <Button
-            onClick={() => setOpenCreationModal(true)}
-            type="primary"
-            icon={<PlusOutlined />}
-          >
+          <Button onClick={handleCreate} type="primary" icon={<PlusOutlined />}>
             Crear nueva sede
           </Button>
         </div>
@@ -106,11 +151,14 @@ export default function PlacesTableClient({}: Props) {
           dataSource={filteredDataSource}
           columns={columns}
           pagination={{ pageSize: 10 }}
+          rowKey={"id"}
         />
       </div>
       <PlaceCreationModal
         open={openPlaceCreationModal}
         onClose={() => setOpenCreationModal(false)}
+        onPlaceCreated={handleUserAction}
+        placeToEdit={editingPlace}
       />
     </>
   );

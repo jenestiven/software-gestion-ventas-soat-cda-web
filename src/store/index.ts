@@ -1,20 +1,23 @@
 import { create } from "zustand";
-import { CustomUser } from "@/types/types";
+import { CustomUser, PlacesDataType } from "@/types/types";
 
 interface UserState {
   user: CustomUser | null;
   isAuthenticated: boolean;
   headerTitle: string;
+  salesPlaces: PlacesDataType[];
   setUser: (user: CustomUser) => void;
   clearUser: () => void;
   initializeUser: () => void;
   setTitle: (title: string) => void;
+  setSalesPlaces: (places: PlacesDataType[]) => void;
 }
 
 const useStore = create<UserState>((set, get) => ({
   user: null,
   isAuthenticated: false,
   headerTitle: "",
+  salesPlaces: [],
 
   setUser: (user) => {
     set({ user, isAuthenticated: !!user });
@@ -50,6 +53,13 @@ const useStore = create<UserState>((set, get) => ({
         cookieString += "; Secure";
       }
       document.cookie = cookieString;
+    }
+  },
+
+  setSalesPlaces: (places: PlacesDataType[]) => {
+    set({ salesPlaces: places });
+    if (typeof window !== "undefined") {
+      localStorage.setItem("salesPlaces", JSON.stringify(places));
     }
   },
 

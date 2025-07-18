@@ -86,11 +86,23 @@ export interface Sale {
 }
 
 export interface PlacesDataType {
-  key: React.Key;
+  id: string;
   place_name: string;
   place_address: string;
-  asesors_number: number;
-  active: boolean;
+  asesors_number?: number;
+  asesor_sale_commission: number;
+  can_add_profit: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface PlacesDataTypeFromDb {
+  place_name: string;
+  place_address: string;
+  asesor_sale_commission: number;
+  can_add_profit: boolean;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface UserDataType {
@@ -132,4 +144,12 @@ export interface UserForUpdate {
   role: string;
   sales_place?: string | null;
   file?: string | null;
+}
+
+export interface DbSalesPlace {
+  id: string;
+  name: string;
+  address: string;
+  created_at: string;
+  updated_at: string;
 }

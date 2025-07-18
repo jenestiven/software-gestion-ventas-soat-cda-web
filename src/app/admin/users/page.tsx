@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
-import PlacesTableClient from "@/app/components/app/admin/users/PlacesTableClient";
 import UsersTable from "@/app/components/app/admin/users/UsersTable";
 import UsersCards from "@/app/components/app/admin/users/UsersCards";
+import PlacesTable from "@/app/components/app/admin/users/PlacesTable";
 import "@/app/admin/page.css";
 
 export default function UsersPage() {
@@ -14,7 +14,9 @@ export default function UsersPage() {
         </Suspense>
       </div>
       <div style={{ gridColumn: "span 4" }}>
-        <PlacesTableClient />
+        <Suspense fallback={<div>Loading...</div>}>
+          <PlacesTable />
+        </Suspense>
       </div>
     </div>
   );
