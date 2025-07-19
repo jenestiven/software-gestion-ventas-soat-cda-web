@@ -22,7 +22,7 @@ import { PaymentMethod } from "@/types/types";
 
 type Props = {
   onCloseModal: (open: boolean) => void;
-  method: PaymentMethod | null;
+  method: PaymentMethod;
 };
 
 export default function CashForm(props: Props) {
@@ -71,7 +71,6 @@ export default function CashForm(props: Props) {
         },
       };
 
-      console.log("Submitting to API:", saleData);
       await saveSaleApi(saleData);
       message.success("Venta registrada exitosamente");
       form.resetFields();

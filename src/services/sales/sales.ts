@@ -4,8 +4,6 @@ import { uploadBase64FileAndGetUrl } from "../storage";
 
 export async function createSale(saleData: Omit<Sale, "id" | "receipts">) {
   try {
-    console.log("Creating sale with data:", saleData);
-    
     const saleRef = db.collection("sales").doc();
     const saleId = saleRef.id;
 
@@ -13,14 +11,20 @@ export async function createSale(saleData: Omit<Sale, "id" | "receipts">) {
     let receiptType: "brilla-contract" | "pagare" | "invoice" | null = null;
     let file: string | undefined;
 
-    if (saleData.payment_method_id === "addi" && saleData.payment_details) {
-      file = (saleData.payment_details as any).invoice_file;
+    if (saleData.payment_method_id === "addi" && saleData.invoice_file) {
+      file = saleData.invoice_file;
       receiptType = "invoice";
-    } else if (saleData.payment_method_id === "sistecredito" && saleData.payment_details) {
-      file = (saleData.payment_details as any).pagare_file;
+    } else if (
+      saleData.payment_method_id === "sistecredito" &&
+      saleData.pagare_file
+    ) {
+      file = saleData.pagare_file;
       receiptType = "pagare";
-    } else if (saleData.payment_method_id === "brilla" && saleData.payment_details) {
-      file = (saleData.payment_details as any).contract_file;
+    } else if (
+      saleData.payment_method_id === "brilla" &&
+      saleData.contract_file
+    ) {
+      file = saleData.contract_file;
       receiptType = "brilla-contract";
     }
 
@@ -33,14 +37,17 @@ export async function createSale(saleData: Omit<Sale, "id" | "receipts">) {
       );
     }
 
-    const receipts = fileUrl && receiptType ? [
-      {
-        id: `${receiptType}_${saleId}`,
-        uploaded_at: new Date().toISOString(),
-        receipt_url: fileUrl,
-        receipt_type: receiptType,
-      },
-    ] : [];
+    const receipts =
+      fileUrl && receiptType
+        ? [
+            {
+              id: `${receiptType}_${saleId}`,
+              uploaded_at: new Date().toISOString(),
+              receipt_url: fileUrl,
+              receipt_type: receiptType,
+            },
+          ]
+        : [];
 
     const finalSaleData = {
       ...saleData,
@@ -56,4 +63,3 @@ export async function createSale(saleData: Omit<Sale, "id" | "receipts">) {
     throw new Error("Unable to create sale");
   }
 }
-
