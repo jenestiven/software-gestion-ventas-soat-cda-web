@@ -18,9 +18,11 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import useStore from "@/store";
 import { saveSaleApi } from "@/lib/api/sales";
+import { PaymentMethod } from "@/types/types";
 
 type Props = {
   onCloseModal: (open: boolean) => void;
+  method: PaymentMethod | null;
 };
 
 export default function CashForm(props: Props) {
@@ -59,7 +61,9 @@ export default function CashForm(props: Props) {
       message.loading("Registrando venta...", 0);
       const saleData = {
         ...values,
-        seller_id: user?.uid,
+        seller: user,
+        payment_method_id: props.method?.id,
+        payment_method_name: props.method?.name,
         sale_summary: {
           fixed_commission: fixedCommission,
           profit: profit,

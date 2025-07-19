@@ -1,14 +1,13 @@
+import { createSale } from "@/services/sales/sales";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
     const saleData = await req.json();
 
-    // Aquí puedes añadir la lógica para guardar en Firestore
-    console.log("Datos de la venta recibidos en el servidor:", saleData);
-
+    const sale = await createSale(saleData);
     return NextResponse.json(
-      { message: "Venta guardada con éxito", data: saleData },
+      { message: "Venta guardada con éxito", data: sale },
       { status: 201 }
     );
   } catch (error) {

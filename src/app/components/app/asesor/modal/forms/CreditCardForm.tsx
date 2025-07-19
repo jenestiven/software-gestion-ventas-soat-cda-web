@@ -133,7 +133,9 @@ export default function CreditCardForm(props: Props) {
       message.loading("Registrando venta...", 0);
       const saleData = {
         ...values,
-        seller_id: user?.uid,
+        seller: user,
+        payment_method_id: props.method?.id,
+        payment_method_name: props.method?.name,
         sale_summary: {
           datafono_commission: datafonoCommission,
           client_commission: clientCommission,

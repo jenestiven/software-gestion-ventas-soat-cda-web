@@ -22,11 +22,13 @@ import useStore from "@/store";
 import dayjs from "dayjs";
 import { saveSaleApi } from "@/lib/api/sales";
 import { AntdUpload, getBase64 } from "../../../admin/users/AntdUpload";
+import { PaymentMethod } from "@/types/types";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 type Props = {
   onCloseModal: (open: boolean) => void;
+  method: PaymentMethod | null;
 };
 
 export default function SistecreditoForm(props: Props) {
@@ -80,7 +82,9 @@ export default function SistecreditoForm(props: Props) {
       const saleData = {
         ...values,
         pagare_file: file,
-        seller_id: user?.uid,
+        seller: user,
+        payment_method_id: props.method?.id,
+        payment_method_name: props.method?.name,
         sale_summary: {
           fixed_commission: fixedCommission,
           partners_commission: partnersCommission,

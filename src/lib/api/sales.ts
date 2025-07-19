@@ -1,4 +1,6 @@
-export const saveSaleApi = async (saleData: any) => {
+import { SaleCreation } from "@/types/types";
+
+export const saveSaleApi = async (saleData: SaleCreation) => {
   try {
     const response = await fetch("/api/server/sales/create-sale", {
       method: "POST",

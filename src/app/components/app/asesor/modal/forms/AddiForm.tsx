@@ -22,6 +22,7 @@ import {
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { AntdUpload, getBase64 } from "../../../admin/users/AntdUpload";
+import { PaymentMethod } from "@/types/types";
 
 const { Text, Title } = Typography;
 
@@ -29,6 +30,7 @@ type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 type Props = {
   onCloseModal: (open: boolean) => void;
+  method: PaymentMethod | null;
 }
 
 export default function AddiForm(props: Props) {
@@ -99,7 +101,9 @@ export default function AddiForm(props: Props) {
       const saleData = {
         ...values,
         invoice_file: file,
-        seller_id: user?.uid,
+        seller: user,
+        payment_method_id: props.method?.id,
+        payment_method_name: props.method?.name,
         sale_summary: {
           fixed_commission: fixedCommission,
           addi_commission: addiCommission,

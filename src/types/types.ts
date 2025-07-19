@@ -1,16 +1,128 @@
-export interface CustomUser {
-  uid?: string;
+export type CustomUser = {
+  uid: string;
   email: string | null;
-  name?: string;
-  thumbnail?: string | null;
-  role?: string;
-  sales_place?: string;
-  sales_place_id?: string;
-  sale_data?:{
-    asesor_sale_commission?: number;
-    can_add_profit?: boolean;
-  }
-}
+  name: string;
+  thumbnail: string;
+  role: "admin" | "asesor";
+  sales_place: string;
+  sales_place_id: string;
+  sale_data: {
+    asesor_sale_commission: number;
+    can_add_profit: boolean;
+  };
+};
+
+// Tipos para los detalles de cada método de pago
+export type CashPaymentDetails = {
+  cash_value_payed: number;
+};
+
+export type AddiPaymentDetails = {
+  financed_amount: number;
+  invoice_number: string;
+  invoice_file?: string;
+  sale_summary: {
+    fixed_commission: number;
+    addi_commission: number;
+    partners_commission: number;
+    profit: number;
+    gross_profit: number;
+    value_to_deposit: number;
+    total_to_pay: number;
+  };
+};
+
+export type SistecreditoPaymentDetails = {
+  financed_amount: number;
+  pagare_number: string;
+  pagare_file?: string;
+  sis_status: boolean;
+  sale_summary: {
+    fixed_commission: number;
+    sistecredito_commission: number;
+    partners_commission: number;
+    profit: number;
+    gross_profit: number;
+    value_to_deposit: number;
+    total_to_pay: number;
+  };
+};
+
+export type BrillaPaymentDetails = {
+  financed_amount: number;
+  brilla_contract_number: string;
+  contract_file?: string;
+  proceedings?: number;
+  brilla_payed: boolean;
+  sale_summary: {
+    fixed_commission: number;
+    partners_commission: number;
+    profit: number;
+    gross_profit: number;
+    total_to_pay: number;
+  };
+};
+
+export type CreditCardPaymentDetails = {
+  cash_value_payed: number;
+  credit_type: string;
+  sale_summary: {
+    datafono_commission: number;
+    client_commission: number;
+    fixed_commission: number;
+    reteica: number;
+    profit: number;
+    total_to_pay: number;
+    bold_deposit_value: number;
+    total_cost_transfer: number;
+  };
+};
+
+// Unión discriminada para el objeto Sale
+export type SaleCreation = {
+  seller: CustomUser;
+  client_name: string;
+  client_id: string;
+  plate: string;
+  vehicle_type: string;
+  soat_value: number;
+  soat_state: "pending" | "delivered";
+  soat_payed: boolean;
+  date: string; // ISO string
+  remarks?: string;
+  payment_method_id: "cash" | "addi" | "sistecredito" | "brilla" | "credit_card";
+  payment_method_name: string;
+} & (
+  | { payment_method_id: "cash"; payment_details: CashPaymentDetails }
+  | { payment_method_id: "addi"; payment_details: AddiPaymentDetails }
+  | {
+      payment_method_id: "sistecredito";
+      payment_details: SistecreditoPaymentDetails;
+    }
+  | { payment_method_id: "brilla"; payment_details: BrillaPaymentDetails }
+  | {
+      payment_method_id: "credit_card";
+      payment_details: CreditCardPaymentDetails;
+    }
+);
+
+// Este tipo representa una venta ya creada, incluyendo el id del servidor
+export type SaleWithId = SaleCreation & {
+  id: string;
+};
+
+// Tipo de entrada para la función de transformación (acepta todos los campos)
+export type RawSaleData = Omit<
+  Sale,
+  "id" | "payment_method" | "payment_details"
+> &
+  Partial<AddiPaymentDetails> &
+  Partial<SistecreditoPaymentDetails> &
+  Partial<BrillaPaymentDetails> &
+  Partial<CreditCardPaymentDetails> &
+  Partial<CashPaymentDetails> & {
+    sale_summary?: any; // Para capturar los resúmenes anidados
+  };
 
 export interface UserState {
   user: CustomUser | null;
