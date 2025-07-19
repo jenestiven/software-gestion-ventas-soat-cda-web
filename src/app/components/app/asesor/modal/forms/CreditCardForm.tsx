@@ -298,7 +298,7 @@ export default function CreditCardForm(props: Props) {
           </Col>
           <Col xs={24} sm={12}>
             <Form.Item
-              name="SOAT_state"
+              name="soat_state"
               label="Estado"
               required={true}
               rules={[

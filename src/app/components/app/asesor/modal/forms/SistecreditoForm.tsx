@@ -223,7 +223,7 @@ export default function SistecreditoForm(props: Props) {
             </Form.Item>
 
             <Form.Item
-              name="SOAT_state"
+              name="soat_state"
               label="Estado"
               required={true}
               rules={[
