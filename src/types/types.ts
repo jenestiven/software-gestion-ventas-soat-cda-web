@@ -198,7 +198,7 @@ export interface Sale {
     vehicle_plate: string;
   };
   sale_place: { place_name: string; place_id: string };
-  asesor_data: { name: string; thumnail: string };
+  asesor_data: { name: string; thumnail: string, uid: string };
   paid_in_cash_value: number;
   soat_status?: "pending" | "delivered";
   financed_amount?: number;

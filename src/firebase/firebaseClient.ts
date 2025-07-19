@@ -38,6 +38,10 @@ setPersistence(auth, browserLocalPersistence)
 const logout = async () => {
   try {
     await signOut(auth);
+    // Call the server-side logout API to clear the session cookie
+    await fetch("/api/server/logout", {
+      method: "POST",
+    });
   } catch (error) {
     console.error("Error signing out:", error);
   }

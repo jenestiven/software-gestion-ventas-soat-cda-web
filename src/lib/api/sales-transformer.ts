@@ -20,6 +20,7 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
     asesor_data: {
       name: saleCreation.seller.name,
       thumnail: saleCreation.seller.thumbnail,
+      uid: saleCreation.seller.uid,
     },
     paid_in_cash_value: 0, // Default value
     sale_sumary: {

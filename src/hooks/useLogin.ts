@@ -3,6 +3,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/firebase/firebaseClient";
 import useStore from "@/store";
 import { useState } from "react";
+import { loginServerApi } from "@/lib/api/login";
 
 export function useLogin() {
   const [loading, setLoading] = useState(false);
@@ -15,20 +16,26 @@ export function useLogin() {
       password
     );
 
+    const idToken = await userCredential.user.getIdToken();
+
+    // Send the ID token to your backend to create a session cookie 
+    const response = await loginServerApi(idToken);
+    
     const firebaseUser = userCredential.user;
     const userDocRef = doc(db, "users", firebaseUser.uid);
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists()) {
-      console.error("❌ No se encontró el documento del usuario.");
+      console.error("❌ No se encontró el documento del usuario en Firestore.");
       throw new Error("Perfil de usuario no encontrado.");
     }
 
     const userData = userDoc.data();
+    console.log("useLogin: User data from Firestore:", userData);
     const { role, sales_place } = userData;
 
     if (!sales_place) {
-      console.error("❌ El usuario no tiene un lugar de venta asignado.");
+      console.error("❌ El usuario no tiene un lugar de venta asignado en Firestore.");
       throw new Error("El usuario no tiene un lugar de venta asignado.");
     }
 
@@ -37,10 +44,8 @@ export function useLogin() {
 
     try {
       const placeDoc = await getDoc(placeDocRef);
-      console.log("📍 Lugar de venta:", placeDoc.data());
-
       if (!placeDoc.exists()) {
-        console.error("❌ No se encontró el documento del lugar de venta.");
+        console.error("❌ No se encontró el documento del lugar de venta en Firestore.");
         throw new Error("Lugar de venta no encontrado.");
       }
 
