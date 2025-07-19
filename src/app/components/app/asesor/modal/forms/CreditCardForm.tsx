@@ -12,13 +12,20 @@ import {
   Select,
   Divider,
   Typography,
+  message,
 } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import useStore from "@/store";
 import { saveSaleApi } from "@/lib/api/sales";
+import { PaymentMethod } from "@/types/types";
 
-export default function CreditCardForm() {
+type Props = {
+  method: PaymentMethod;
+  onCloseModal: (open: boolean) => void;
+};
+
+export default function CreditCardForm(props: Props) {
   const [form] = Form.useForm();
   const { Text, Title } = Typography;
   const user = useStore((state) => state.user);
@@ -87,8 +94,6 @@ export default function CreditCardForm() {
           break;
         case "debit":
           commission = 0.012 * value;
-          console.log("Debit Commission:", commission);
-
           break;
         case "alkosto":
         case "olimpica":
@@ -110,8 +115,6 @@ export default function CreditCardForm() {
 
   useEffect(() => {
     const boldDepositValueValue = cobroDatafono - datafonoCommission - reteica;
-    console.log("Bold Deposit Value:", boldDepositValueValue);
-
     setBoldDepositValue(boldDepositValueValue);
   }, [cobroDatafono, datafonoCommission, reteica]);
 
@@ -126,23 +129,32 @@ export default function CreditCardForm() {
   }, [boldDepositValue, profit]);
 
   const onFinish = async (values: any) => {
-    const saleData = {
-      ...values,
-      seller_id: user?.uid,
-      sale_summary: {
-        datafono_commission: datafonoCommission,
-        client_commission: clientCommission,
-        fixed_commission: fixedCommission,
-        reteica: reteica,
-        profit: profit,
-        total_to_pay: totalToPay,
-        bold_deposit_value: boldDepositValue,
-        total_cost_transfer: totalCostTransfer,
-      },
-    };
-    
-    console.log("Submitting to API:", saleData);
-    await saveSaleApi(saleData);
+    try {
+      message.loading("Registrando venta...", 0);
+      const saleData = {
+        ...values,
+        seller_id: user?.uid,
+        sale_summary: {
+          datafono_commission: datafonoCommission,
+          client_commission: clientCommission,
+          fixed_commission: fixedCommission,
+          reteica: reteica,
+          profit: profit,
+          total_to_pay: totalToPay,
+          bold_deposit_value: boldDepositValue,
+          total_cost_transfer: totalCostTransfer,
+        },
+      };
+      
+      await saveSaleApi(saleData);
+      message.success("Venta registrada con éxito", 2);
+      form.resetFields();
+      props.onCloseModal(false);
+    } catch (error) {
+      message.error("Error al registrar la venta", 2);
+    } finally {
+      message.destroy();
+    }
   };
 
   return (

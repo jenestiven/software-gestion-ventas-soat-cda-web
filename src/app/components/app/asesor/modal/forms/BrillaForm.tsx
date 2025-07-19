@@ -15,22 +15,25 @@ import {
   Select,
   Divider,
   Upload,
+  message,
+  UploadProps,
+  GetProp,
+  UploadFile,
 } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { AntdUpload, getBase64 } from "../../../admin/users/AntdUpload";
 
-const getBase64 = (file: File): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-export default function BrillaForm() {
+type Props = {
+  onCloseModal: (open: boolean) => void;
+};
+
+export default function BrillaForm(props: Props) {
   const [form] = Form.useForm();
   const { Text, Title } = Typography;
-  const [file, setFile] = useState<File | null>(null);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const user = useStore((state) => state.user);
 
@@ -69,26 +72,36 @@ export default function BrillaForm() {
   }, [soatValue, fixedCommission]);
 
   const onFinish = async (values: any) => {
-    let contractBase64 = null;
-    if (file) {
-      contractBase64 = await getBase64(file);
-    }
+    try {
+      message.loading("Registrando venta...", 0);
+      let file = null;
+      if (fileList?.length > 0 && fileList[0]?.originFileObj) {
+        file = await getBase64(fileList[0]?.originFileObj as FileType);
+      }
 
-    const saleData = {
-      ...values,
-      contract_image: contractBase64,
-      seller_id: user?.uid,
-      sale_summary: {
-        fixed_commission: fixedCommission,
-        partners_commission: partnersCommission,
-        profit: profit,
-        gross_profit: grossProfit,
-        total_to_pay: totalToPay,
-      },
-    };
-    
-    console.log("Submitting to API:", saleData);
-    await saveSaleApi(saleData);
+      const saleData = {
+        ...values,
+        contract_file: file,
+        seller_id: user?.uid,
+        sale_summary: {
+          fixed_commission: fixedCommission,
+          partners_commission: partnersCommission,
+          profit: profit,
+          gross_profit: grossProfit,
+          total_to_pay: totalToPay,
+        },
+      };
+
+      await saveSaleApi(saleData);
+      message.success("Venta registrada exitosamente");
+      props.onCloseModal(false);
+      form.resetFields();
+      setFileList([]);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      message.destroy();
+    }
   };
 
   return (
@@ -268,9 +281,7 @@ export default function BrillaForm() {
               <InputNumber style={{ width: "100%" }} />
             </Form.Item>
 
-            <Upload>
-              <Button icon={<UploadOutlined />}>Subir contrato</Button>
-            </Upload>
+            <AntdUpload fileList={fileList} setFileList={setFileList} />
 
             <Divider orientation="left">Resumen de venta</Divider>
 

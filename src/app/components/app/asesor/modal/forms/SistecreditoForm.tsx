@@ -12,26 +12,28 @@ import {
   Row,
   Col,
   Divider,
-  Upload,
+  message,
+  GetProp,
+  UploadProps,
+  UploadFile,
 } from "antd";
 import { useEffect, useState } from "react";
 import useStore from "@/store";
 import dayjs from "dayjs";
 import { saveSaleApi } from "@/lib/api/sales";
+import { AntdUpload, getBase64 } from "../../../admin/users/AntdUpload";
 
-const getBase64 = (file: File): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-export default function SistecreditoForm() {
+type Props = {
+  onCloseModal: (open: boolean) => void;
+};
+
+export default function SistecreditoForm(props: Props) {
   const [form] = Form.useForm();
   const { Text, Title } = Typography;
   const user = useStore((state) => state.user);
-  const [file, setFile] = useState<File | null>(null);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const [partnersCommission, setPartnersCommission] = useState(
     user?.sale_data?.asesor_sale_commission || 0
@@ -68,25 +70,36 @@ export default function SistecreditoForm() {
   }, [soatValue, fixedCommission]);
 
   const onFinish = async (values: any) => {
-    let pagareBase64 = null;
-    if (file) {
-      pagareBase64 = await getBase64(file);
-    }
+    try {
+      message.loading("Registrando venta...", 0);
+      let file = null;
+      if (fileList?.length > 0 && fileList[0]?.originFileObj) {
+        file = await getBase64(fileList[0]?.originFileObj as FileType);
+      }
 
-    const saleData = {
-      ...values,
-      pagare_image: pagareBase64,
-      seller_id: user?.uid,
-      sale_summary: {
-        fixed_commission: fixedCommission,
-        partners_commission: partnersCommission,
-        profit: profit,
-        gross_profit: grossProfit,
-        total_to_pay: totalToPay,
-      },
-    };
-    console.log("Submitting to API:", saleData);
-    await saveSaleApi(saleData);
+      const saleData = {
+        ...values,
+        pagare_file: file,
+        seller_id: user?.uid,
+        sale_summary: {
+          fixed_commission: fixedCommission,
+          partners_commission: partnersCommission,
+          profit: profit,
+          gross_profit: grossProfit,
+          total_to_pay: totalToPay,
+        },
+      };
+
+      await saveSaleApi(saleData);
+      message.success("Venta registrada exitosamente");
+      props.onCloseModal(false);
+      form.resetFields();
+      setFileList([]);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      message.destroy();
+    }
   };
 
   return (
@@ -265,9 +278,7 @@ export default function SistecreditoForm() {
               <Input.TextArea rows={5} />
             </Form.Item>
 
-            <Upload>
-              <Button icon={<UploadOutlined />}>Subir pagare</Button>
-            </Upload>
+            <AntdUpload setFileList={setFileList} fileList={fileList} />
 
             <Divider orientation="left">Resumen de venta</Divider>
 

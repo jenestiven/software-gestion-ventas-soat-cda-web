@@ -14,26 +14,28 @@ import {
   Select,
   Typography,
   Divider,
-  Upload,
+  message,
+  UploadFile,
+  GetProp,
+  UploadProps,
 } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { AntdUpload, getBase64 } from "../../../admin/users/AntdUpload";
 
 const { Text, Title } = Typography;
 
-const getBase64 = (file: File): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-export default function AddiForm() {
+type Props = {
+  onCloseModal: (open: boolean) => void;
+}
+
+export default function AddiForm(props: Props) {
   const [form] = Form.useForm();
   const user = useStore((state) => state.user);
-  const [file, setFile] = useState<File | null>(null);
-
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  
   const [addiCommission, setAddiCommission] = useState(0);
   const [partnersCommission, setPartnersCommission] = useState(
     user?.sale_data?.asesor_sale_commission || 0
@@ -85,29 +87,40 @@ export default function AddiForm() {
     setTotalToPay(Number(value.toFixed(1)));
   }, [soatValue, fixedCommission]);
 
-  const handleSubmit = async (values: any) => {//hay que tipar este any
-    let invoiceBase64 = null;
-    if (file) {
-      invoiceBase64 = await getBase64(file);
-    }
+  const handleSubmit = async (values: any) => {
+    try {
+      message.loading("Registrando venta...", 0);
 
-    const saleData = {
-      ...values,
-      invoice_image: invoiceBase64,
-      seller_id: user?.uid,
-      sale_summary: {
-        fixed_commission: fixedCommission,
-        addi_commission: addiCommission,
-        partners_commission: partnersCommission,
-        profit: profit,
-        gross_profit: grossProfit,
-        value_to_deposit: valueToDeposit,
-        total_to_pay: totalToPay,
-      },
-    };
-    
-    console.log("Submitting to API:", saleData);
-    await saveSaleApi(saleData);
+        let file = null;
+        if (fileList?.length > 0 && fileList[0]?.originFileObj) {
+          file = await getBase64(fileList[0]?.originFileObj as FileType);
+        }
+  
+      const saleData = {
+        ...values,
+        invoice_file: file,
+        seller_id: user?.uid,
+        sale_summary: {
+          fixed_commission: fixedCommission,
+          addi_commission: addiCommission,
+          partners_commission: partnersCommission,
+          profit: profit,
+          gross_profit: grossProfit,
+          value_to_deposit: valueToDeposit,
+          total_to_pay: totalToPay,
+        },
+      };
+      
+      await saveSaleApi(saleData);
+      message.success("Venta registrada exitosamente", 2);
+      form.resetFields();
+      setFileList([]);
+      props.onCloseModal(false);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      message.destroy();
+    }
   };
 
   return (
@@ -191,9 +204,7 @@ export default function AddiForm() {
               <Input.TextArea rows={4} />
             </Form.Item>
 
-            <Upload>
-              <Button icon={<UploadOutlined />}>Subir factura</Button>
-            </Upload>
+            <AntdUpload fileList={fileList} setFileList={setFileList} />
 
             <Divider orientation="left">Resumen de venta</Divider>
 

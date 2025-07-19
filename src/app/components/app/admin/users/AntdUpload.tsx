@@ -36,7 +36,7 @@ export const AntdUpload: React.FC<AntdUploadProps> = ({ fileList, setFileList })
   const uploadButton = (
     <button style={{ border: 0, background: "none" }} type="button">
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Subir foto</div>
+      <div style={{ marginTop: 8 }}>Subir archivo</div>
     </button>
   );
 

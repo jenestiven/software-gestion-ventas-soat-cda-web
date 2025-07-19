@@ -12,13 +12,18 @@ import {
   Select,
   Divider,
   Typography,
+  message,
 } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import useStore from "@/store";
 import { saveSaleApi } from "@/lib/api/sales";
 
-export default function CashForm() {
+type Props = {
+  onCloseModal: (open: boolean) => void;
+};
+
+export default function CashForm(props: Props) {
   const [form] = Form.useForm();
   const { Text } = Typography;
   const user = useStore((state) => state.user);
@@ -50,18 +55,28 @@ export default function CashForm() {
   }, [soatValue, fixedCommission]);
 
   const onFinish = async (values: any) => {
-    const saleData = {
-      ...values,
-      seller_id: user?.uid,
-      sale_summary: {
-        fixed_commission: fixedCommission,
-        profit: profit,
-        total_to_pay: totalToPay,
-      },
-    };
-    
-    console.log("Submitting to API:", saleData);
-    await saveSaleApi(saleData);
+    try {
+      message.loading("Registrando venta...", 0);
+      const saleData = {
+        ...values,
+        seller_id: user?.uid,
+        sale_summary: {
+          fixed_commission: fixedCommission,
+          profit: profit,
+          total_to_pay: totalToPay,
+        },
+      };
+
+      console.log("Submitting to API:", saleData);
+      await saveSaleApi(saleData);
+      message.success("Venta registrada exitosamente");
+      form.resetFields();
+      props.onCloseModal(false);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      message.destroy();
+    }
   };
 
   return (
