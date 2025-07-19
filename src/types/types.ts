@@ -15,6 +15,11 @@ export type CustomUser = {
 // Tipos para los detalles de cada método de pago
 export type CashPaymentDetails = {
   cash_value_payed: number;
+  sale_summary: {
+    fixed_commission: number;
+    profit: number;
+    total_to_pay: number;
+  };
 };
 
 export type AddiPaymentDetails = {
@@ -90,21 +95,15 @@ export type SaleCreation = {
   soat_payed: boolean;
   date: string; // ISO string
   remarks?: string;
-  payment_method_id: "cash" | "addi" | "sistecredito" | "brilla" | "credit_card";
   payment_method_name: string;
 } & (
   | { payment_method_id: "cash"; payment_details: CashPaymentDetails }
   | { payment_method_id: "addi"; payment_details: AddiPaymentDetails }
-  | {
-      payment_method_id: "sistecredito";
-      payment_details: SistecreditoPaymentDetails;
-    }
+  | { payment_method_id: "sistecredito"; payment_details: SistecreditoPaymentDetails }
   | { payment_method_id: "brilla"; payment_details: BrillaPaymentDetails }
-  | {
-      payment_method_id: "credit_card";
-      payment_details: CreditCardPaymentDetails;
-    }
+  | { payment_method_id: "credit_card"; payment_details: CreditCardPaymentDetails }
 );
+
 
 // Este tipo representa una venta ya creada, incluyendo el id del servidor
 export type SaleWithId = SaleCreation & {
@@ -168,21 +167,21 @@ export interface Sale {
   payment_method_name: string;
   client_data: { client_name: string; client_id: string };
   vehicle_data: {
-    vehicle_type_name: string;
     vehicle_type_id: string;
     vehicle_plate: string;
   };
-  sale_place: { place_name: string };
+  sale_place: { place_name: string; place_id: string };
   asesor_data: { name: string; thumnail: string };
   paid_in_cash_value: number;
   sale_sumary: {
     total_payed: number;
-    fixed_comission: number;
+    client_commission?: number;
+    fixed_comission?: number;
     profit: number;
     soat_value: number;
     asesor_sale_commission: number;
     bold_to_be_deposited_value: number;
-    datafono_commission: number;
+    datafono_commission?: number;
     datafono_value: number;
     reteica: number;
     total_to_tranfer_costs: number;
@@ -192,14 +191,12 @@ export interface Sale {
   receipt_required: boolean;
   receipt_status: "delivered" | "pending" | null;
   remarks: string;
-  receipts: [
-    {
-      id: string;
-      uploaded_at: string;
-      receipt_url: string;
-      receipt_type: "brilla-contract" | "pagare" | "invoice";
-    }
-  ];
+  receipts: {
+    id: string;
+    uploaded_at: string;
+    receipt_url: string;
+    receipt_type: "brilla-contract" | "pagare" | "invoice";
+  }[];
 }
 
 export interface PlacesDataType {

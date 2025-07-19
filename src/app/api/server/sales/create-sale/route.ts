@@ -1,13 +1,20 @@
 import { createSale } from "@/services/sales/sales";
+import { transformSaleCreationToSale } from "@/lib/api/sales-transformer";
+import { SaleCreation } from "@/types/types";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const saleData = await req.json();
+    const saleCreationData: SaleCreation = await req.json();
+    console.log("Datos de creación de venta recibidos:", saleCreationData);
+    
+    const saleData = transformSaleCreationToSale(saleCreationData);
+    
+    console.log("Datos de venta transformados:");
 
-    const sale = await createSale(saleData);
+    //const sale = await createSale(saleData);
     return NextResponse.json(
-      { message: "Venta guardada con éxito", data: sale },
+      { message: "Venta guardada con éxito", data: {} },
       { status: 201 }
     );
   } catch (error) {

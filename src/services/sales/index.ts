@@ -1,4 +1,4 @@
-'''import { RawSaleData, Sale } from "@/types/types";
+import { RawSaleData, Sale } from "@/types/types";
 import { v4 as uuidv4 } from "uuid";
 
 export function buildSaleObject(rawData: RawSaleData): Sale {
@@ -72,4 +72,3 @@ export function buildSaleObject(rawData: RawSaleData): Sale {
     };
   }
 }
-'''
