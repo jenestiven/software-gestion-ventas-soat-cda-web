@@ -17,11 +17,21 @@ import {
 import { useEffect, useState } from "react";
 import useStore from "@/store";
 import dayjs from "dayjs";
+import { saveSaleApi } from "@/lib/api/sales";
+
+const getBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
 
 export default function SistecreditoForm() {
   const [form] = Form.useForm();
   const { Text, Title } = Typography;
   const user = useStore((state) => state.user);
+  const [file, setFile] = useState<File | null>(null);
 
   const [partnersCommission, setPartnersCommission] = useState(
     user?.sale_data?.asesor_sale_commission || 0
@@ -57,8 +67,26 @@ export default function SistecreditoForm() {
     setTotalToPay(Number(value.toFixed(1)));
   }, [soatValue, fixedCommission]);
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
+  const onFinish = async (values: any) => {
+    let pagareBase64 = null;
+    if (file) {
+      pagareBase64 = await getBase64(file);
+    }
+
+    const saleData = {
+      ...values,
+      pagare_image: pagareBase64,
+      seller_id: user?.uid,
+      sale_summary: {
+        fixed_commission: fixedCommission,
+        partners_commission: partnersCommission,
+        profit: profit,
+        gross_profit: grossProfit,
+        total_to_pay: totalToPay,
+      },
+    };
+    console.log("Submitting to API:", saleData);
+    await saveSaleApi(saleData);
   };
 
   return (

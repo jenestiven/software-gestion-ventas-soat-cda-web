@@ -1,5 +1,6 @@
 "use client";
 
+import { saveSaleApi } from "@/lib/api/sales";
 import useStore from "@/store";
 import { DeliveredProcedureOutlined, UploadOutlined } from "@ant-design/icons";
 import {
@@ -20,9 +21,18 @@ import { useEffect, useState } from "react";
 
 const { Text, Title } = Typography;
 
+const getBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
 export default function AddiForm() {
   const [form] = Form.useForm();
   const user = useStore((state) => state.user);
+  const [file, setFile] = useState<File | null>(null);
 
   const [addiCommission, setAddiCommission] = useState(0);
   const [partnersCommission, setPartnersCommission] = useState(
@@ -71,12 +81,33 @@ export default function AddiForm() {
   }, [financedAmount, addiCommission]);
 
   useEffect(() => {
-    const value = soatValue + fixedCommission;
+    const value = (soatValue || 0) + fixedCommission;
     setTotalToPay(Number(value.toFixed(1)));
   }, [soatValue, fixedCommission]);
 
-  const handleSubmit = (values: any) => {
-    console.log("Submitted:", values);
+  const handleSubmit = async (values: any) => {//hay que tipar este any
+    let invoiceBase64 = null;
+    if (file) {
+      invoiceBase64 = await getBase64(file);
+    }
+
+    const saleData = {
+      ...values,
+      invoice_image: invoiceBase64,
+      seller_id: user?.uid,
+      sale_summary: {
+        fixed_commission: fixedCommission,
+        addi_commission: addiCommission,
+        partners_commission: partnersCommission,
+        profit: profit,
+        gross_profit: grossProfit,
+        value_to_deposit: valueToDeposit,
+        total_to_pay: totalToPay,
+      },
+    };
+    
+    console.log("Submitting to API:", saleData);
+    await saveSaleApi(saleData);
   };
 
   return (

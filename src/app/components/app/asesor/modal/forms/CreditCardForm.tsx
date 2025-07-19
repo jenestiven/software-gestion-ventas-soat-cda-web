@@ -15,10 +15,13 @@ import {
 } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import useStore from "@/store";
+import { saveSaleApi } from "@/lib/api/sales";
 
 export default function CreditCardForm() {
   const [form] = Form.useForm();
   const { Text, Title } = Typography;
+  const user = useStore((state) => state.user);
 
   const [datafonoCommission, setDatafonoCommission] = useState(0);
   const [clientCommission, setClientCommission] = useState(0);
@@ -101,15 +104,14 @@ export default function CreditCardForm() {
   }, [creditType, cashValuePayed]);
 
   useEffect(() => {
-    const totalToPayValue =
-      (soatValue || 0) + fixedCommission;
+    const totalToPayValue = (soatValue || 0) + fixedCommission;
     setTotalToPay(totalToPayValue);
   }, [soatValue, fixedCommission]);
 
   useEffect(() => {
     const boldDepositValueValue = cobroDatafono - datafonoCommission - reteica;
     console.log("Bold Deposit Value:", boldDepositValueValue);
-    
+
     setBoldDepositValue(boldDepositValueValue);
   }, [cobroDatafono, datafonoCommission, reteica]);
 
@@ -123,8 +125,24 @@ export default function CreditCardForm() {
     setTotalCostTransfer(totalCostTransferValue);
   }, [boldDepositValue, profit]);
 
-  const onFinish = (values: any) => {
-    console.log("Submitted:", values);
+  const onFinish = async (values: any) => {
+    const saleData = {
+      ...values,
+      seller_id: user?.uid,
+      sale_summary: {
+        datafono_commission: datafonoCommission,
+        client_commission: clientCommission,
+        fixed_commission: fixedCommission,
+        reteica: reteica,
+        profit: profit,
+        total_to_pay: totalToPay,
+        bold_deposit_value: boldDepositValue,
+        total_cost_transfer: totalCostTransfer,
+      },
+    };
+    
+    console.log("Submitting to API:", saleData);
+    await saveSaleApi(saleData);
   };
 
   return (

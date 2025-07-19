@@ -15,10 +15,13 @@ import {
 } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import useStore from "@/store";
+import { saveSaleApi } from "@/lib/api/sales";
 
 export default function CashForm() {
   const [form] = Form.useForm();
   const { Text } = Typography;
+  const user = useStore((state) => state.user);
 
   const [fixedCommission, setFixedCommission] = useState(0);
   const [profit, setProfit] = useState(0);
@@ -37,17 +40,28 @@ export default function CashForm() {
   }, [vehicleType]);
 
   useEffect(() => {
-    const profitValue = inCashValue - totalToPay;
+    const profitValue = (inCashValue || 0) - totalToPay;
     setProfit(Number(profitValue.toFixed(1)));
   }, [totalToPay, inCashValue]);
 
   useEffect(() => {
-    const value = soatValue + fixedCommission;
+    const value = (soatValue || 0) + fixedCommission;
     setTotalToPay(Number(value.toFixed(1)));
   }, [soatValue, fixedCommission]);
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
+  const onFinish = async (values: any) => {
+    const saleData = {
+      ...values,
+      seller_id: user?.uid,
+      sale_summary: {
+        fixed_commission: fixedCommission,
+        profit: profit,
+        total_to_pay: totalToPay,
+      },
+    };
+    
+    console.log("Submitting to API:", saleData);
+    await saveSaleApi(saleData);
   };
 
   return (

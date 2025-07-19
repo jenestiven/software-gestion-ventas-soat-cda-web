@@ -1,5 +1,6 @@
 "use client";
 
+import { saveSaleApi } from "@/lib/api/sales";
 import useStore from "@/store";
 import { DeliveredProcedureOutlined, UploadOutlined } from "@ant-design/icons";
 import {
@@ -18,9 +19,18 @@ import {
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
+const getBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
 export default function BrillaForm() {
   const [form] = Form.useForm();
   const { Text, Title } = Typography;
+  const [file, setFile] = useState<File | null>(null);
 
   const user = useStore((state) => state.user);
 
@@ -37,7 +47,7 @@ export default function BrillaForm() {
   const soatValue = Form.useWatch("soat_value", form);
 
   useEffect(() => {
-    const profitValue = financedAmount - totalToPay;
+    const profitValue = (financedAmount || 0) - totalToPay;
     setProfit(Number(profitValue.toFixed(1)));
 
     const grossProfitValue =
@@ -54,12 +64,31 @@ export default function BrillaForm() {
   }, [vehicleType]);
 
   useEffect(() => {
-    const value = soatValue + fixedCommission;
+    const value = (soatValue || 0) + fixedCommission;
     setTotalToPay(Number(value.toFixed(1)));
   }, [soatValue, fixedCommission]);
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
+  const onFinish = async (values: any) => {
+    let contractBase64 = null;
+    if (file) {
+      contractBase64 = await getBase64(file);
+    }
+
+    const saleData = {
+      ...values,
+      contract_image: contractBase64,
+      seller_id: user?.uid,
+      sale_summary: {
+        fixed_commission: fixedCommission,
+        partners_commission: partnersCommission,
+        profit: profit,
+        gross_profit: grossProfit,
+        total_to_pay: totalToPay,
+      },
+    };
+    
+    console.log("Submitting to API:", saleData);
+    await saveSaleApi(saleData);
   };
 
   return (
