@@ -25,16 +25,47 @@ export function useLogin() {
     }
 
     const userData = userDoc.data();
-    const { role } = userData;
+    const { role, sales_place } = userData;
 
-    setUser({
-      uid: firebaseUser.uid,
-      email: firebaseUser.email,
-      name: userData.name,
-      thumbnail: userData.thumbnail,
-      role: role,
-      sales_place: userData.sales_place ?? "moto gp",
-    });
+    if (!sales_place) {
+      console.error("❌ El usuario no tiene un lugar de venta asignado.");
+      throw new Error("El usuario no tiene un lugar de venta asignado.");
+    }
+
+    const salesPlaceId = sales_place;
+    const placeDocRef = doc(db, "places", salesPlaceId);
+
+    try {
+      const placeDoc = await getDoc(placeDocRef);
+      console.log("📍 Lugar de venta:", placeDoc.data());
+
+      if (!placeDoc.exists()) {
+        console.error("❌ No se encontró el documento del lugar de venta.");
+        throw new Error("Lugar de venta no encontrado.");
+      }
+
+      const salesPlaceData = placeDoc.data();
+
+      setUser({
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        name: userData.name,
+        thumbnail: userData.thumbnail,
+        role: role,
+        sales_place: salesPlaceData.place_name,
+        sales_place_id: salesPlaceId,
+        sale_data: {
+          asesor_sale_commission: salesPlaceData.asesor_sale_commission,
+          can_add_profit: salesPlaceData.can_add_profit,
+        },
+      });
+    } catch (error) {
+      console.error(
+        "❌ Error al obtener el documento del lugar de venta:",
+        error
+      );
+      throw new Error("No se pudo obtener la información del lugar de venta.");
+    }
 
     return role;
   };

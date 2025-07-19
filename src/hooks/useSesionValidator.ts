@@ -18,14 +18,36 @@ export function useSessionValidator() {
           const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            setUser({
-              uid: firebaseUser.uid,
-              email: firebaseUser.email,
-              name: userData.name,
-              thumbnail: userData.thumbnail,
-              role: userData.role,
-              sales_place: userData.sales_place ?? "moto gp",
-            });
+            const salesPlaceId = userData.sales_place;
+
+            if (!salesPlaceId) {
+              console.error(
+                "❌ El usuario no tiene un lugar de venta asignado."
+              );
+              clearUser();
+              return;
+            }
+
+            const placeDocRef = doc(db, "places", salesPlaceId);
+            const placeDoc = await getDoc(placeDocRef);
+            if (placeDoc.exists()) {
+              const salesPlaceData = placeDoc.data();
+              
+              setUser({
+                uid: firebaseUser.uid,
+                email: firebaseUser.email,
+                name: userData.name,
+                thumbnail: userData.thumbnail,
+                role: userData.role,
+                sales_place: salesPlaceData.place_name,
+                sales_place_id: salesPlaceId,
+                sale_data: {
+                  asesor_sale_commission:
+                    salesPlaceData.asesor_sale_commission,
+                  can_add_profit: salesPlaceData.can_add_profit,
+                },
+              });
+            }
           } else {
             console.error(
               "❌ No se encontró el documento del usuario en Firestore"

@@ -5,6 +5,11 @@ export interface CustomUser {
   thumbnail?: string | null;
   role?: string;
   sales_place?: string;
+  sales_place_id?: string;
+  sale_data?:{
+    asesor_sale_commission?: number;
+    can_add_profit?: boolean;
+  }
 }
 
 export interface UserState {
