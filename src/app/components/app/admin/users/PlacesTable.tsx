@@ -6,6 +6,5 @@ type Props = {};
 
 export default async function PlacesTable({}: Props) {
   const data = await getSalesPlaces();
-  
   return <PlacesTableClient dataSource={data} />;
 }

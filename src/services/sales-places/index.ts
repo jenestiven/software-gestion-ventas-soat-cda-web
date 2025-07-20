@@ -57,10 +57,7 @@ export const getSalesPlaces = async () => {
     return salesPlaces;
   } catch (error) {
     console.error("Error getting sales places:", error);
-    return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 }
-    );
+    return [] as PlacesDataType[];
   }
 };
 

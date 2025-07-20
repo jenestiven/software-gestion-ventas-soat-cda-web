@@ -8,8 +8,6 @@ import "@/app/admin/page.css";
 export default async function UsersPage() {
   const stats = await getUsersStats();
 
-  console.log("User stats:", stats);
-
   return (
     <div className="grid grid-cols-4 gap-5 px-2 py-5 h-full overflow-y-auto scroll-bar">
       <UsersCards stats={stats} />

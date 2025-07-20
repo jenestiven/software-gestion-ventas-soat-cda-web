@@ -196,9 +196,11 @@ export async function getUsersStats() {
     };
   } catch (error) {
     console.error("Error fetching user stats:", error);
-    return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 }
-    );
+    return {
+      activeUsers: 0,
+      adminUsers: 0,
+      asesorUsers: 0,
+      salesPlacesCount: 0,
+    };
   }
 }
