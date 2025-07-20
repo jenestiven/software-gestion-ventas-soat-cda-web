@@ -1,16 +1,35 @@
 import { create } from "zustand";
 import { CustomUser, PlacesDataType } from "@/types/types";
-
 interface UserState {
   user: CustomUser | null;
   isAuthenticated: boolean;
   headerTitle: string;
   salesPlaces: PlacesDataType[];
+  dataForDashboard: {
+    betterSellerName: string;
+    betterSellerImage: string;
+    betterPlaceName: string;
+    salesCount: number;
+    totalSalesCount: number;
+    totalSalesAmount: number;
+    amountGrowth: number;
+    salesGrowth: number;
+  };
   setUser: (user: CustomUser) => void;
   clearUser: () => void;
   initializeUser: () => void;
   setTitle: (title: string) => void;
   setSalesPlaces: (places: PlacesDataType[]) => void;
+  setDataForDashboard: (data: {
+    betterSellerName?: string;
+    betterSellerImage?: string;
+    betterPlaceName?: string;
+    salesCount?: number;
+    totalSalesCount?: number;
+    totalSalesAmount?: number;
+    amountGrowth?: number;
+    salesGrowth?: number;
+  }) => void;
 }
 
 const useStore = create<UserState>((set, get) => ({
@@ -18,6 +37,16 @@ const useStore = create<UserState>((set, get) => ({
   isAuthenticated: false,
   headerTitle: "",
   salesPlaces: [],
+  dataForDashboard: {
+    betterSellerName: "",
+    betterSellerImage: "",
+    betterPlaceName: "",
+    salesCount: 0,
+    totalSalesCount: 0,
+    totalSalesAmount: 0,
+    amountGrowth: 0,
+    salesGrowth: 0,
+  },
 
   setUser: (user) => {
     set({ user, isAuthenticated: !!user });
@@ -61,6 +90,19 @@ const useStore = create<UserState>((set, get) => ({
     if (typeof window !== "undefined") {
       localStorage.setItem("salesPlaces", JSON.stringify(places));
     }
+  },
+
+  setDataForDashboard: (data: {
+    betterSellerName?: string;
+    betterSellerImage?: string;
+    betterPlaceName?: string;
+    salesCount?: number;
+    totalSalesCount?: number;
+    totalSalesAmount?: number;
+    amountGrowth?: number;
+    salesGrowth?: number;
+  }) => {
+    set({ dataForDashboard: { ...get().dataForDashboard, ...data } });
   },
 
   initializeUser: () => {

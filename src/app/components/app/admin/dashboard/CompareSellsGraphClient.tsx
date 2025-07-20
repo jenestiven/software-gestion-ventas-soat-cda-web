@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { Typography } from "antd";
 import "@/app/admin/page.css";
 import { SalesForMonthsResponse } from "@/types/types";
+import useStore from "@/store";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -16,8 +17,29 @@ interface CompareSellsGraphClientProps {
 const CompareSellsGraphClient: React.FC<CompareSellsGraphClientProps> = ({
   salesData,
 }) => {
+  const { setDataForDashboard } = useStore();
   const [chartOptions, setChartOptions] = useState<ApexCharts.ApexOptions>({});
   const [chartSeries, setChartSeries] = useState<ApexAxisChartSeries>([]);
+
+  // Recupera la cantidad y el monto de ventas del mes actual
+  const currentMonthData =
+    salesData.monthsData[salesData.monthsData.length - 1];
+  const salesCurrentMonth = currentMonthData
+    ? currentMonthData.sales_quantity
+    : 0;
+  const amountCurrentMonth = currentMonthData
+    ? currentMonthData.sales_amount
+    : 0;
+
+  useEffect(() => {
+    if (salesCurrentMonth && amountCurrentMonth) {
+      setDataForDashboard({
+        totalSalesCount: salesCurrentMonth,
+        totalSalesAmount: amountCurrentMonth,
+        amountGrowth: salesData.growth,
+      });
+    }
+  }, [salesCurrentMonth, amountCurrentMonth]); //eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (salesData.monthsData.length === 0) return;

@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Avatar, Table, Typography } from "antd";
 import "@/app/admin/page.css";
+import useStore from "@/store";
 
 const { Title } = Typography;
 
@@ -11,6 +12,21 @@ type Props = {
 };
 
 export default function BetterSellerTableClient({ dataSource }: Props) {
+  const { setDataForDashboard } = useStore();
+  const betterSeller = dataSource.reduce(
+    (max, item) => (item.sells > (max?.sells ?? 0) ? item : max),
+    null
+  );
+
+  useEffect(() => {
+    if (betterSeller) {
+      setDataForDashboard({
+        betterSellerImage: betterSeller?.photo ?? "",
+        betterSellerName: betterSeller?.name ?? "",
+      });
+    }
+  }, [betterSeller]); //eslint-disable-line react-hooks/exhaustive-deps
+
   const columns = [
     {
       title: "Asesor",

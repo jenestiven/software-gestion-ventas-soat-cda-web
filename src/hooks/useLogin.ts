@@ -31,7 +31,6 @@ export function useLogin() {
     }
 
     const userData = userDoc.data();
-    console.log("useLogin: User data from Firestore:", userData);
     const { role, sales_place } = userData;
 
     if (!sales_place) {

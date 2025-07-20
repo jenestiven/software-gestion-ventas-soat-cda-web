@@ -2,57 +2,79 @@
 
 import React from "react";
 import { DollarOutlined, PieChartOutlined } from "@ant-design/icons";
-import { DatePicker, Divider, Typography } from "antd";
+import { Typography } from "antd";
 import "@/app/admin/page.css";
+import useStore from "@/store";
+import Logo from "@/images/logo.png";
 
 type Props = {};
 
 const { Title, Text } = Typography;
 
 export default function SellsCardSection({}: Props) {
+  const data = useStore((state) => state.dataForDashboard);
+
   return (
     <>
       <article className="stat-1 admin-stat-card">
         <span className="flex items-center justify-between w-full">
           <PieChartOutlined className="icon utility" />
           <Title level={3} style={{ margin: 0 }}>
-            500
+            {data.totalSalesCount}
           </Title>
         </span>
         <span className="flex items-center justify-between w-full">
           <Text type="secondary">Cantidad de ventas</Text>
-          <Text className="stat-growth negative" type="secondary">
-            -15%
-          </Text>
         </span>
       </article>
       <article className="stat-2 admin-stat-card">
         <span className="flex items-center justify-between w-full">
           <DollarOutlined className="icon earning" />
           <Title level={3} style={{ margin: 0 }}>
-            $ 2900000
+            {data.totalSalesAmount.toLocaleString("es-CO", {
+              style: "currency",
+              currency: "COP",
+            })}
           </Title>
         </span>
         <span className="flex items-center justify-between w-full">
           <Text type="secondary">Total en ventas</Text>
-          <Text className="stat-growth" type="secondary">
-            +25%
+          <Text
+            className={`stat-growth ${data.amountGrowth < 0 ? "negative" : ""}`}
+            type="secondary"
+          >
+            {data.amountGrowth}%
           </Text>
         </span>
       </article>
-      <article className="stat-3 flex items-center justify-between bg-white p-5 rounded-lg shadow">
-        <span className="flex flex-col items-start justify-between w-full pl-2">
-          <Text type="secondary">Filtrar por mes</Text>
-          <DatePicker placeholder="Seleccionar mes" picker="month" />
-        </span>
-        <Divider type="vertical" />
-        <span className="flex flex-col items-start justify-between w-full pl-4">
-          <Text type="secondary">Periodo</Text>
-          <Title level={3} style={{ margin: 0 }}>
-            Ultimos 4 meses
-          </Title>
-        </span>
-      </article>
+      <div className="flex gap-5">
+        <article
+          className="stat-3 flex flex-col items-center justify-center bg-white p-5 rounded-lg shadow w-6/12"
+          style={{
+            backgroundImage: `url(${data.betterSellerImage ?? Logo})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <span className="flex flex-col items-center bg-white/80 rounded p-2">
+            <Text strong>{data.betterSellerName.toUpperCase()}</Text>
+            <Text type="secondary" className="text-xs mt-1">
+              Mejor vendedor
+            </Text>
+          </span>
+        </article>
+        <article className="stat-3 flex flex-col items-center justify-center bg-white p-5 rounded-lg shadow w-6/12">
+          <span className="flex flex-col items-center">
+            <Text strong>{data.betterPlaceName}</Text>
+            <Text type="secondary" className="text-xs mt-1">
+              Sede con más ventas
+            </Text>
+            <Title level={3} className="m-0">
+              {data.salesCount}
+            </Title>
+          </span>
+        </article>
+      </div>
     </>
   );
 }

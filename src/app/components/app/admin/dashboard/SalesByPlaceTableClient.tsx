@@ -1,16 +1,34 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Table, Typography } from "antd";
 import "@/app/admin/page.css";
+import useStore from "@/store";
+import { SalesByPlaceData } from "@/types/types";
 
 const { Title } = Typography;
 
 type Props = {
-  dataSource: any[];
+  dataSource: SalesByPlaceData[];
 };
 
 export default function SalesByPlaceTableClient({ dataSource }: Props) {
+  const { setDataForDashboard } = useStore();
+
+  const betterPlace = dataSource.reduce<SalesByPlaceData | null>(
+    (max, item) => (item.sales_quantity > (max?.sales_quantity ?? 0) ? item : max),
+    null
+  );
+
+  useEffect(() => {
+    if (betterPlace) {
+      setDataForDashboard({
+        betterPlaceName: betterPlace?.place_name ?? "",
+        salesCount: betterPlace?.sales_quantity ?? 0,
+      });
+    }
+  }, [betterPlace]); //eslint-disable-line react-hooks/exhaustive-deps
+
   const columns = [
     {
       title: "Sede",
