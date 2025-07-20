@@ -323,3 +323,40 @@ export interface DbSalesPlace {
   created_at: string;
   updated_at: string;
 }
+
+export interface SalesByPayMethodData {
+  id: string;
+  pay_method: string;
+  sales_quantity: number;
+  sales_amount: number;
+  growth: number;
+}
+
+export interface BetterSeller {
+  id: string;
+  name: string;
+  photo: string;
+  sells: number;
+  amount: number;
+  growth: number;
+  place: string;
+}
+
+export interface SalesByPlaceData {
+  id: string;
+  place_name: string;
+  sales_quantity: number;
+  sales_amount: number;
+  growth: number;
+}
+
+export interface SalesForMonthsData {
+  month: string;
+  sales_quantity: number;
+  sales_amount: number;
+}
+
+export interface SalesForMonthsResponse {
+  monthsData: SalesForMonthsData[];
+  growth: number;
+}

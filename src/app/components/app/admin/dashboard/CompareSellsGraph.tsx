@@ -1,9 +1,10 @@
+import { getSalesForMonths } from "@/services/sales/sales";
 import CompareSellsGraphClient from "./CompareSellsGraphClient";
-import salesData from "@/app/api/local/sales-for-months/sales-for-months.json";
 
 type Props = {};
 
-const CompareSellsGraph = ({}: Props) => {
+const CompareSellsGraph = async ({}: Props) => {
+  const salesData = await getSalesForMonths();
   return <CompareSellsGraphClient salesData={salesData} />;
 };
 

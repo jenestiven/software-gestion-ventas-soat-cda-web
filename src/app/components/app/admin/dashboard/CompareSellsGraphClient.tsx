@@ -4,20 +4,13 @@ import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Typography } from "antd";
 import "@/app/admin/page.css";
+import { SalesForMonthsResponse } from "@/types/types";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const { Title, Text } = Typography;
-
-interface Sale {
-  id: number;
-  month: string;
-  "sells-quantity": number;
-  "sells-amount": number;
-}
-
 interface CompareSellsGraphClientProps {
-  salesData: Sale[];
+  salesData: SalesForMonthsResponse;
 }
 
 const CompareSellsGraphClient: React.FC<CompareSellsGraphClientProps> = ({
@@ -27,10 +20,10 @@ const CompareSellsGraphClient: React.FC<CompareSellsGraphClientProps> = ({
   const [chartSeries, setChartSeries] = useState<ApexAxisChartSeries>([]);
 
   useEffect(() => {
-    if (salesData.length === 0) return;
+    if (salesData.monthsData.length === 0) return;
 
-    const months = salesData.map((sale) => sale.month);
-    const sales = salesData.map((sale) => sale["sells-quantity"]);
+    const months = salesData.monthsData.map((sale) => sale.month);
+    const sales = salesData.monthsData.map((sale) => sale["sales_quantity"]);
 
     setChartOptions({
       chart: {
@@ -54,10 +47,10 @@ const CompareSellsGraphClient: React.FC<CompareSellsGraphClientProps> = ({
         },
         y: {
           formatter: (value, { seriesIndex, dataPointIndex }) => {
-            const sale = salesData[dataPointIndex];
+            const sale = salesData.monthsData[dataPointIndex];
             return `<div style="align-items: center; display: flex; gap: 8px;">
-                  <div>Cantidad: ${sale["sells-quantity"]},</div>
-                  <div>Monto: $${sale["sells-amount"].toLocaleString()}</div>
+                  <div>Cantidad: ${sale["sales_quantity"]},</div>
+                  <div>Monto: $${sale["sales_amount"].toLocaleString()}</div>
                 </div>`;
           },
         },
@@ -76,10 +69,11 @@ const CompareSellsGraphClient: React.FC<CompareSellsGraphClientProps> = ({
     <div className="month-graph bg-white rounded-lg shadow p-4">
       <Title level={4}>Ventas mensuales</Title>
       <Title level={1} style={{ margin: 0 }}>
-        +15%
+        {salesData.growth ?? 0}%
       </Title>
       <Text type="secondary">
-        Este mes <span className="text-green-500">+15%</span>
+        Este mes{" "}
+        <span className="text-green-500">{salesData.growth ?? 0}%</span>
       </Text>
       {chartSeries.length > 0 && chartOptions.xaxis && (
         <Chart

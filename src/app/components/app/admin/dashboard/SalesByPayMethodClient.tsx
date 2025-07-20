@@ -3,11 +3,12 @@
 import React from "react";
 import { Table, Typography } from "antd";
 import "@/app/admin/page.css";
+import { SalesByPayMethodData } from "@/types/types";
 
 const { Title } = Typography;
 
 type Props = {
-  dataSource: any[];
+  dataSource: SalesByPayMethodData[];
 };
 
 export default function SalesByPayMethodClient({ dataSource }: Props) {

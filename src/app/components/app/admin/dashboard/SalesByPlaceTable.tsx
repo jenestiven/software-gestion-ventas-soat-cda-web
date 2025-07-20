@@ -1,9 +1,10 @@
 import React from "react";
 import SalesByPlaceTableClient from "./SalesByPlaceTableClient";
-import salesByPlace from "@/app/api/local/sales-by-place/sales-by-place.json";
+import { getSalesByPlace } from "@/services/sales/sales";
 
 type Props = {};
 
-export default function SalesByPlaceTable({}: Props) {
+export default async function SalesByPlaceTable({}: Props) {
+  const salesByPlace = await getSalesByPlace();
   return <SalesByPlaceTableClient dataSource={salesByPlace} />;
 }
