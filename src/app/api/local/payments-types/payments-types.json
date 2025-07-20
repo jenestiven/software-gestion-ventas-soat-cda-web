@@ -1,7 +1,7 @@
 [
     {
         "id": "credit_card",
-        "name": "Datafono/Tarjeta de credito",
+        "name": "Datafono/Tarjeta",
         "description": "Pago realizado mediante datáfono o tarjeta de crédito.",
         "createdAt": "2025-06-01T09:00:00Z",
         "isActive": true

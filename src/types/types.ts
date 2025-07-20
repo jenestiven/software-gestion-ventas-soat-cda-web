@@ -183,10 +183,23 @@ export interface Sell {
   vehicle_license_plate: string;
   vehicle_type: string;
   soat_value: number;
+  total_value: number; 
   payment_method: string;
   doc_state: string;
+  fixed_commission?: number; 
+  profit?: number; 
+  asesor_sale_commission?: number; 
 }
-
+export interface AsesorStats {
+  totalSalesValue: number;
+  totalCommission: number;
+  totalUtility: number;
+  netEarnings: number;
+  salesGrowth: number;
+  commissionGrowth: number;
+  utilityGrowth: number;
+  earningsGrowth: number;
+};
 export interface Sale {
   id: string;
   created_at: string;

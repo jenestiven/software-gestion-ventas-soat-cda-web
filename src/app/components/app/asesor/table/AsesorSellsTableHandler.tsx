@@ -10,9 +10,7 @@ interface Props {}
 
 export default async function AsesorSellsTablehandler({}: Props) {
   const cookieHeader = headers().get("cookie");
-  console.log("AsesorSellsTableHandler: Raw Cookie Header:", cookieHeader);
   const sessionCookie = cookieHeader?.split(';').find(c => c.trim().startsWith('__session='))?.split('=')[1];
-  console.log("Session Cookie:", sessionCookie);
   
   let data: Sell[] = [];
 
@@ -25,11 +23,9 @@ export default async function AsesorSellsTablehandler({}: Props) {
     const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
     const asesorId = decodedClaims.uid;
     data = await getSalesByAsesor(asesorId);
-    console.log("Fetched sales data:", data);
     
   } catch (error) {
     console.error("Error verifying session cookie or fetching sales:", error);
-    // Optionally, redirect to login or return an empty state
     return <AsesorSellsTable data={[]} />;
   }
 

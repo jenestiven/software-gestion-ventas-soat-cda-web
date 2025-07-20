@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import { saveSaleApi } from "@/lib/api/sales";
 import { AntdUpload, getBase64 } from "../../../admin/users/AntdUpload";
 import { PaymentMethod } from "@/types/types";
+import { useRouter } from "next/navigation";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -36,6 +37,7 @@ export default function SistecreditoForm(props: Props) {
   const { Text, Title } = Typography;
   const user = useStore((state) => state.user);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const router = useRouter();
 
   const [partnersCommission, setPartnersCommission] = useState(
     user?.sale_data?.asesor_sale_commission || 0
@@ -102,6 +104,7 @@ export default function SistecreditoForm(props: Props) {
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
+      router.refresh();
       message.destroy();
     }
   };

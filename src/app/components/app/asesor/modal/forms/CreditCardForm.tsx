@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import useStore from "@/store";
 import { saveSaleApi } from "@/lib/api/sales";
 import { PaymentMethod } from "@/types/types";
+import { useRouter } from "next/navigation";
 
 type Props = {
   method: PaymentMethod;
@@ -29,6 +30,7 @@ export default function CreditCardForm(props: Props) {
   const [form] = Form.useForm();
   const { Text, Title } = Typography;
   const user = useStore((state) => state.user);
+  const router = useRouter();
 
   const [datafonoCommission, setDatafonoCommission] = useState(0);
   const [clientCommission, setClientCommission] = useState(0);
@@ -155,6 +157,7 @@ export default function CreditCardForm(props: Props) {
     } catch (error) {
       message.error("Error al registrar la venta", 2);
     } finally {
+      router.refresh();
       message.destroy();
     }
   };

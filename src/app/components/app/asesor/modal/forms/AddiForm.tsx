@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { AntdUpload, getBase64 } from "../../../admin/users/AntdUpload";
 import { PaymentMethod } from "@/types/types";
+import { useRouter } from "next/navigation";
 
 const { Text, Title } = Typography;
 
@@ -37,6 +38,7 @@ export default function AddiForm(props: Props) {
   const [form] = Form.useForm();
   const user = useStore((state) => state.user);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const router = useRouter();
   
   const [addiCommission, setAddiCommission] = useState(0);
   const [partnersCommission, setPartnersCommission] = useState(
@@ -123,6 +125,7 @@ export default function AddiForm(props: Props) {
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
+      router.refresh();
       message.destroy();
     }
   };

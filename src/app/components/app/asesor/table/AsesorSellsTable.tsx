@@ -4,26 +4,64 @@ import { Button, Table, Tag } from "antd";
 import React from "react";
 import "@/app/components/app/asesor/table/asesor-table.css";
 import { Sell } from "@/types/types";
-import { CloudUploadOutlined, EditOutlined, FilePdfOutlined } from "@ant-design/icons";
-
+import {
+  CloudUploadOutlined,
+  EditOutlined,
+  FilePdfOutlined,
+} from "@ant-design/icons";
 interface Props {
   data: Sell[];
 }
 
 export default function AsesorSellsTable({ data }: Props) {
   return (
-    <Table dataSource={data} rowKey="id">
-      <Table.Column title="Fecha" dataIndex="date" key="date" />
-      <Table.Column title="Cliente" dataIndex="client" key="client" />
+    <Table
+      dataSource={[...data].sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      )}
+      rowKey="id"
+      pagination={{ pageSize: 7 }}
+    >
+      <Table.Column
+        title="Fecha"
+        dataIndex="date"
+        key="date"
+        render={(date: string) =>
+          new Date(date).toLocaleDateString("es-CO", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        }
+      />
+      <Table.Column
+        title="Cliente"
+        dataIndex="client"
+        key="client"
+        render={(client: string) => <span>{client.toUpperCase()}</span>}
+      />
       <Table.Column
         title="Placa"
         dataIndex="vehicle_license_plate"
         key="vehicle_license_plate"
+        render={(plate: string) => <span>{plate.toUpperCase()}</span>}
       />
       <Table.Column
         title="Vehículo"
         dataIndex="vehicle_type"
         key="vehicle_type"
+        render={(item: string) => {
+          const vehicleTypes = [
+            { value: "car", label: "Carro" },
+            { value: "motorcycle", label: "Moto" },
+            { value: "suv", label: "Camioneta" },
+            { value: "taxi", label: "Taxi" },
+          ];
+          const found = vehicleTypes.find((v) => v.value === item);
+          return <span>{found ? found.label : item}</span>;
+        }}
       />
       <Table.Column
         title="Valor SOAT"
@@ -41,7 +79,9 @@ export default function AsesorSellsTable({ data }: Props) {
         dataIndex="doc_state"
         key="doc_state"
         render={(item: string) => (
-          <Tag color={item === "Pendiente" ? "volcano" : "green"}>{item}</Tag>
+          <Tag color={item === "pending" ? "volcano" : "green"}>
+            {item === "pending" ? "Pendiente" : "Completado"}
+          </Tag>
         )}
       />
       <Table.Column

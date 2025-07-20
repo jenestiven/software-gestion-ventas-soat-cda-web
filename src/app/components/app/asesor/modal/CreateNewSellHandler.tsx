@@ -31,6 +31,7 @@ export default function CreateNewSellHandler() {
         onClick={() => setOpenModal(true)}
         type="primary"
         icon={<PlusOutlined />}
+        className="w-44"
       >
         Nueva venta
       </Button>

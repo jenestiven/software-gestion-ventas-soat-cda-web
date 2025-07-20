@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import useStore from "@/store";
 import { saveSaleApi } from "@/lib/api/sales";
 import { PaymentMethod } from "@/types/types";
+import { useRouter } from "next/navigation";
 
 type Props = {
   onCloseModal: (open: boolean) => void;
@@ -29,6 +30,7 @@ export default function CashForm(props: Props) {
   const [form] = Form.useForm();
   const { Text } = Typography;
   const user = useStore((state) => state.user);
+  const router = useRouter();
 
   const [fixedCommission, setFixedCommission] = useState(0);
   const [profit, setProfit] = useState(0);
@@ -78,6 +80,7 @@ export default function CashForm(props: Props) {
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
+      router.refresh();
       message.destroy();
     }
   };

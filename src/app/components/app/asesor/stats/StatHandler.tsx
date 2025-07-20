@@ -1,77 +1,43 @@
-"use client";
-
-import {
-  DollarOutlined,
-  PieChartOutlined,
-  RiseOutlined,
-  ShoppingOutlined,
-} from "@ant-design/icons";
-import { Typography } from "antd";
 import React from "react";
+import Stats from "./Stats";
+import { headers } from "next/headers";
+import { AsesorStats } from "@/types/types";
+import { getStatsByAsesor } from "@/services/sales/sales";
+import { auth } from "@/firebase/firebaseAdmin";
+
 type Props = {};
 
-const { Title, Text } = Typography;
+export default async function StatHandler({}: Props) {
+  const cookieHeader = headers().get("cookie");
+  const sessionCookie = cookieHeader
+    ?.split(";")
+    .find((c) => c.trim().startsWith("__session="))
+    ?.split("=")[1];
 
-type StatCardProps = {
-  icon: React.ReactNode;
-  title: string;
-  value: string;
-  growth: string;
-};
+  let stats: AsesorStats = {
+    totalSalesValue: 0,
+    totalCommission: 0,
+    totalUtility: 0,
+    netEarnings: 0,
+    salesGrowth: 0,
+    commissionGrowth: 0,
+    utilityGrowth: 0,
+    earningsGrowth: 0,
+  };
 
-const StatCard: React.FC<StatCardProps> = ({ icon, title, value, growth }) => (
-  <article className="asesor-stat-card">
-    <span className="flex items-center justify-between w-full">
-    {icon}
-    <Title level={3} style={{ margin: 0 }}>
-      ${Number(value).toLocaleString()}
-    </Title>
-    </span>
-    <span className="flex items-center justify-between w-full">
-      <Text type="secondary">{title}</Text>
-      <Text
-        className={`stat-growth ${growth.startsWith("-") ? "negative" : ""}`}
-        type="secondary"
-      >
-        {growth}%
-      </Text>
-    </span>
-  </article>
-);
+  if (!sessionCookie) {
+    console.error("No session cookie found.");
+    return <Stats {...stats} />;
+  }
 
-const stats = [
-  {
-    icon: <ShoppingOutlined className="icon sell" />,
-    title: "Total en ventas",
-    value: "8220000",
-    growth: "+25",
-  },
-  {
-    icon: <DollarOutlined className="icon comision" />,
-    title: "Total en comisión",
-    value: "1000000",
-    growth: "-12",
-  },
-  {
-    icon: <PieChartOutlined className="icon utility" />,
-    title: "Total en utilidad del asesor",
-    value: "570000",
-    growth: "+23",
-  },
-  {
-    icon: <RiseOutlined className="icon earning" />,
-    title: "Ganancia neta del asesor",
-    value: "1570000",
-    growth: "+60",
-  },
-];
+  try {
+    const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
+    const asesorId = decodedClaims.uid;
+    stats = await getStatsByAsesor(asesorId);
+  } catch (error) {
+    console.error("Error verifying session cookie or fetching stats:", error);
+    return <Stats {...stats} />;
+  }
 
-export default function StatHandler({}: Props) {
-  return (
-    <>
-      {stats.map((stat, idx) => (
-        <StatCard key={idx} {...stat} />
-      ))}
-    </>
-  );
+  return <Stats {...stats} />;
 }

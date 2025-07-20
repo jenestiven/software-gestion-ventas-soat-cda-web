@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { AntdUpload, getBase64 } from "../../../admin/users/AntdUpload";
 import { PaymentMethod } from "@/types/types";
+import { useRouter } from "next/navigation";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -36,6 +37,7 @@ export default function BrillaForm(props: Props) {
   const [form] = Form.useForm();
   const { Text, Title } = Typography;
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const router = useRouter();
 
   const user = useStore((state) => state.user);
 
@@ -104,6 +106,7 @@ export default function BrillaForm(props: Props) {
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
+      router.refresh();
       message.destroy();
     }
   };
