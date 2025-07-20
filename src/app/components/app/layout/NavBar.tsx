@@ -1,4 +1,6 @@
 "use client";
+
+import "./nav.css";
 import React, { useEffect, useState } from "react";
 import { Tooltip, Typography } from "antd";
 import Link from "next/link";
@@ -6,7 +8,6 @@ import useStore from "@/store";
 import { adminNavRoutes, asesorNavRoutes } from "@/utils/nav-routes";
 import Image from "next/image";
 import LOGO from "@/images/logo.png";
-import "./nav.css";
 
 type Props = {};
 

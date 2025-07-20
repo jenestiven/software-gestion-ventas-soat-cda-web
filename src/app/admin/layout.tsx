@@ -16,7 +16,7 @@ export default function HomeLayout({
 
   useEffect(() => {
     initializeUser();
-  }, []);
+  }, []);//eslint-disable-line react-hooks/exhaustive-deps
 
   useSessionValidator();
 

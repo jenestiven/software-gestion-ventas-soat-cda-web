@@ -1,5 +1,6 @@
 "use client";
 
+import "@/app/asesor/page.css";
 import {
   DollarOutlined,
   PieChartOutlined,

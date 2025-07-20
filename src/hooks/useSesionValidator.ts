@@ -64,5 +64,5 @@ export function useSessionValidator() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
 }
