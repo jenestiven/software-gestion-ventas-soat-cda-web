@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useMemo } from "react";
 import {
   Table,
@@ -16,7 +17,7 @@ import {
 } from "antd";
 import type { TableProps } from "antd";
 import { AuditOutlined, MoreOutlined } from "@ant-design/icons";
-import { Sale } from "@/types/types";
+import { PlacesDataType, Sale } from "@/types/types";
 import SaleDetail from "./SaleDetail";
 
 const { RangePicker } = DatePicker;
@@ -24,10 +25,12 @@ const { Option } = Select;
 
 interface ManagmentTableClientProps {
   initialData: Sale[];
+  places: PlacesDataType[];
 }
 
 const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
   initialData,
+  places,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<Sale | null>(null);
@@ -71,7 +74,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
     }
     if (filters.sale_place) {
       data = data.filter(
-        (item) => item.sale_place.place_name === filters.sale_place
+        (item) => item.sale_place.place_id === filters.sale_place
       );
     }
     if (filters.asesor) {
@@ -148,7 +151,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
               ? `${record.asesor_data.name.charAt(0).toUpperCase()}`
               : null}
           </Avatar>
-          {record.asesor_data.name}
+          {record.asesor_data.name.toUpperCase()}
         </span>
       ),
     },
@@ -161,16 +164,31 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       title: "Nombre del cliente",
       dataIndex: ["client_data", "client_name"],
       key: "client_name",
+      render: (client_name: string) => {
+        return client_name ? client_name.toUpperCase() : "Desconocido";
+      },
     },
     {
       title: "Vehiculo",
-      dataIndex: ["vehicle_data", "vehicle_type_name"],
+      dataIndex: ["vehicle_data", "vehicle_type_id"],
       key: "vehicle_type",
+      render: (vehicle_type: string) => {
+        const vehicleTypes: Record<string, string> = {
+          motorcycle: "Moto",
+          car: "Carro",
+          suv: "Camioneta",
+          taxi: "Taxi",
+        };
+        return vehicleTypes[vehicle_type] || "Desconocido";
+      },
     },
     {
       title: "Placa",
       dataIndex: ["vehicle_data", "vehicle_plate"],
       key: "vehicle_plate",
+      render: (vehicle_plate: string) => {
+        return vehicle_plate ? vehicle_plate.toUpperCase() : "Desconocido";
+      },
     },
     {
       title: "Sede",
@@ -208,13 +226,15 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
         const menu = [
           {
             key: "1",
-            label: (
-              <a onClick={() => handleViewMore(record)}>ver detalle</a>
-            ),
+            label: <a onClick={() => handleViewMore(record)}>ver detalle</a>,
           },
         ];
         return (
-          <Dropdown menu={{items: menu}} trigger={["click"]} placement="bottomRight">
+          <Dropdown
+            menu={{ items: menu }}
+            trigger={["click"]}
+            placement="bottomRight"
+          >
             <Button icon={<MoreOutlined />} />
           </Dropdown>
         );
@@ -258,7 +278,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
             allowClear
           >
             <Option value="cash">Efectivo</Option>
-            <Option value="datafono">Datafono</Option>
+            <Option value="credit_card">Datafono</Option>
             <Option value="brilla">Brilla</Option>
             <Option value="sistecredito">Sistecredito</Option>
             <Option value="addi">Addi</Option>
@@ -295,10 +315,11 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
             style={{ width: 180 }}
             allowClear
           >
-            <Option value="Punto vial">Punto vial</Option>
-            <Option value="Asesorias KG">Asesorias KG</Option>
-            <Option value="Moto GP">Moto GP</Option>
-            <Option value="TCC">TCC</Option>
+            {places.map((place) => (
+              <Select.Option key={place.id} value={place.id}>
+                {place.place_name}
+              </Select.Option>
+            ))}
           </Select>
         </Col>
         <Col>
@@ -323,9 +344,12 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       </Row>
       <Table
         columns={columns}
-        dataSource={filteredData}
+        dataSource={filteredData.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        )}
         rowKey="id"
-        pagination={{ pageSize: 10 }}
+        pagination={{ pageSize: 8 }}
       />
 
       <Modal

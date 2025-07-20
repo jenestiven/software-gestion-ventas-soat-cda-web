@@ -39,7 +39,7 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
           </Avatar>
           <span>
             <p className="font-light">Asesor</p>
-            <h2>{sale?.asesor_data.name}</h2>
+            <h2>{sale?.asesor_data.name.toUpperCase()}</h2>
           </span>
         </div>
         <div className="w-2/4">
@@ -66,13 +66,13 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
         <div className="flex flex-col gap-2 w-2/5">
           <span>
             <p className="font-light">Datos del cliente</p>
-            <h2>{sale?.client_data.client_name}</h2>
+            <h2>{sale?.client_data.client_name.toUpperCase()}</h2>
             <h2>Cc. {sale?.client_data.client_id}</h2>
           </span>
           <span>
             <p className="font-light">Vehiculo</p>
             <h2>{getVehicleTypeName(sale?.vehicle_data.vehicle_type_id)}</h2>
-            <h2>Placa: {sale?.vehicle_data.vehicle_plate}</h2>
+            <h2>Placa: {sale?.vehicle_data.vehicle_plate.toUpperCase()}</h2>
           </span>
           <span>
             <p className="font-light">Sede</p>
@@ -115,19 +115,19 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
                 <h2>${sale?.sale_sumary.fixed_comission.toLocaleString()}</h2>
               </span>
             )}
-            {sale?.sale_sumary?.profit && (
+            {sale?.sale_sumary?.profit && sale.sale_sumary.profit > 0 && (
               <span className="flex gap-2 justify-between w-full">
                 <p className="font-light">Utilidad:</p>
                 <h2>${sale?.sale_sumary.profit.toLocaleString()}</h2>
               </span>
             )}
-            {sale?.sale_sumary?.gross_profit !== undefined && (
+            {sale?.sale_sumary?.gross_profit !== undefined && sale.sale_sumary.gross_profit > 0 && (
               <span className="flex gap-2 justify-between w-full">
                 <p className="font-light">Utilidad bruta:</p>
                 <h2>${sale.sale_sumary.gross_profit.toLocaleString()}</h2>
               </span>
             )}
-            {sale?.sale_sumary?.bold_to_be_deposited_value !== undefined && (
+            {sale?.sale_sumary?.bold_to_be_deposited_value !== undefined && sale.sale_sumary.bold_to_be_deposited_value > 0 && (
               <span className="flex gap-2 justify-between w-full">
                 <p className="font-light">Valor a consignar (Bold):</p>
                 <h2>
@@ -136,7 +136,7 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
                 </h2>
               </span>
             )}
-            {sale?.sale_sumary?.datafono_commission !== undefined && (
+            {sale?.sale_sumary?.datafono_commission !== undefined && sale.sale_sumary.datafono_commission > 0 && (
               <span className="flex gap-2 justify-between w-full">
                 <p className="font-light">Comisión datáfono: $</p>
                 <h2>
@@ -144,19 +144,19 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
                 </h2>
               </span>
             )}
-            {sale?.sale_sumary?.datafono_value !== undefined && (
+            {sale?.sale_sumary?.datafono_value !== undefined && sale.sale_sumary.datafono_value > 0 && (
               <span className="flex gap-2 justify-between w-full">
                 <p className="font-light">Valor datáfono:</p>
                 <h2>${sale.sale_sumary.datafono_value.toLocaleString()}</h2>
               </span>
             )}
-            {sale?.sale_sumary?.reteica !== undefined && (
+            {sale?.sale_sumary?.reteica !== undefined && sale.sale_sumary.reteica > 0 && (
               <span className="flex gap-2 justify-between w-full">
                 <p className="font-light">ReteICA:</p>
                 <h2>${sale.sale_sumary.reteica.toLocaleString()}</h2>
               </span>
             )}
-            {sale?.sale_sumary?.total_to_tranfer_costs !== undefined && (
+            {sale?.sale_sumary?.total_to_tranfer_costs !== undefined && sale.sale_sumary.total_to_tranfer_costs > 0 && (
               <span className="flex gap-2 justify-between w-full">
                 <p className="font-light">Total a transferir (costos):</p>
                 <h2>
@@ -165,7 +165,7 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
               </span>
             )}
 
-            {sale?.sale_sumary?.value_to_be_deposited !== undefined && (
+            {sale?.sale_sumary?.value_to_be_deposited !== undefined && sale.sale_sumary.value_to_be_deposited > 0 && (
               <span className="flex gap-2 justify-between w-full">
                 <p className="font-light ">Valor a consignar:</p>
                 <h2>
@@ -173,7 +173,7 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
                 </h2>
               </span>
             )}
-            {sale?.sale_sumary?.soat_value !== undefined && (
+            {sale?.sale_sumary?.soat_value !== undefined && sale.sale_sumary.soat_value > 0 && (
               <span className="flex gap-2 justify-between w-full">
                 <p className="font-light ">Valor SOAT:</p>
                 <h2>${sale.sale_sumary.soat_value.toLocaleString()}</h2>

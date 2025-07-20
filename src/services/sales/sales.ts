@@ -237,3 +237,18 @@ export async function getStatsByAsesor(asesorId: string) {
     throw new Error("Unable to get stats by asesor");
   }
 }
+
+export async function getAllSales(): Promise<Sale[]> {
+  try {
+    const salesCollection = db.collection("sales");
+    const salesSnapshot = await salesCollection.get();
+    const sales: Sale[] = salesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Sale[];
+    return sales;
+  } catch (error) {
+    console.error("Error getting all sales:", error);
+    throw new Error("Unable to get all sales");
+  }
+}
