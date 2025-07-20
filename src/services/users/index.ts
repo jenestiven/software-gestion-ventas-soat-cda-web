@@ -90,10 +90,7 @@ export async function getUsers() {
     return users;
   } catch (error) {
     console.error("Error fetching users:", error);
-    return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 }
-    );
+    return [] as DbUser[];
   }
 }
 

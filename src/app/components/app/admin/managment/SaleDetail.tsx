@@ -3,6 +3,21 @@ import { CopyOutlined, DownloadOutlined } from "@ant-design/icons";
 import { Avatar, Button, Divider } from "antd";
 import React from "react";
 
+function getVehicleTypeName(type?: string) {
+  switch (type) {
+    case "motorcycle":
+      return "Moto";
+    case "car":
+      return "Carro";
+    case "suv":
+      return "Camioneta";
+    case "taxi":
+      return "Taxi";
+    default:
+      return "Vehículo";
+  }
+}
+
 export default function SaleDetail({ sale }: { sale: Sale | null }) {
   const date = sale?.created_at
     ? new Date(sale.created_at).toLocaleString("es-CO", {
@@ -56,7 +71,7 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
           </span>
           <span>
             <p className="font-light">Vehiculo</p>
-            <h2>{sale?.vehicle_data.vehicle_type_name}</h2>
+            <h2>{getVehicleTypeName(sale?.vehicle_data.vehicle_type_id)}</h2>
             <h2>Placa: {sale?.vehicle_data.vehicle_plate}</h2>
           </span>
           <span>
