@@ -2,7 +2,6 @@
 
 import { Button, Table, Tag } from "antd";
 import React from "react";
-import "@/app/components/app/asesor/table/asesor-table.css";
 import { Sell } from "@/types/types";
 import {
   CloudUploadOutlined,
@@ -67,6 +66,12 @@ export default function AsesorSellsTable({ data }: Props) {
         title="Valor SOAT"
         dataIndex="soat_value"
         key="soat_value"
+        render={(item: number) => <span>${item.toLocaleString()}</span>}
+      />
+      <Table.Column
+        title="Valor de venta"
+        dataIndex="total_value"
+        key="total_value"
         render={(item: number) => <span>${item.toLocaleString()}</span>}
       />
       <Table.Column

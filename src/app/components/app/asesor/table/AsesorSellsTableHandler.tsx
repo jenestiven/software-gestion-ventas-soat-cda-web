@@ -1,5 +1,4 @@
 import React from "react";
-import "@/app/components/app/asesor/table/asesor-table.css";
 import { Sell } from "@/types/types";
 import { headers } from "next/headers";
 import AsesorSellsTable from "./AsesorSellsTable";

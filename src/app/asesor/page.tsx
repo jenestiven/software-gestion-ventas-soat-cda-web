@@ -10,10 +10,12 @@ export default function Page() {
       <StatHandler />
 
       <section className="asesor-table">
-        <h2 className="p-4 font-semibold">Ventas actuales</h2>
-        <Suspense fallback={<h2>Cargando ventas...</h2>}>
-          <AsesorSellsTablehandler />
-        </Suspense>
+        <div>
+          <h2 className="p-4 font-semibold">Ventas actuales</h2>
+          <Suspense fallback={<h2>Cargando ventas...</h2>}>
+            <AsesorSellsTablehandler />
+          </Suspense>
+        </div>
 
         <CreateNewSellHandler />
       </section>
