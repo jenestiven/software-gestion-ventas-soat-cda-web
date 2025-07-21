@@ -1,7 +1,7 @@
 .admin-home-page {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr auto auto;
+    grid-template-rows: auto 1fr 1fr;
     grid-template-areas:
         "stat1 stat2 stat3"
         "monthly-sales-compare monthly-sales-compare bypaymethod"

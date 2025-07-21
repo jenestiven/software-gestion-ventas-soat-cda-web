@@ -59,11 +59,27 @@ export default function Header({}: Props) {
           {user?.name ?? "Usuario desconocido"}
         </Title>
         <Dropdown menu={{ items }} trigger={["click"]}>
-          <Avatar
-            size="large"
-            className="header-avatar cursor-pointer"
-            src={user?.thumbnail || "https://i.pravatar.cc/150?img=4"}
-          />
+          {user?.thumbnail ? (
+            <Avatar
+              size="large"
+              className="header-avatar cursor-pointer"
+              src={user?.thumbnail}
+            />
+          ) : (
+            <div
+              style={{
+                backgroundColor: "#fefefe",
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {user?.name?.charAt(0).toUpperCase() ?? "U"}
+            </div>
+          )}
         </Dropdown>
       </div>
     </header>
