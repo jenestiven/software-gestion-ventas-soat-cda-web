@@ -1,4 +1,4 @@
-import { PaymentMethod } from "@/types/types";
+import { PaymentMethod, Tariff } from "@/types/types";
 import { Modal } from "antd";
 import React, { lazy, Suspense } from "react";
 
@@ -15,6 +15,7 @@ const PAYMENTS_METHODS_FORMS: Record<
     (props: {
       method: PaymentMethod;
       onCloseModal: (open: boolean) => void;
+      tariffSchedule: Tariff;
     }) => JSX.Element
   >
 > = {
@@ -29,12 +30,14 @@ type Props = {
   method: PaymentMethod | null;
   openFormModal: boolean;
   onCloseModal: (open: boolean) => void;
+  tariffSchedule: Tariff;
 };
 
 export default function SellFormLauncher({
   method,
   openFormModal,
   onCloseModal,
+  tariffSchedule,
 }: Props) {
   const Component =
     method?.id && method.id in PAYMENTS_METHODS_FORMS
@@ -51,7 +54,7 @@ export default function SellFormLauncher({
     >
       <Suspense fallback={<h2>Cargando formulario...</h2>}>
         {Component && method ? (
-          <Component method={method} onCloseModal={onCloseModal} />
+          <Component method={method} onCloseModal={onCloseModal} tariffSchedule={tariffSchedule} />
         ) : (
           <h2>Seleccione un método de pago válido.</h2>
         )}

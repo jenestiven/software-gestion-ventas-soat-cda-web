@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal, Radio, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import PAYMENTS_METHODS from "@/app/api/local/payments-types/payments-types.json";
 import { PaymentMethod } from "@/types/types";
 import SellFormLauncher from "./SellFormLauncher";
+import { getTariffScheduleApi } from "@/lib/api/asesor";
 
 const { Title } = Typography;
 
@@ -14,6 +15,7 @@ export default function CreateNewSellHandler() {
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<PaymentMethod | null>(null);
   const [openFormModal, setOpenFormModal] = useState(false);
+  const [tariffSchedule, setTariffSchedule] = useState([]);
 
   const onCloseModal = () => {
     setOpenFormModal(false);
@@ -24,6 +26,19 @@ export default function CreateNewSellHandler() {
     setOpenModal(false);
     setOpenFormModal(true);
   };
+
+  useEffect(() => {
+    const getTariff = async () => {
+      try {
+        const tariffSchedule = await getTariffScheduleApi();
+        setTariffSchedule(tariffSchedule);
+      } catch (error) {
+        console.error("Error fetching tariff:", error);
+      }
+    };
+
+    getTariff();
+  }, []);
 
   return (
     <>
@@ -79,6 +94,7 @@ export default function CreateNewSellHandler() {
         method={selectedPaymentMethod}
         openFormModal={openFormModal}
         onCloseModal={onCloseModal}
+        tariffSchedule={tariffSchedule}
       />
     </>
   );

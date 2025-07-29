@@ -360,3 +360,29 @@ export interface SalesForMonthsResponse {
   monthsData: SalesForMonthsData[];
   growth: number;
 }
+
+/**
+ * Define la estructura para una categoría específica de vehículo.
+ */
+export interface Category {
+  code: string;
+  type: string;
+  premium: number;
+  'contribution_52%': number;
+  runt_fee: number;
+  total_to_pay: number;
+}
+
+/**
+ * Define la estructura para una clase de vehículo, que contiene múltiples categorías.
+ */
+export interface VehicleClass {
+  id: string;
+  vehicle_class: string;
+  categories: Category[];
+}
+
+/**
+ * Define el tipo para el arreglo completo de tarifas de vehículos.
+ */
+export type Tariff = VehicleClass[];

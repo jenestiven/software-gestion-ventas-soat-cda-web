@@ -9,7 +9,7 @@ import {
   Button,
   Row,
   Col,
-  Select,
+  Cascader,
   Divider,
   Typography,
   message,
@@ -18,12 +18,18 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import useStore from "@/store";
 import { saveSaleApi } from "@/lib/api/sales";
-import { PaymentMethod } from "@/types/types";
+import {
+  PaymentMethod,
+  Tariff,
+  VehicleClass,
+  Category,
+} from "@/types/types";
 import { useRouter } from "next/navigation";
 
 type Props = {
   onCloseModal: (open: boolean) => void;
   method: PaymentMethod;
+  tariffSchedule: Tariff;
 };
 
 export default function CashForm(props: Props) {
@@ -31,22 +37,55 @@ export default function CashForm(props: Props) {
   const { Text } = Typography;
   const user = useStore((state) => state.user);
   const router = useRouter();
+  const { tariffSchedule } = props;
+
+  const cascaderOptions = tariffSchedule.map((vehicleClass) => ({
+    label: vehicleClass.vehicle_class,
+    value: vehicleClass.id,
+    children: vehicleClass.categories.map((category) => ({
+      label: category.type,
+      value: category.code,
+    })),
+  }));
 
   const [fixedCommission, setFixedCommission] = useState(0);
   const [profit, setProfit] = useState(0);
   const [totalToPay, setTotalToPay] = useState(0);
 
-  const vehicleType = Form.useWatch("vehicle_type", form);
+  const vehicleTypePath = Form.useWatch("vehicle_type", form);
   const inCashValue = Form.useWatch("cash_value_payed", form);
   const soatValue = Form.useWatch("soat_value", form);
 
   useEffect(() => {
-    if (!vehicleType) return;
-    const type = vehicleType.toLowerCase();
+    if (!vehicleTypePath || vehicleTypePath.length < 2) {
+      form.setFieldsValue({ soat_value: undefined });
+      setFixedCommission(0);
+      return;
+    }
 
-    const value = type === "motorcycle" ? 15000 : 0;
-    setFixedCommission(value);
-  }, [vehicleType]);
+    const vehicleClassId = vehicleTypePath[0];
+    const vehicleTypeCode = vehicleTypePath[1];
+
+    const selectedVehicleClass = tariffSchedule.find(
+      (vClass) => vClass.id === vehicleClassId
+    );
+    const selectedCategory = selectedVehicleClass?.categories.find(
+      (c) => c.code === vehicleTypeCode
+    );
+
+    if (selectedCategory && selectedVehicleClass) {
+      form.setFieldsValue({ soat_value: selectedCategory.total_to_pay });
+      const commission = selectedVehicleClass.vehicle_class
+        .toLowerCase()
+        .includes("moto")
+        ? 15000
+        : 0;
+      setFixedCommission(commission);
+    } else {
+      form.setFieldsValue({ soat_value: undefined });
+      setFixedCommission(0);
+    }
+  }, [vehicleTypePath, tariffSchedule, form]);
 
   useEffect(() => {
     const profitValue = (inCashValue || 0) - totalToPay;
@@ -63,6 +102,7 @@ export default function CashForm(props: Props) {
       message.loading("Registrando venta...", 0);
       const saleData = {
         ...values,
+        vehicle_type: values.vehicle_type[1], // Save only the category code
         seller: user,
         payment_method_id: props.method?.id,
         payment_method_name: props.method?.name,
@@ -152,13 +192,10 @@ export default function CashForm(props: Props) {
                 },
               ]}
             >
-              <Select
-                options={[
-                  { label: "Moto", value: "motorcycle" },
-                  { label: "Carro", value: "car" },
-                  { label: "Camioneta", value: "suv" },
-                  { label: "Taxi", value: "taxi" },
-                ]}
+              <Cascader
+                options={cascaderOptions}
+                placeholder="Selecciona un tipo de vehículo"
+                style={{ width: "100%" }}
               />
             </Form.Item>
 
@@ -184,7 +221,7 @@ export default function CashForm(props: Props) {
                 },
               ]}
             >
-              <InputNumber style={{ width: "100%" }} />
+              <InputNumber style={{ width: "100%" }} disabled />
             </Form.Item>
           </Col>
 
