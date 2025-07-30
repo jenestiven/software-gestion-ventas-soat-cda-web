@@ -1,8 +1,8 @@
 [
     {
-        "id": "credit_card",
-        "name": "Datafono/Tarjeta",
-        "description": "Pago realizado mediante datáfono o tarjeta de crédito.",
+        "id": "dataphone",
+        "name": "Datafono",
+        "description": "Pago realizado mediante datáfono.",
         "createdAt": "2025-06-01T09:00:00Z",
         "isActive": true
     },
@@ -11,13 +11,6 @@
         "name": "Sistecredito",
         "description": "Financiación del pago con Sistecrédito.",
         "createdAt": "2025-06-01T09:05:00Z",
-        "isActive": true
-    },
-    {
-        "id": "cash",
-        "name": "Efectivo",
-        "description": "Pago realizado en efectivo directamente en el punto de venta.",
-        "createdAt": "2025-06-01T09:10:00Z",
         "isActive": true
     },
     {
@@ -32,6 +25,13 @@
         "name": "Brilla",
         "description": "Pago cargado a través del programa Brilla.",
         "createdAt": "2025-06-01T09:20:00Z",
+        "isActive": true
+    },
+    {
+        "id": "cash",
+        "name": "Efectivo",
+        "description": "Pago realizado en efectivo directamente en el punto de venta.",
+        "createdAt": "2025-06-01T09:10:00Z",
         "isActive": true
     }
 ]

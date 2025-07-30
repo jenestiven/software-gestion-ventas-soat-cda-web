@@ -260,10 +260,21 @@ export interface PlacesDataType {
   place_name: string;
   place_address: string;
   asesors_number?: number;
-  asesor_sale_commission: number;
   can_add_profit: boolean;
   created_at?: string;
   updated_at?: string;
+  fixed_costs?: {
+    [key: string]: {
+      conditional: boolean;
+      value?: number;
+      value_gt_1m?: number;
+      value_lt_1m?: number;
+      transfer_method?: {
+        name: string;
+        is_exempt: boolean;
+      }[];
+    };
+  };
 }
 
 export interface PlacesDataTypeFromDb {
@@ -380,6 +391,7 @@ export interface VehicleClass {
   id: string;
   vehicle_class: string;
   categories: Category[];
+  fixed_payment_commission?: number;
 }
 
 /**

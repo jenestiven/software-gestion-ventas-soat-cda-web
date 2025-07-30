@@ -2,7 +2,6 @@ import { AppRoute } from "@/types/types";
 import {
   DollarOutlined,
   FundViewOutlined,
-  ReconciliationOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 
@@ -37,12 +36,5 @@ export const adminNavRoutes: AppRoute[] = [
       title: "Usuarios",
       navIcon: UserOutlined,
     },
-  },
-  {
-    path: "admin/reports",
-    handle: {
-      title: "Reportes",
-      navIcon: ReconciliationOutlined,
-    },
-  },
+  }
 ];
