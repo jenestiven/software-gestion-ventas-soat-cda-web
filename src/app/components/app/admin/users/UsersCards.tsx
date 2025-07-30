@@ -8,6 +8,7 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 import { Typography } from "antd";
+import "@/app/admin/page.css";
 
 const { Title, Text } = Typography;
 

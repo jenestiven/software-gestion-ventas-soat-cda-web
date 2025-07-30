@@ -3,7 +3,6 @@ import UsersTable from "@/app/components/app/admin/users/UsersTable";
 import UsersCards from "@/app/components/app/admin/users/UsersCards";
 import PlacesTable from "@/app/components/app/admin/users/PlacesTable";
 import { getUsersStats } from "@/services/users";
-import "@/app/admin/page.css";
 
 export default async function UsersPage() {
   const stats = await getUsersStats();
