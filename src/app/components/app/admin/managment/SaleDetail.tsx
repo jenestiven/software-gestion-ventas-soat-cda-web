@@ -19,6 +19,12 @@ function getVehicleTypeName(type?: string) {
 }
 
 export default function SaleDetail({ sale }: { sale: Sale | null }) {
+  const handleDownload = (receiptId?: string) => {
+    if (receiptId) {
+      window.open(sale?.receipts?.at(0)?.receipt_url, "_blank");
+    }
+  };
+
   const date = sale?.created_at
     ? new Date(sale.created_at).toLocaleString("es-CO", {
         year: "numeric",
@@ -121,64 +127,72 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
                 <h2>${sale?.sale_sumary.profit.toLocaleString()}</h2>
               </span>
             )}
-            {sale?.sale_sumary?.gross_profit !== undefined && sale.sale_sumary.gross_profit > 0 && (
-              <span className="flex gap-2 justify-between w-full">
-                <p className="font-light">Utilidad bruta:</p>
-                <h2>${sale.sale_sumary.gross_profit.toLocaleString()}</h2>
-              </span>
-            )}
-            {sale?.sale_sumary?.bold_to_be_deposited_value !== undefined && sale.sale_sumary.bold_to_be_deposited_value > 0 && (
-              <span className="flex gap-2 justify-between w-full">
-                <p className="font-light">Valor a consignar (Bold):</p>
-                <h2>
-                  $
-                  {sale.sale_sumary.bold_to_be_deposited_value.toLocaleString()}
-                </h2>
-              </span>
-            )}
-            {sale?.sale_sumary?.datafono_commission !== undefined && sale.sale_sumary.datafono_commission > 0 && (
-              <span className="flex gap-2 justify-between w-full">
-                <p className="font-light">Comisión datáfono: $</p>
-                <h2>
-                  ${sale.sale_sumary.datafono_commission.toLocaleString()}
-                </h2>
-              </span>
-            )}
-            {sale?.sale_sumary?.datafono_value !== undefined && sale.sale_sumary.datafono_value > 0 && (
-              <span className="flex gap-2 justify-between w-full">
-                <p className="font-light">Valor datáfono:</p>
-                <h2>${sale.sale_sumary.datafono_value.toLocaleString()}</h2>
-              </span>
-            )}
-            {sale?.sale_sumary?.reteica !== undefined && sale.sale_sumary.reteica > 0 && (
-              <span className="flex gap-2 justify-between w-full">
-                <p className="font-light">ReteICA:</p>
-                <h2>${sale.sale_sumary.reteica.toLocaleString()}</h2>
-              </span>
-            )}
-            {sale?.sale_sumary?.total_to_tranfer_costs !== undefined && sale.sale_sumary.total_to_tranfer_costs > 0 && (
-              <span className="flex gap-2 justify-between w-full">
-                <p className="font-light">Total a transferir (costos):</p>
-                <h2>
-                  ${sale.sale_sumary.total_to_tranfer_costs.toLocaleString()}
-                </h2>
-              </span>
-            )}
+            {sale?.sale_sumary?.gross_profit !== undefined &&
+              sale.sale_sumary.gross_profit > 0 && (
+                <span className="flex gap-2 justify-between w-full">
+                  <p className="font-light">Utilidad bruta:</p>
+                  <h2>${sale.sale_sumary.gross_profit.toLocaleString()}</h2>
+                </span>
+              )}
+            {sale?.sale_sumary?.bold_to_be_deposited_value !== undefined &&
+              sale.sale_sumary.bold_to_be_deposited_value > 0 && (
+                <span className="flex gap-2 justify-between w-full">
+                  <p className="font-light">Valor a consignar (Bold):</p>
+                  <h2>
+                    $
+                    {sale.sale_sumary.bold_to_be_deposited_value.toLocaleString()}
+                  </h2>
+                </span>
+              )}
+            {sale?.sale_sumary?.datafono_commission !== undefined &&
+              sale.sale_sumary.datafono_commission > 0 && (
+                <span className="flex gap-2 justify-between w-full">
+                  <p className="font-light">Comisión datáfono: $</p>
+                  <h2>
+                    ${sale.sale_sumary.datafono_commission.toLocaleString()}
+                  </h2>
+                </span>
+              )}
+            {sale?.sale_sumary?.datafono_value !== undefined &&
+              sale.sale_sumary.datafono_value > 0 && (
+                <span className="flex gap-2 justify-between w-full">
+                  <p className="font-light">Valor datáfono:</p>
+                  <h2>${sale.sale_sumary.datafono_value.toLocaleString()}</h2>
+                </span>
+              )}
+            {sale?.sale_sumary?.reteica !== undefined &&
+              sale.sale_sumary.reteica > 0 && (
+                <span className="flex gap-2 justify-between w-full">
+                  <p className="font-light">ReteICA:</p>
+                  <h2>${sale.sale_sumary.reteica.toLocaleString()}</h2>
+                </span>
+              )}
+            {sale?.sale_sumary?.total_to_tranfer_costs !== undefined &&
+              sale.sale_sumary.total_to_tranfer_costs > 0 && (
+                <span className="flex gap-2 justify-between w-full">
+                  <p className="font-light">Total a transferir (costos):</p>
+                  <h2>
+                    ${sale.sale_sumary.total_to_tranfer_costs.toLocaleString()}
+                  </h2>
+                </span>
+              )}
 
-            {sale?.sale_sumary?.value_to_be_deposited !== undefined && sale.sale_sumary.value_to_be_deposited > 0 && (
-              <span className="flex gap-2 justify-between w-full">
-                <p className="font-light ">Valor a consignar:</p>
-                <h2>
-                  ${sale.sale_sumary.value_to_be_deposited.toLocaleString()}
-                </h2>
-              </span>
-            )}
-            {sale?.sale_sumary?.soat_value !== undefined && sale.sale_sumary.soat_value > 0 && (
-              <span className="flex gap-2 justify-between w-full">
-                <p className="font-light ">Valor SOAT:</p>
-                <h2>${sale.sale_sumary.soat_value.toLocaleString()}</h2>
-              </span>
-            )}
+            {sale?.sale_sumary?.value_to_be_deposited !== undefined &&
+              sale.sale_sumary.value_to_be_deposited > 0 && (
+                <span className="flex gap-2 justify-between w-full">
+                  <p className="font-light ">Valor a consignar:</p>
+                  <h2>
+                    ${sale.sale_sumary.value_to_be_deposited.toLocaleString()}
+                  </h2>
+                </span>
+              )}
+            {sale?.sale_sumary?.soat_value !== undefined &&
+              sale.sale_sumary.soat_value > 0 && (
+                <span className="flex gap-2 justify-between w-full">
+                  <p className="font-light ">Valor SOAT:</p>
+                  <h2>${sale.sale_sumary.soat_value.toLocaleString()}</h2>
+                </span>
+              )}
           </div>
         </div>
       </div>
@@ -196,7 +210,11 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
               }`}{" "}
               {sale?.receipts.at(0)?.id}
             </p>
-            <Button type="primary" icon={<DownloadOutlined />}>
+            <Button
+              onClick={() => handleDownload(sale?.receipts?.at(0)?.id)}
+              type="primary"
+              icon={<DownloadOutlined />}
+            >
               Descargar{" "}
               {`${
                 sale?.receipts.at(0)?.receipt_type === "brilla-contract"

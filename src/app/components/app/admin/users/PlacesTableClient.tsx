@@ -88,12 +88,6 @@ export default function PlacesTableClient({ dataSource }: Props) {
       key: "asesorsNumber",
     },
     {
-      title: "Comisión de Asesor",
-      dataIndex: "asesor_sale_commission",
-      key: "asesorSaleCommission",
-      render: (text) => `$${text.toLocaleString()}`,
-    },
-    {
       title: "Fecha de creación",
       dataIndex: "created_at",
       key: "createdAt",

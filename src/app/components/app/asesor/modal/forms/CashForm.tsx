@@ -244,27 +244,14 @@ export default function CashForm(props: Props) {
               <Input.TextArea rows={5} />
             </Form.Item>
 
-            <Divider orientation="left">Resumen de venta</Divider>
-
-            <section className="px-4">
-              <div className="flex justify-between">
-                <Text>Comision fija:</Text> $
-                {Number(fixedCommission).toLocaleString()}
-              </div>
-
-              <div className="flex justify-between">
-                <Text>Utilidad:</Text> $
-                {profit ? Number(profit).toLocaleString() : 0}
-              </div>
-
               <Divider />
+            <section className="px-2">
 
               <div className="flex justify-between">
                 <Text strong>Total a pagar:</Text> $
                 {totalToPay ? Number(totalToPay).toLocaleString() : 0}
               </div>
 
-              <Divider />
             </section>
           </Col>
           <Col xs={24} md={24}>

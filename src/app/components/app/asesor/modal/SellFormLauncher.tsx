@@ -7,7 +7,7 @@ type PaymentMethodId =
   | "brilla"
   | "sistecredito"
   | "cash"
-  | "credit_card";
+  | "dataphone";
 
 const PAYMENTS_METHODS_FORMS: Record<
   PaymentMethodId,
@@ -23,7 +23,7 @@ const PAYMENTS_METHODS_FORMS: Record<
   brilla: lazy(() => import("./forms/BrillaForm")),
   sistecredito: lazy(() => import("./forms/SistecreditoForm")),
   cash: lazy(() => import("./forms/CashForm")),
-  credit_card: lazy(() => import("./forms/CreditCardForm")),
+  dataphone: lazy(() => import("./forms/CreditCardForm")),
 };
 
 type Props = {

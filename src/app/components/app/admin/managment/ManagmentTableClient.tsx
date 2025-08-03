@@ -32,6 +32,8 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
   initialData,
   places,
 }) => {
+  console.log("Initial Data:", initialData);
+  
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<Sale | null>(null);
   const [filters, setFilters] = useState<any>({});
