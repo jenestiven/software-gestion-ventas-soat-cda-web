@@ -19,6 +19,7 @@ import type { TableProps } from "antd";
 import { AuditOutlined, MoreOutlined } from "@ant-design/icons";
 import { PlacesDataType, Sale } from "@/types/types";
 import SaleDetail from "./SaleDetail";
+import ConciliationModal from "./ConciliationModal";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -32,10 +33,9 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
   initialData,
   places,
 }) => {
-  console.log("Initial Data:", initialData);
-  
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<Sale | null>(null);
+  const [isConciliationModalVisible, setIsConciliationModalVisible] = useState(false);
   const [filters, setFilters] = useState<any>({});
 
   const filteredData = useMemo(() => {
@@ -246,7 +246,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
-      <Button icon={<AuditOutlined />} type="primary">
+      <Button icon={<AuditOutlined />} type="primary" onClick={() => setIsConciliationModalVisible(true)}>
         Conciliar facturas
       </Button>
       <Divider />
@@ -363,6 +363,12 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       >
         <SaleDetail sale={selectedRecord} />
       </Modal>
+
+      <ConciliationModal
+        visible={isConciliationModalVisible}
+        onCancel={() => setIsConciliationModalVisible(false)}
+        initialData={initialData}
+      />
     </div>
   );
 };

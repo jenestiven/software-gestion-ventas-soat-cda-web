@@ -253,6 +253,7 @@ export interface Sale {
     receipt_url: string;
     receipt_type: "brilla-contract" | "pagare" | "invoice";
   }[];
+  conciliation_status?: "conciliated" | "pending";
 }
 
 export interface PlacesDataType {
