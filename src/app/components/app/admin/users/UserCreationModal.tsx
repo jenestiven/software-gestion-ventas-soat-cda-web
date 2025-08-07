@@ -110,6 +110,10 @@ export default function UserCreationModal({
       const actionMessage = isEditMode ? "actualizar" : "crear";
       console.error(`Error ${actionMessage} usuario:`, error);
       message.error(`Error al ${actionMessage} el usuario`);
+    } finally {
+      setTimeout(() => {
+        message.destroy();
+      }, 2000);
     }
   };
 
@@ -156,7 +160,12 @@ export default function UserCreationModal({
             <Form.Item
               name="email"
               label="Correo electronico"
-              rules={[{ required: true, message: "El correo electronico es requerido" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "El correo electronico es requerido",
+                },
+              ]}
             >
               <Input className="h-8 rounded-md" disabled={isEditMode} />
             </Form.Item>

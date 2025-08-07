@@ -39,9 +39,8 @@ export default function PlaceCreationModal({
   placeToEdit,
 }: Props) {
   const [form] = Form.useForm();
-  const [baseValueType, setBaseValueType] = useState<
-    Record<string, "fixed" | "dynamic">
-  >({});
+  const [baseValueType, setBaseValueType] = useState<Record<string, "fixed" | "dynamic">>({});
+  const [paymentMethodStatus, setPaymentMethodStatus] = useState<Record<string, boolean>>({});
   const [currentStep, setCurrentStep] = useState(0);
   const [formValues, setFormValues] = useState<any>({});
 
@@ -56,6 +55,8 @@ export default function PlaceCreationModal({
         };
 
         const newBaseValueType: Record<string, "fixed" | "dynamic"> = {};
+        const newPaymentMethodStatus: Record<string, boolean> = {};
+
         payments.forEach((payment) => {
           const cost = placeToEdit.fixed_costs?.[payment.id];
           if (cost) {
@@ -68,21 +69,27 @@ export default function PlaceCreationModal({
               transfer_method: cost.transfer_method,
             };
             newBaseValueType[payment.id] = cost.base_value_type;
+            newPaymentMethodStatus[payment.id] = cost.is_active;
           } else {
             newBaseValueType[payment.id] = "fixed";
+            newPaymentMethodStatus[payment.id] = true; // Default to active
           }
         });
 
         form.setFieldsValue(initialValues);
         setFormValues(initialValues);
         setBaseValueType(newBaseValueType);
+        setPaymentMethodStatus(newPaymentMethodStatus);
       } else {
         form.resetFields();
         const initialBaseValueType: Record<string, "fixed" | "dynamic"> = {};
+        const initialPaymentMethodStatus: Record<string, boolean> = {};
         payments.forEach((payment) => {
           initialBaseValueType[payment.id] = "fixed";
+          initialPaymentMethodStatus[payment.id] = true; // Default to active
         });
         setBaseValueType(initialBaseValueType);
+        setPaymentMethodStatus(initialPaymentMethodStatus);
         setFormValues({});
         setCurrentStep(0);
       }
@@ -98,13 +105,16 @@ export default function PlaceCreationModal({
       const fixed_costs: any = {};
       payments.forEach((payment) => {
         const isDynamic = baseValueType[payment.id] === "dynamic";
+        const isActive = paymentMethodStatus[payment.id];
+
         fixed_costs[payment.id] = {
+          is_active: isActive,
           base_value_type: baseValueType[payment.id],
-          base_value: isDynamic ? 0 : finalValues[payment.id]?.base_value ?? 0,
-          base_value_gt_1m: isDynamic ? finalValues[payment.id]?.base_value_gt_1m ?? 0 : 0,
-          base_value_lt_1m: isDynamic ? finalValues[payment.id]?.base_value_lt_1m ?? 0 : 0,
-          can_add_profit: finalValues[payment.id]?.can_add_profit ?? false,
-          place_profit: finalValues[payment.id]?.place_profit ?? 0,
+          base_value: isActive && !isDynamic ? finalValues[payment.id]?.base_value ?? 0 : 0,
+          base_value_gt_1m: isActive && isDynamic ? finalValues[payment.id]?.base_value_gt_1m ?? 0 : 0,
+          base_value_lt_1m: isActive && isDynamic ? finalValues[payment.id]?.base_value_lt_1m ?? 0 : 0,
+          can_add_profit: isActive ? finalValues[payment.id]?.can_add_profit ?? false : false,
+          place_profit: isActive ? finalValues[payment.id]?.place_profit ?? 0 : 0,
         };
         if (payment.id === "cash") {
           fixed_costs[payment.id].transfer_method =
@@ -196,117 +206,131 @@ export default function PlaceCreationModal({
         <Row gutter={16}>
           <Col span={24}>
             <Divider>{payment.name}</Divider>
-            <Form.Item label="Tipo de Valor Base">
-              <Radio.Group
-                onChange={(e) =>
-                  setBaseValueType({
-                    ...baseValueType,
-                    [payment.id]: e.target.value,
+            <Form.Item label={`Activar ${payment.name}`}>
+              <Switch
+                checked={paymentMethodStatus[payment.id]}
+                onChange={(checked) =>
+                  setPaymentMethodStatus({
+                    ...paymentMethodStatus,
+                    [payment.id]: checked,
                   })
                 }
-                value={baseValueType[payment.id]}
-              >
-                <Radio value="fixed">Fijo</Radio>
-                <Radio value="dynamic">Dinámico</Radio>
-              </Radio.Group>
+              />
             </Form.Item>
 
-            {baseValueType[payment.id] === "dynamic" ? (
+            <fieldset disabled={!paymentMethodStatus[payment.id]}>
+              <Form.Item label="Tipo de Valor Base">
+                <Radio.Group
+                  onChange={(e) =>
+                    setBaseValueType({
+                      ...baseValueType,
+                      [payment.id]: e.target.value,
+                    })
+                  }
+                  value={baseValueType[payment.id]}
+                >
+                  <Radio value="fixed">Fijo</Radio>
+                  <Radio value="dynamic">Dinámico</Radio>
+                </Radio.Group>
+              </Form.Item>
+
+              {baseValueType[payment.id] === "dynamic" ? (
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      name={[payment.id, "base_value_lt_1m"]}
+                      label="Valor Base (SOAT < 1,000,000)"
+                    >
+                      <InputNumber style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      name={[payment.id, "base_value_gt_1m"]}
+                      label="Valor Base (SOAT > 1,000,000)"
+                    >
+                      <InputNumber style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              ) : (
+                <Form.Item name={[payment.id, "base_value"]} label="Valor Base">
+                  <InputNumber style={{ width: "100%" }} />
+                </Form.Item>
+              )}
+
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    name={[payment.id, "base_value_lt_1m"]}
-                    label="Valor Base (SOAT < 1,000,000)"
+                    name={[payment.id, "place_profit"]}
+                    label="Ganancia de la Sede"
                   >
                     <InputNumber style={{ width: "100%" }} />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    name={[payment.id, "base_value_gt_1m"]}
-                    label="Valor Base (SOAT > 1,000,000)"
+                    name={[payment.id, "can_add_profit"]}
+                    label="¿Puede aumentar sus utilidades?"
+                    valuePropName="checked"
                   >
-                    <InputNumber style={{ width: "100%" }} />
+                    <Switch />
                   </Form.Item>
                 </Col>
               </Row>
-            ) : (
-              <Form.Item name={[payment.id, "base_value"]} label="Valor Base">
-                <InputNumber style={{ width: "100%" }} />
-              </Form.Item>
-            )}
 
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  name={[payment.id, "place_profit"]}
-                  label="Ganancia de la Sede"
-                >
-                  <InputNumber style={{ width: "100%" }} />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name={[payment.id, "can_add_profit"]}
-                  label="¿Puede aumentar sus utilidades?"
-                  valuePropName="checked"
-                >
-                  <Switch />
-                </Form.Item>
-              </Col>
-            </Row>
-
-            {payment.id === "cash" && (
-              <Form.List name={[payment.id, "transfer_method"]}>
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, ...restField }) => (
-                      <Space
-                        key={key}
-                        style={{ display: "flex", marginBottom: 8 }}
-                        align="baseline"
-                      >
-                        <Form.Item
-                          {...restField}
-                          name={[name, "name"]}
-                          rules={[
-                            { required: true, message: "Nombre requerido" },
-                          ]}
+              {payment.id === "cash" && (
+                <Form.List name={[payment.id, "transfer_method"]}>
+                  {(fields, { add, remove }) => (
+                    <>
+                      {fields.map(({ key, name, ...restField }) => (
+                        <Space
+                          key={key}
+                          style={{ display: "flex", marginBottom: 8 }}
+                          align="baseline"
                         >
-                          <Input
-                            placeholder="Nombre del método"
-                            className="h-8 rounded-md"
-                          />
-                        </Form.Item>
-                        <Tooltip title="¿Este método de transferencia está exento del impuesto 4*1000?">
                           <Form.Item
                             {...restField}
-                            name={[name, "is_exempt"]}
-                            valuePropName="checked"
+                            name={[name, "name"]}
+                            rules={[
+                              { required: true, message: "Nombre requerido" },
+                            ]}
                           >
-                            <Switch />
+                            <Input
+                              placeholder="Nombre del método"
+                              className="h-8 rounded-md"
+                            />
                           </Form.Item>
-                        </Tooltip>
-                        <MinusCircleOutlined
-                          className="text-red-500"
-                          onClick={() => remove(name)}
-                        />
-                      </Space>
-                    ))}
-                    <Form.Item>
-                      <Button
-                        type="dashed"
-                        onClick={() => add({ is_exempt: false })}
-                        block
-                        icon={<PlusOutlined />}
-                      >
-                        Añadir método de transferencia
-                      </Button>
-                    </Form.Item>
-                  </>
-                )}
-              </Form.List>
-            )}
+                          <Tooltip title="¿Este método de transferencia está exento del impuesto 4*1000?">
+                            <Form.Item
+                              {...restField}
+                              name={[name, "is_exempt"]}
+                              valuePropName="checked"
+                            >
+                              <Switch />
+                            </Form.Item>
+                          </Tooltip>
+                          <MinusCircleOutlined
+                            className="text-red-500"
+                            onClick={() => remove(name)}
+                          />
+                        </Space>
+                      ))}
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+                          onClick={() => add({ is_exempt: false })}
+                          block
+                          icon={<PlusOutlined />}
+                        >
+                          Añadir método de transferencia
+                        </Button>
+                      </Form.Item>
+                    </>
+                  )}
+                </Form.List>
+              )}
+            </fieldset>
           </Col>
         </Row>
       ),

@@ -271,6 +271,7 @@ export interface PlacesDataType {
       base_value_lt_1m?: number;
       can_add_profit: boolean;
       place_profit?: number;
+      is_active: boolean;
       transfer_method?: {
         name: string;
         is_exempt: boolean;
