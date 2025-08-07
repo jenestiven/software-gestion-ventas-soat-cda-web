@@ -261,15 +261,16 @@ export interface PlacesDataType {
   place_name: string;
   place_address: string;
   asesors_number?: number;
-  can_add_profit: boolean;
   created_at?: string;
   updated_at?: string;
   fixed_costs?: {
     [key: string]: {
-      conditional: boolean;
-      value?: number;
-      value_gt_1m?: number;
-      value_lt_1m?: number;
+      base_value_type: "fixed" | "dynamic";
+      base_value?: number;
+      base_value_gt_1m?: number;
+      base_value_lt_1m?: number;
+      can_add_profit: boolean;
+      place_profit?: number;
       transfer_method?: {
         name: string;
         is_exempt: boolean;

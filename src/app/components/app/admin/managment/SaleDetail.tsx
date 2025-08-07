@@ -208,7 +208,13 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
                   ? "Factura: "
                   : "Pagare: "
               }`}{" "}
-              {sale?.receipts.at(0)?.id}
+              {`${
+                sale?.receipts.at(0)?.receipt_type === "brilla-contract"
+                  ? `${sale.brilla_contract_number}`
+                  : sale?.receipts.at(0)?.receipt_type === "invoice"
+                  ? `${sale.invoice_number}`
+                  : `${sale.pagare_number}`
+              }`}{" "}
             </p>
             <Button
               onClick={() => handleDownload(sale?.receipts?.at(0)?.id)}

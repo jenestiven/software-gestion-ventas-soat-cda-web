@@ -17,6 +17,7 @@ import {
   Steps,
   Space,
   Tooltip,
+  Radio,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import payments from "@/app/api/local/payments-types/payments-types.json";
@@ -38,8 +39,8 @@ export default function PlaceCreationModal({
   placeToEdit,
 }: Props) {
   const [form] = Form.useForm();
-  const [conditionalSoat, setConditionalSoat] = useState<
-    Record<string, boolean>
+  const [baseValueType, setBaseValueType] = useState<
+    Record<string, "fixed" | "dynamic">
   >({});
   const [currentStep, setCurrentStep] = useState(0);
   const [formValues, setFormValues] = useState<any>({});
@@ -49,25 +50,39 @@ export default function PlaceCreationModal({
   useEffect(() => {
     if (open) {
       if (isEditMode && placeToEdit) {
-        const initialValues = {
+        const initialValues: any = {
           name: placeToEdit?.place_name,
           address: placeToEdit?.place_address,
-          can_add_profit: placeToEdit?.can_add_profit ?? false,
-          ...placeToEdit.fixed_costs,
         };
-        form.setFieldsValue(initialValues);
-        setFormValues(initialValues);
 
-        const newConditionalSoat: Record<string, boolean> = {};
+        const newBaseValueType: Record<string, "fixed" | "dynamic"> = {};
         payments.forEach((payment) => {
-          if (placeToEdit.fixed_costs?.[payment.id]?.conditional) {
-            newConditionalSoat[payment.id] = true;
+          const cost = placeToEdit.fixed_costs?.[payment.id];
+          if (cost) {
+            initialValues[payment.id] = {
+              base_value: cost.base_value,
+              base_value_gt_1m: cost.base_value_gt_1m,
+              base_value_lt_1m: cost.base_value_lt_1m,
+              can_add_profit: cost.can_add_profit,
+              place_profit: cost.place_profit,
+              transfer_method: cost.transfer_method,
+            };
+            newBaseValueType[payment.id] = cost.base_value_type;
+          } else {
+            newBaseValueType[payment.id] = "fixed";
           }
         });
-        setConditionalSoat(newConditionalSoat);
+
+        form.setFieldsValue(initialValues);
+        setFormValues(initialValues);
+        setBaseValueType(newBaseValueType);
       } else {
         form.resetFields();
-        setConditionalSoat({});
+        const initialBaseValueType: Record<string, "fixed" | "dynamic"> = {};
+        payments.forEach((payment) => {
+          initialBaseValueType[payment.id] = "fixed";
+        });
+        setBaseValueType(initialBaseValueType);
         setFormValues({});
         setCurrentStep(0);
       }
@@ -82,11 +97,14 @@ export default function PlaceCreationModal({
 
       const fixed_costs: any = {};
       payments.forEach((payment) => {
+        const isDynamic = baseValueType[payment.id] === "dynamic";
         fixed_costs[payment.id] = {
-          conditional: conditionalSoat[payment.id] ?? false,
-          value: finalValues[payment.id]?.value ?? 0,
-          value_gt_1m: finalValues[payment.id]?.value_gt_1m ?? 0,
-          value_lt_1m: finalValues[payment.id]?.value_lt_1m ?? 0,
+          base_value_type: baseValueType[payment.id],
+          base_value: isDynamic ? 0 : finalValues[payment.id]?.base_value ?? 0,
+          base_value_gt_1m: isDynamic ? finalValues[payment.id]?.base_value_gt_1m ?? 0 : 0,
+          base_value_lt_1m: isDynamic ? finalValues[payment.id]?.base_value_lt_1m ?? 0 : 0,
+          can_add_profit: finalValues[payment.id]?.can_add_profit ?? false,
+          place_profit: finalValues[payment.id]?.place_profit ?? 0,
         };
         if (payment.id === "cash") {
           fixed_costs[payment.id].transfer_method =
@@ -98,13 +116,10 @@ export default function PlaceCreationModal({
         id: isEditMode ? placeToEdit?.id : "",
         place_name: finalValues.name,
         place_address: finalValues.address,
-        can_add_profit: finalValues.can_add_profit ?? false,
         fixed_costs,
       };
 
       if (isEditMode) {
-        console.log("Updating place with data:", placeData);
-
         await updateSalesPlaceApi(placeData);
         message.success("Sede actualizada exitosamente");
       } else {
@@ -122,7 +137,9 @@ export default function PlaceCreationModal({
       console.error("Error creating/updating place:", error);
       message.error(`Error al ${actionMessage} la sede`);
     } finally {
-      message.destroy();
+      setTimeout(() => {
+        message.destroy();
+      }, 2000);
     }
   };
 
@@ -152,7 +169,7 @@ export default function PlaceCreationModal({
       title: "Información General",
       content: (
         <Row gutter={16}>
-          <Col span={8}>
+          <Col span={12}>
             <Form.Item
               name="name"
               label="Nombre"
@@ -161,22 +178,13 @@ export default function PlaceCreationModal({
               <Input className="h-8 rounded-md" />
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={12}>
             <Form.Item
               name="address"
               label="Dirección"
               rules={[{ required: true, message: "La dirección es requerida" }]}
             >
               <Input className="h-8 rounded-md" />
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item
-              name="can_add_profit"
-              label="¿Puede agregar utilidades extras?"
-              valuePropName="checked"
-            >
-              <Switch />
             </Form.Item>
           </Col>
         </Row>
@@ -188,44 +196,66 @@ export default function PlaceCreationModal({
         <Row gutter={16}>
           <Col span={24}>
             <Divider>{payment.name}</Divider>
-            <Form.Item
-              label="¿El metodo de pago esta sujeto a una condicion del valor de SOAT mayor a $1.000.000 COP?"
-              valuePropName="checked"
-            >
-              <Switch
-                onChange={(checked) =>
-                  setConditionalSoat({
-                    ...conditionalSoat,
-                    [payment.id]: checked,
+            <Form.Item label="Tipo de Valor Base">
+              <Radio.Group
+                onChange={(e) =>
+                  setBaseValueType({
+                    ...baseValueType,
+                    [payment.id]: e.target.value,
                   })
                 }
-                checked={conditionalSoat[payment.id]}
-              />
+                value={baseValueType[payment.id]}
+              >
+                <Radio value="fixed">Fijo</Radio>
+                <Radio value="dynamic">Dinámico</Radio>
+              </Radio.Group>
             </Form.Item>
-            {conditionalSoat[payment.id] ? (
+
+            {baseValueType[payment.id] === "dynamic" ? (
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    name={[payment.id, "value_gt_1m"]}
-                    label="Costo Fijo (> 1M)"
+                    name={[payment.id, "base_value_lt_1m"]}
+                    label="Valor Base (SOAT < 1,000,000)"
                   >
                     <InputNumber style={{ width: "100%" }} />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    name={[payment.id, "value_lt_1m"]}
-                    label="Costo Fijo (< 1M)"
+                    name={[payment.id, "base_value_gt_1m"]}
+                    label="Valor Base (SOAT > 1,000,000)"
                   >
                     <InputNumber style={{ width: "100%" }} />
                   </Form.Item>
                 </Col>
               </Row>
             ) : (
-              <Form.Item name={[payment.id, "value"]} label="Costo Fijo">
+              <Form.Item name={[payment.id, "base_value"]} label="Valor Base">
                 <InputNumber style={{ width: "100%" }} />
               </Form.Item>
             )}
+
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name={[payment.id, "place_profit"]}
+                  label="Ganancia de la Sede"
+                >
+                  <InputNumber style={{ width: "100%" }} />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name={[payment.id, "can_add_profit"]}
+                  label="¿Puede aumentar sus utilidades?"
+                  valuePropName="checked"
+                >
+                  <Switch />
+                </Form.Item>
+              </Col>
+            </Row>
+
             {payment.id === "cash" && (
               <Form.List name={[payment.id, "transfer_method"]}>
                 {(fields, { add, remove }) => (

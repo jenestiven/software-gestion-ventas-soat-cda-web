@@ -140,9 +140,6 @@ const ConciliationModal: React.FC<ConciliationModalProps> = ({
         onCancel={handleCancel}
         centered
         footer={[
-            <Button key="back" onClick={handleCancel}>
-              Cancelar
-            </Button>,
             <Button key="submit" type="primary" loading={loading} onClick={handleFindSales}>
               Encontrar ventas para conciliar
             </Button>,
