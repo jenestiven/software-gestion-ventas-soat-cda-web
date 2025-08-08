@@ -1,6 +1,6 @@
 "use client";
 
-import { DeliveredProcedureOutlined, UploadOutlined } from "@ant-design/icons";
+import { DeliveredProcedureOutlined } from "@ant-design/icons";
 import {
   Form,
   Input,
@@ -12,102 +12,38 @@ import {
   Row,
   Col,
   Divider,
-  message,
-  GetProp,
-  UploadProps,
-  UploadFile,
+  Cascader,
 } from "antd";
-import { useEffect, useState } from "react";
-import useStore from "@/store";
 import dayjs from "dayjs";
-import { saveSaleApi } from "@/lib/api/sales";
-import { AntdUpload, getBase64 } from "../../../admin/users/AntdUpload";
-import { PaymentMethod } from "@/types/types";
-import { useRouter } from "next/navigation";
-
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+import { AntdUpload } from "../../../admin/users/AntdUpload";
+import { PaymentMethod, Tariff } from "@/types/types";
+import useSistecreditoForm from "@/hooks/use-sale-creation/useSistecreditoForm";
+import { moneyFormat } from "@/utils/utils";
 
 type Props = {
   onCloseModal: (open: boolean) => void;
   method: PaymentMethod | null;
+  tariffSchedule: Tariff;
 };
 
 export default function SistecreditoForm(props: Props) {
-  const [form] = Form.useForm();
   const { Text, Title } = Typography;
-  const user = useStore((state) => state.user);
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const router = useRouter();
-
-  const [partnersCommission, setPartnersCommission] = useState(
-    user?.sale_data?.asesor_sale_commission || 0
-  );
-  const [totalToPay, setTotalToPay] = useState(0);
-  const [fixedCommission, setFixedCommission] = useState(0);
-  const [profit, setProfit] = useState(0);
-  const [grossProfit, setGrossProfit] = useState(0);
-
-  const vehicleType = Form.useWatch("vehicle_type", form);
-  const financedAmount = Form.useWatch("financed_amount", form);
-  const soatValue = Form.useWatch("soat_value", form);
-
-  useEffect(() => {
-    const profitValue = (financedAmount || 0) - totalToPay;
-    setProfit(Number(profitValue.toFixed(1)));
-
-    const grossProfitValue =
-      partnersCommission === profit ? profit : profit - partnersCommission;
-    setGrossProfit(Number(grossProfitValue.toFixed(1)));
-  }, [totalToPay, financedAmount, partnersCommission, profit]);
-
-  useEffect(() => {
-    if (!vehicleType) return;
-    const type = vehicleType.toLowerCase();
-
-    const value = type === "motorcycle" ? 15000 : 0;
-    setFixedCommission(value);
-  }, [vehicleType]);
-
-  useEffect(() => {
-    const value = (soatValue || 0) + fixedCommission;
-    setTotalToPay(Number(value.toFixed(1)));
-  }, [soatValue, fixedCommission]);
-
-  const onFinish = async (values: any) => {
-    try {
-      message.loading("Registrando venta...", 0);
-      let file = null;
-      if (fileList?.length > 0 && fileList[0]?.originFileObj) {
-        file = await getBase64(fileList[0]?.originFileObj as FileType);
-      }
-
-      const saleData = {
-        ...values,
-        pagare_file: file,
-        seller: user,
-        payment_method_id: props.method?.id,
-        payment_method_name: props.method?.name,
-        sale_summary: {
-          fixed_commission: fixedCommission,
-          partners_commission: partnersCommission,
-          profit: profit,
-          gross_profit: grossProfit,
-          total_to_pay: totalToPay,
-        },
-      };
-
-      await saveSaleApi(saleData);
-      message.success("Venta registrada exitosamente");
-      props.onCloseModal(false);
-      form.resetFields();
-      setFileList([]);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    } finally {
-      router.refresh();
-      message.destroy();
-    }
-  };
+  const {
+    form,
+    fileList,
+    setFileList,
+    onFinish,
+    fixedCommission,
+    partnersCommission,
+    profit,
+    grossProfit,
+    financedAmount,
+    user,
+    cascaderOptions,
+    isSoatValueDisabled,
+    setIsSoatValueDisabled,
+    place_total_gains,
+  } = useSistecreditoForm(props);
 
   return (
     <div>
@@ -176,13 +112,10 @@ export default function SistecreditoForm(props: Props) {
                 },
               ]}
             >
-              <Select
-                options={[
-                  { label: "Moto", value: "motorcycle" },
-                  { label: "Carro", value: "car" },
-                  { label: "Camioneta", value: "suv" },
-                  { label: "Taxi", value: "taxi" },
-                ]}
+              <Cascader
+                options={cascaderOptions}
+                placeholder="Selecciona un tipo de vehículo"
+                style={{ width: "100%" }}
               />
             </Form.Item>
 
@@ -197,33 +130,31 @@ export default function SistecreditoForm(props: Props) {
               <Input className="h-8 rounded-md" />
             </Form.Item>
 
-            <Form.Item
-              name="soat_value"
-              label="Valor SOAT"
-              required={true}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, ingresa el valor del SOAT",
-                },
-              ]}
-            >
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
-
-            <Form.Item
-              name="financed_amount"
-              label="Valor financiado"
-              required={true}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, ingresa el valor financiado",
-                },
-              ]}
-            >
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
+            <div className="flex items-center gap-2">
+              <Form.Item
+                name="soat_value"
+                label="Valor SOAT"
+                required={true}
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor, ingresa el valor del SOAT",
+                  },
+                ]}
+                className="flex-grow "
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  disabled={isSoatValueDisabled}
+                />
+              </Form.Item>
+              <Button
+                className="mt-1.5"
+                onClick={() => setIsSoatValueDisabled(!isSoatValueDisabled)}
+              >
+                {isSoatValueDisabled ? "Habilitar" : "Deshabilitar"}
+              </Button>
+            </div>
 
             <Form.Item
               name="soat_state"
@@ -281,38 +212,63 @@ export default function SistecreditoForm(props: Props) {
               />
             </Form.Item>
 
+            {props.method?.fixedCost?.can_add_profit && (
+              <Form.Item
+                name="place_profit"
+                label="Utilidad"
+                required={true}
+                rules={[
+                  { required: true, message: "Por favor, ingresa la utilidad" },
+                ]}
+              >
+                <InputNumber style={{ width: "100%" }} />
+              </Form.Item>
+            )}
+
             <Form.Item name="remarks" label="Observaciones">
-              <Input.TextArea rows={5} />
+              <Input.TextArea rows={4} />
             </Form.Item>
 
             <AntdUpload setFileList={setFileList} fileList={fileList} />
 
-            <Divider orientation="left">Resumen de venta</Divider>
+            {user?.main_place ? (
+              <>
+                <Divider orientation="left">Resumen de venta</Divider>
 
-            <section className="px-4 flex flex-col gap-1">
-              <div className="flex justify-between">
-                <Text>Comision fija:</Text> $
-                {Number(fixedCommission).toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Comisión Aliados:</Text> $
-                {Number(partnersCommission).toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Utilidad:</Text> $
-                {profit ? Number(profit).toLocaleString() : 0}
-              </div>
-              <div className="flex justify-between">
-                <Text>Utilidad neta:</Text> $
-                {grossProfit ? Number(grossProfit).toLocaleString() : 0}
-              </div>
-              <Divider />
-              <div className="flex justify-between">
-                <Text strong>Total a pagar:</Text> $
-                {totalToPay ? Number(totalToPay).toLocaleString() : 0}
-              </div>
-              <Divider />
-            </section>
+                <section className="px-4 flex flex-col gap-1">
+                  <div className="flex justify-between">
+                    <Text>Comision fija:</Text> ${moneyFormat(fixedCommission)}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Comisión Aliados:</Text> $
+                    {moneyFormat(partnersCommission)}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Utilidad:</Text> ${moneyFormat(profit)}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Utilidad neta:</Text> ${moneyFormat(grossProfit)}
+                  </div>
+                  <Divider />
+                  <div className="flex justify-between">
+                    <Text strong>Total a financiar:</Text> $
+                    {moneyFormat(financedAmount)}
+                  </div>
+                  <Divider />
+                </section>
+              </>
+            ) : (
+              <>
+                <Divider />
+                <div className="flex justify-between">
+                  <Text>Ganancias:</Text> ${moneyFormat(place_total_gains)}
+                </div>
+                <div className="flex justify-between">
+                  <Text strong>Total a financiar:</Text> $
+                  {moneyFormat(financedAmount)}
+                </div>
+              </>
+            )}
           </Col>
           <Col xs={24} md={24}>
             <Form.Item className="flex justify-end w-full">

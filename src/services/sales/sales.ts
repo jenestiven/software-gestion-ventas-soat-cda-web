@@ -119,7 +119,7 @@ export async function getSalesByAsesor(asesorId: string): Promise<Sell[]> {
         total_value: saleData.sale_sumary.total_payed,
         fixed_commission: saleData.sale_sumary.fixed_comission,
         profit: saleData.sale_sumary.profit,
-        asesor_sale_commission: saleData.sale_sumary.asesor_sale_commission,
+        //aqui debo poner la data de la ganancia
         payment_method: saleData.payment_method_name,
         doc_state: saleData.receipt_status || "pending", // Default to 'pending' if null
       });

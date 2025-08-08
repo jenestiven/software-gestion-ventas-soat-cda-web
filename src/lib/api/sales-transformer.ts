@@ -105,7 +105,6 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
 
     sale.sale_sumary.gross_profit = saleCreation.sale_summary.gross_profit;
 
-    sale.sale_sumary.total_payed = saleCreation.sale_summary.total_to_pay;
     sale.has_payed_soat = saleCreation.soat_payed;
     sale.sale_sumary.fixed_comission =
       saleCreation.sale_summary.fixed_commission;
@@ -113,7 +112,8 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
       saleCreation.sale_summary.partners_commission;
     sale.sale_sumary.profit = saleCreation.sale_summary.profit;
     sale.sale_sumary.gross_profit = saleCreation.sale_summary.gross_profit;
-    sale.sale_sumary.total_payed = saleCreation.sale_summary.total_to_pay;
+    sale.sale_sumary.total_payed = saleCreation.sale_summary.total;
+    sale.sale_sumary.place_total_gains = saleCreation.sale_summary.place_total_gains;
     
   } else if (saleCreation.payment_method_id === "brilla") {
     sale.receipt_required = true;

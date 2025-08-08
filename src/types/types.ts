@@ -82,7 +82,8 @@ export type SistecreditoSale = {
     profit: number;
     gross_profit: number;
     value_to_deposit: number;
-    total_to_pay: number;
+    total: number;
+    place_total_gains: number;
   };
 };
 

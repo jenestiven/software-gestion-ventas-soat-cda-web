@@ -7,7 +7,8 @@ export async function POST(req: Request) {
   try {
     const saleCreationData: SaleCreation = await req.json();
 
-    const saleData = transformSaleCreationToSale(saleCreationData);  
+    const saleData = transformSaleCreationToSale(saleCreationData);
+    console.log("Datos de la venta transformados:", saleData);
 
     const sale = await createSale(saleData);
     return NextResponse.json(
