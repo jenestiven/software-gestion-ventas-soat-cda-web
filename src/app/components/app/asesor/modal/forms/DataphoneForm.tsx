@@ -32,6 +32,8 @@ export default function DataphoneForm(props: Props) {
   const [form] = Form.useForm();
   const { Text, Title } = Typography;
   const user = useStore((state) => state.user);
+  console.log(user);
+  
   const router = useRouter();
   const { tariffSchedule, method } = props;
 

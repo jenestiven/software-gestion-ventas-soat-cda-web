@@ -58,10 +58,7 @@ export function useLogin() {
         role: role,
         sales_place: salesPlaceData.place_name,
         sales_place_id: salesPlaceId,
-        sale_data: {
-          asesor_sale_commission: salesPlaceData.asesor_sale_commission,
-          can_add_profit: salesPlaceData.can_add_profit,
-        },
+        main_place: salesPlaceData.main_place || false,
       });
     } catch (error) {
       console.error(

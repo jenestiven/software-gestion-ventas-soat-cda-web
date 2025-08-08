@@ -6,10 +6,7 @@ export type CustomUser = {
   role: "admin" | "asesor";
   sales_place: string;
   sales_place_id: string;
-  sale_data: {
-    asesor_sale_commission: number;
-    can_add_profit: boolean;
-  };
+  main_place: boolean;
 };
 
 // Unión discriminada para el objeto Sale
