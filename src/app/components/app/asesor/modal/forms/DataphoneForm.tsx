@@ -31,14 +31,13 @@ type Props = {
 export default function DataphoneForm(props: Props) {
   const [form] = Form.useForm();
   const { Text, Title } = Typography;
+
   const user = useStore((state) => state.user);
-  console.log(user);
-  
   const router = useRouter();
+
   const { tariffSchedule, method } = props;
 
   const [isSoatValueDisabled, setIsSoatValueDisabled] = useState(true);
-
   const [datafonoCommission, setDatafonoCommission] = useState(0);
   const [clientCommission, setClientCommission] = useState(0);
   const [fixedCommission, setFixedCommission] = useState(0);
@@ -55,13 +54,16 @@ export default function DataphoneForm(props: Props) {
   const place_profit = Form.useWatch("place_profit", form);
 
   const cobroDatafono = effectiveValue + clientCommission;
+  const place_total_gains = place_profit
+    ? place_profit + method.fixedCost?.place_profit
+    : method.fixedCost?.place_profit;
 
   useEffect(() => {
     if (
       !vehicleTypePath ||
       vehicleTypePath.length < 2 ||
       !isSoatValueDisabled
-    ) {;
+    ) {
       return;
     }
 
@@ -203,6 +205,7 @@ export default function DataphoneForm(props: Props) {
           total_to_pay: cobroDatafono,
           bold_deposit_value: boldDepositValue,
           total_cost_transfer: totalCostTransfer,
+          place_total_gains: place_total_gains,
         },
       };
 
@@ -213,8 +216,10 @@ export default function DataphoneForm(props: Props) {
     } catch (error) {
       message.error("Error al registrar la venta", 2);
     } finally {
-      router.refresh();
-      message.destroy();
+      setTimeout(() => {
+        router.refresh();
+        message.destroy();
+      }, 2000);
     }
   };
 
@@ -349,7 +354,8 @@ export default function DataphoneForm(props: Props) {
                 ]}
               />
             </Form.Item>
-
+          </Col>
+          <Col xs={24} sm={12}>
             <Form.Item
               name="soat_state"
               label="Estado"
@@ -365,8 +371,7 @@ export default function DataphoneForm(props: Props) {
                 ]}
               />
             </Form.Item>
-          </Col>
-          <Col xs={24} sm={12}>
+
             {method.fixedCost?.can_add_profit && (
               <Form.Item
                 name="place_profit"
@@ -381,48 +386,102 @@ export default function DataphoneForm(props: Props) {
             )}
 
             <Form.Item name="remarks" label="Observaciones">
-              <Input.TextArea rows={6} />
+              <Input.TextArea rows={4} />
             </Form.Item>
 
-            <Divider orientation="left">Resumen de venta</Divider>
+            {user?.main_place ? (
+              <>
+                <Divider orientation="left">Resumen de venta</Divider>
 
-            <section className="px-4 flex flex-col gap-1">
-              <div className="flex justify-between">
-                <Text>Comisión datafono:</Text> $
-                {datafonoCommission.toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Comisión fija:</Text> ${fixedCommission.toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Reteica (0.7 %):</Text> ${reteica.toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Comisión cliente:</Text> $
-                {clientCommission.toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Cobro del datafono:</Text> $
-                {(cobroDatafono || 0).toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Valor a consignar Bold:</Text> $
-                {(boldDepositValue || 0).toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Utilidad:</Text> ${(profit || 0).toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Total a trasferir costos:</Text> $
-                {(totalCostTransfer || 0).toLocaleString()}
-              </div>
-              <Divider />
-              <div className="flex justify-between">
-                <Text strong>Total a pagar:</Text> $
-                {(cobroDatafono || 0).toLocaleString()}
-              </div>
-              <Divider />
-            </section>
+                <section className="px-4 flex flex-col gap-1">
+                  <div className="flex justify-between">
+                    <Text>Comisión datafono:</Text> $
+                    {datafonoCommission.toLocaleString("es-ES", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Comisión fija:</Text> $
+                    {fixedCommission.toLocaleString("es-ES", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Reteica (0.7 %):</Text> $
+                    {reteica.toLocaleString("es-ES", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Comisión cliente:</Text> $
+                    {clientCommission.toLocaleString("es-ES", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Cobro del datafono:</Text> $
+                    {(cobroDatafono || 0).toLocaleString("es-ES", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Valor a consignar Bold:</Text> $
+                    {(boldDepositValue || 0).toLocaleString("es-ES", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Utilidad:</Text> $
+                    {(profit || 0).toLocaleString("es-ES", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Total a trasferir costos:</Text> $
+                    {(totalCostTransfer || 0).toLocaleString("es-ES", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </div>
+                  <Divider />
+                  <div className="flex justify-between">
+                    <Text strong>Total a pagar:</Text> $
+                    {(cobroDatafono || 0).toLocaleString("es-ES", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </div>
+                  <Divider />
+                </section>
+              </>
+            ) : (
+              <>
+                <Divider />
+                <div className="px-4">
+                  <div className="flex justify-between">
+                    <Text>Ganancias:</Text> $
+                    {(place_total_gains || 0).toLocaleString("es-ES", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text strong>Total a pagar:</Text> $
+                    {(cobroDatafono || 0).toLocaleString("es-ES", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
           </Col>
           <Col xs={24} md={24}>
             <Form.Item className="flex justify-end w-full">

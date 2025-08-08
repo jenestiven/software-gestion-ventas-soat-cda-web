@@ -113,7 +113,7 @@ export type BrillaSale = {
   };
 };
 
-export type CreditCardSale = {
+export type DataphoneSale = {
   date: string; // ISO string
   seller: CustomUser;
   client_name: string;
@@ -125,7 +125,7 @@ export type CreditCardSale = {
   soat_payed: boolean;
   remarks?: string;
   payment_method_name: string;
-  payment_method_id: "credit_card";
+  payment_method_id: "dataphone";
   cash_value_payed: number;
   credit_type: string;
   sale_summary: {
@@ -134,9 +134,11 @@ export type CreditCardSale = {
     fixed_commission: number;
     reteica: number;
     profit: number;
+    place_profit?: number;
     total_to_pay: number;
     bold_deposit_value: number;
     total_cost_transfer: number;
+    place_total_gains?: number;
   };
 };
 
@@ -145,7 +147,7 @@ export type SaleCreation =
   | AddiSale
   | SistecreditoSale
   | BrillaSale
-  | CreditCardSale;
+  | DataphoneSale;
 
 export interface UserState {
   user: CustomUser | null;
@@ -240,7 +242,6 @@ export interface Sale {
     fixed_comission?: number;
     profit: number;
     soat_value: number;
-    asesor_sale_commission: number;
     bold_to_be_deposited_value: number;
     datafono_commission?: number;
     datafono_value: number;
@@ -251,6 +252,8 @@ export interface Sale {
     addi_commission?: number;
     partners_commission?: number;
     sistecredito_commission?: number;
+    place_profit?: number;
+    place_total_gains?: number;
   };
   receipt_required: boolean;
   receipt_status: "delivered" | "pending" | null;
