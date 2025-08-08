@@ -4,18 +4,22 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal, Radio, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import PAYMENTS_METHODS from "@/app/api/local/payments-types/payments-types.json";
-import { PaymentMethod } from "@/types/types";
+import { PaymentMethod, PlacesDataType } from "@/types/types";
 import SellFormLauncher from "./SellFormLauncher";
 import { getTariffScheduleApi } from "@/lib/api/asesor";
+import { getSalesPlaceByIdApi } from "@/lib/api/salesPlaces";
+import useStore from "@/store";
 
 const { Title } = Typography;
 
 export default function CreateNewSellHandler() {
+  const user = useStore((state) => state.user);
   const [openModal, setOpenModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<PaymentMethod | null>(null);
   const [openFormModal, setOpenFormModal] = useState(false);
   const [tariffSchedule, setTariffSchedule] = useState([]);
+  const [salesPlace, setSalesPlace] = useState<PlacesDataType | null>(null);
 
   const onCloseModal = () => {
     setOpenFormModal(false);
@@ -28,17 +32,29 @@ export default function CreateNewSellHandler() {
   };
 
   useEffect(() => {
-    const getTariff = async () => {
-      try {
-        const tariffSchedule = await getTariffScheduleApi();
-        setTariffSchedule(tariffSchedule);
-      } catch (error) {
-        console.error("Error fetching tariff:", error);
+    const getInitialData = async () => {
+      if (user?.sales_place_id) {
+        try {
+          const tariffSchedule = await getTariffScheduleApi();
+          const placeData = await getSalesPlaceByIdApi(user.sales_place_id);
+          setTariffSchedule(tariffSchedule);
+          setSalesPlace(placeData);
+        } catch (error) {
+          console.error("Error fetching initial data:", error);
+        }
       }
     };
 
-    getTariff();
-  }, []);
+    getInitialData();
+  }, [user]);
+
+  const paymentsMethods = PAYMENTS_METHODS.map((method: PaymentMethod) => {
+    const fixedCost = salesPlace?.fixed_costs?.[method.id];
+    return {
+      ...method,
+      isActive: fixedCost?.is_active ? true : false,
+    };
+  });
 
   return (
     <>
@@ -61,7 +77,7 @@ export default function CreateNewSellHandler() {
           <Radio.Group
             onChange={(e) => {
               const id = e.target.value;
-              const selectedMethod = PAYMENTS_METHODS.find(
+              const selectedMethod = paymentsMethods.find(
                 (method: PaymentMethod) => method.id === id
               );
               setSelectedPaymentMethod(selectedMethod || null);
@@ -69,9 +85,11 @@ export default function CreateNewSellHandler() {
             value={selectedPaymentMethod?.id}
           >
             <ul className="grid grid-cols-2 gap-2 text-left">
-              {PAYMENTS_METHODS.map((method: PaymentMethod) => (
+              {paymentsMethods.map((method: PaymentMethod) => (
                 <li className="border rounded-md p-3" key={method.id}>
-                  <Radio value={method.id}>{method.name}</Radio>
+                  <Radio disabled={!method.isActive} value={method.id}>
+                    {method.name}
+                  </Radio>
                 </li>
               ))}
             </ul>

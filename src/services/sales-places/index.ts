@@ -11,8 +11,6 @@ export async function createSalesPlace(data: PlacesDataType) {
     const newPlaceRef = await salesPlaceCollection.add({
       place_name: data.place_name,
       place_address: data.place_address,
-      asesor_sale_commission: data.asesor_sale_commission,
-      can_add_profit: data.can_add_profit,
       created_at: new Date().toISOString(),
     });
     return NextResponse.json(
@@ -25,6 +23,23 @@ export async function createSalesPlace(data: PlacesDataType) {
       { message: "Internal Server Error" },
       { status: 500 }
     );
+  }
+}
+
+export const getSalesPlaceById = async (id: string) => {
+  try {
+    console.log("Getting sales place by ID:", id);
+    
+    const salesPlaceRef = db.collection(SALES_PLACES_COLLECTION).doc(id);
+    const salesPlaceSnapshot = await salesPlaceRef.get();
+    if (!salesPlaceSnapshot.exists) {
+      return null;
+    }
+    return { id: salesPlaceSnapshot.id, ...salesPlaceSnapshot.data() };
+  } catch (error) {
+    console.error("Error getting sales place by ID:", error);
+    return null;
+    
   }
 }
 

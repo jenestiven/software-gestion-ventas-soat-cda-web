@@ -19,6 +19,16 @@ export async function getSalesPlacesApi() {
   return await res.json();
 }
 
+export async function getSalesPlaceByIdApi(id: string) {
+  console.log("Fetching sales place with ID:", id);
+  
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/sales-places/${id}`
+  );
+  if (!res.ok) throw new Error("Error obteniendo lugar de venta");
+  return await res.json();
+}
+
 export async function updateSalesPlaceApi(salesPlaceData: any) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/sales-places/update-sales-place`,
