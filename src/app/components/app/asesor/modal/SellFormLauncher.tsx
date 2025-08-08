@@ -23,7 +23,7 @@ const PAYMENTS_METHODS_FORMS: Record<
   brilla: lazy(() => import("./forms/BrillaForm")),
   sistecredito: lazy(() => import("./forms/SistecreditoForm")),
   cash: lazy(() => import("./forms/CashForm")),
-  dataphone: lazy(() => import("./forms/CreditCardForm")),
+  dataphone: lazy(() => import("./forms/DataphoneForm")),
 };
 
 type Props = {

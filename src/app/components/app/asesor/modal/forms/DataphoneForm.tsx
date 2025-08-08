@@ -13,24 +13,27 @@ import {
   Divider,
   Typography,
   message,
+  Cascader,
 } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import useStore from "@/store";
 import { saveSaleApi } from "@/lib/api/sales";
-import { PaymentMethod } from "@/types/types";
+import { PaymentMethod, Tariff } from "@/types/types";
 import { useRouter } from "next/navigation";
 
 type Props = {
   method: PaymentMethod;
   onCloseModal: (open: boolean) => void;
+  tariffSchedule: Tariff;
 };
 
-export default function CreditCardForm(props: Props) {
+export default function DataphoneForm(props: Props) {
   const [form] = Form.useForm();
   const { Text, Title } = Typography;
   const user = useStore((state) => state.user);
   const router = useRouter();
+  const { tariffSchedule } = props;
 
   const [datafonoCommission, setDatafonoCommission] = useState(0);
   const [clientCommission, setClientCommission] = useState(0);
@@ -45,22 +48,55 @@ export default function CreditCardForm(props: Props) {
   const cashValuePayed = Form.useWatch("cash_value_payed", form);
   const creditType = Form.useWatch("credit_type", form);
   const soatValue = Form.useWatch("soat_value", form);
-  const vehicleType = Form.useWatch("vehicle_type", form);
-
+  const vehicleTypePath = Form.useWatch("vehicle_type", form);
+  
   const cobroDatafono = (cashValuePayed || 0) + (clientCommission || 0);
 
   useEffect(() => {
-    if (!vehicleType) return;
-    const type = vehicleType.toLowerCase();
-    const value = type === "motorcycle" ? 15000 : 0;
-    setFixedCommission(value);
-  }, [vehicleType]);
+    if (!vehicleTypePath || vehicleTypePath.length < 2) {
+      form.setFieldsValue({ soat_value: undefined });
+      setFixedCommission(0);
+      return;
+    }
+
+    const vehicleClassId = vehicleTypePath[0];
+    const vehicleTypeCode = vehicleTypePath[1];
+
+    const selectedVehicleClass = tariffSchedule.find(
+      (vClass) => vClass.id === vehicleClassId
+    );
+    const selectedCategory = selectedVehicleClass?.categories.find(
+      (c) => c.code === vehicleTypeCode
+    );
+
+    if (selectedCategory && selectedVehicleClass) {
+      form.setFieldsValue({ soat_value: selectedCategory.total_to_pay });
+      const commission = selectedVehicleClass.vehicle_class
+        .toLowerCase()
+        .includes("moto")
+        ? 15000
+        : 0;
+      setFixedCommission(commission);
+    } else {
+      form.setFieldsValue({ soat_value: undefined });
+      setFixedCommission(0);
+    }
+  }, [vehicleTypePath, tariffSchedule, form]);
 
   useEffect(() => {
     if (!cobroDatafono) return;
     const reteicaValue = cobroDatafono * 0.007;
     setReteica(reteicaValue);
   }, [cobroDatafono]);
+
+  const cascaderOptions = tariffSchedule.map((vehicleClass) => ({
+    label: vehicleClass.vehicle_class,
+    value: vehicleClass.id,
+    children: vehicleClass.categories.map((category) => ({
+      label: category.type,
+      value: category.code,
+    })),
+  }));
 
   useEffect(() => {
     let commission = 0;
@@ -138,6 +174,7 @@ export default function CreditCardForm(props: Props) {
         seller: user,
         payment_method_id: props.method?.id,
         payment_method_name: props.method?.name,
+        vehicle_type: values.vehicle_type,
         sale_summary: {
           datafono_commission: datafonoCommission,
           client_commission: clientCommission,
@@ -226,13 +263,10 @@ export default function CreditCardForm(props: Props) {
                 },
               ]}
             >
-              <Select
-                options={[
-                  { label: "Moto", value: "motorcycle" },
-                  { label: "Carro", value: "car" },
-                  { label: "Camioneta", value: "suv" },
-                  { label: "Taxi", value: "taxi" },
-                ]}
+              <Cascader
+                options={cascaderOptions}
+                placeholder="Selecciona un tipo de vehículo"
+                style={{ width: "100%" }}
               />
             </Form.Item>
 

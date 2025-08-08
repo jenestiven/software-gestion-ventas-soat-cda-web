@@ -48,11 +48,11 @@ export default function CreateNewSellHandler() {
     getInitialData();
   }, [user]);
 
-  const paymentsMethods = PAYMENTS_METHODS.map((method: PaymentMethod) => {
+  const paymentsMethods = PAYMENTS_METHODS.map((method: any) => {
     const fixedCost = salesPlace?.fixed_costs?.[method.id];
     return {
       ...method,
-      isActive: fixedCost?.is_active ? true : false,
+      fixedCost: fixedCost,
     };
   });
 
@@ -87,7 +87,10 @@ export default function CreateNewSellHandler() {
             <ul className="grid grid-cols-2 gap-2 text-left">
               {paymentsMethods.map((method: PaymentMethod) => (
                 <li className="border rounded-md p-3" key={method.id}>
-                  <Radio disabled={!method.isActive} value={method.id}>
+                  <Radio
+                    disabled={!method.fixedCost?.is_active}
+                    value={method.id}
+                  >
                     {method.name}
                   </Radio>
                 </li>

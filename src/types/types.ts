@@ -172,7 +172,7 @@ export interface PaymentMethod {
   id: string;
   name: string;
   description: string;
-  isActive: boolean;
+  fixedCost: PlacesDataType["fixed_costs"];
 }
 
 export interface Sell {

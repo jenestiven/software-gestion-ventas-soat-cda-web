@@ -2,31 +2,26 @@
     {
         "id": "dataphone",
         "name": "Datafono",
-        "description": "Pago realizado mediante datáfono.",
-        "isActive": true
+        "description": "Pago realizado mediante datáfono."
     },
     {
         "id": "sistecredito",
         "name": "Sistecredito",
-        "description": "Financiación del pago con Sistecrédito.",
-        "isActive": true
+        "description": "Financiación del pago con Sistecredito."
     },
     {
         "id": "addi",
         "name": "Addi",
-        "description": "Financiación del pago con Addi.",
-        "isActive": true
+        "description": "Financiación del pago con Addi."
     },
     {
         "id": "brilla",
         "name": "Brilla",
-        "description": "Pago cargado a través del programa Brilla.",
-        "isActive": true
+        "description": "Pago cargado a través del programa Brilla."
     },
     {
         "id": "cash",
         "name": "Efectivo",
-        "description": "Pago realizado en efectivo directamente en el punto de venta.",
-        "isActive": true
+        "description": "Pago realizado en efectivo directamente en el punto de venta."
     }
 ]

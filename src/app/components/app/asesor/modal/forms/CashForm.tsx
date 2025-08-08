@@ -102,7 +102,7 @@ export default function CashForm(props: Props) {
       message.loading("Registrando venta...", 0);
       const saleData = {
         ...values,
-        vehicle_type: values.vehicle_type[1], // Save only the category code
+        vehicle_type: values.vehicle_type,
         seller: user,
         payment_method_id: props.method?.id,
         payment_method_name: props.method?.name,
