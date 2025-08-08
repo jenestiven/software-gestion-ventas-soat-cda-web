@@ -33,29 +33,33 @@ export default function DataphoneForm(props: Props) {
   const { Text, Title } = Typography;
   const user = useStore((state) => state.user);
   const router = useRouter();
-  const { tariffSchedule } = props;
+  const { tariffSchedule, method } = props;
+
+  const [isSoatValueDisabled, setIsSoatValueDisabled] = useState(true);
 
   const [datafonoCommission, setDatafonoCommission] = useState(0);
   const [clientCommission, setClientCommission] = useState(0);
   const [fixedCommission, setFixedCommission] = useState(0);
   const [reteica, setReteica] = useState(0);
   const [profit, setProfit] = useState(0);
-  const [totalToPay, setTotalToPay] = useState(0);
+  const [totalToPaySoatPlatform, setTotalToPaySoatPlatform] = useState(0);
   const [boldDepositValue, setBoldDepositValue] = useState(0);
   const [totalCostTransfer, setTotalCostTransfer] = useState(0);
+  const [effectiveValue, setEffectiveValue] = useState(0);
 
-  // Calcula el cobro del datafono: valor en efectivo + comisión cliente
-  const cashValuePayed = Form.useWatch("cash_value_payed", form);
   const creditType = Form.useWatch("credit_type", form);
   const soatValue = Form.useWatch("soat_value", form);
   const vehicleTypePath = Form.useWatch("vehicle_type", form);
-  
-  const cobroDatafono = (cashValuePayed || 0) + (clientCommission || 0);
+  const place_profit = Form.useWatch("place_profit", form);
+
+  const cobroDatafono = effectiveValue + clientCommission;
 
   useEffect(() => {
-    if (!vehicleTypePath || vehicleTypePath.length < 2) {
-      form.setFieldsValue({ soat_value: undefined });
-      setFixedCommission(0);
+    if (
+      !vehicleTypePath ||
+      vehicleTypePath.length < 2 ||
+      !isSoatValueDisabled
+    ) {;
       return;
     }
 
@@ -81,7 +85,7 @@ export default function DataphoneForm(props: Props) {
       form.setFieldsValue({ soat_value: undefined });
       setFixedCommission(0);
     }
-  }, [vehicleTypePath, tariffSchedule, form]);
+  }, [vehicleTypePath, tariffSchedule, form, isSoatValueDisabled]);
 
   useEffect(() => {
     if (!cobroDatafono) return;
@@ -104,16 +108,16 @@ export default function DataphoneForm(props: Props) {
     if (creditType && cobroDatafono) {
       switch (creditType) {
         case "debit":
-          commission = (cobroDatafono * 0.0219) + 300;
+          commission = cobroDatafono * 0.0219 + 300;
           break;
         case "credit":
-          commission = (cobroDatafono * 0.0269) + 300;
+          commission = cobroDatafono * 0.0269 + 300;
           break;
         case "alkosto":
         case "olimpica":
         case "exito":
         case "american_express":
-          commission = (cobroDatafono * 0.0299) + 300;
+          commission = cobroDatafono * 0.0299 + 300;
           break;
         default:
           commission = 0;
@@ -124,8 +128,8 @@ export default function DataphoneForm(props: Props) {
 
   useEffect(() => {
     let commission = 0;
-    if (creditType && cashValuePayed) {
-      const value = Number(cashValuePayed);
+    if (creditType && effectiveValue) {
+      const value = Number(effectiveValue);
       switch (creditType) {
         case "credit":
           commission = 0.015 * value;
@@ -144,12 +148,24 @@ export default function DataphoneForm(props: Props) {
       }
     }
     setClientCommission(commission);
-  }, [creditType, cashValuePayed]);
+  }, [creditType, effectiveValue]);
 
   useEffect(() => {
-    const totalToPayValue = (soatValue || 0) + fixedCommission;
-    setTotalToPay(totalToPayValue);
+    const totalToPayValueSoatPlatform = (soatValue || 0) + fixedCommission;
+    setTotalToPaySoatPlatform(totalToPayValueSoatPlatform);
   }, [soatValue, fixedCommission]);
+
+  useEffect(() => {
+    const baseValue =
+      method.fixedCost?.base_value_type === "fixed"
+        ? method.fixedCost?.base_value
+        : soatValue > 1000000
+        ? method.fixedCost?.base_value_gt_1m
+        : method.fixedCost?.base_value_lt_1m;
+
+    const effectiveValue = soatValue + (place_profit || 0) + baseValue;
+    setEffectiveValue(effectiveValue);
+  }, [soatValue, place_profit, method.fixedCost]);
 
   useEffect(() => {
     const boldDepositValueValue = cobroDatafono - datafonoCommission - reteica;
@@ -157,9 +173,9 @@ export default function DataphoneForm(props: Props) {
   }, [cobroDatafono, datafonoCommission, reteica]);
 
   useEffect(() => {
-    const profitValue = boldDepositValue - totalToPay;
+    const profitValue = boldDepositValue - totalToPaySoatPlatform;
     setProfit(profitValue);
-  }, [boldDepositValue, totalToPay]);
+  }, [boldDepositValue, totalToPaySoatPlatform]);
 
   useEffect(() => {
     const totalCostTransferValue = boldDepositValue - profit;
@@ -181,12 +197,13 @@ export default function DataphoneForm(props: Props) {
           fixed_commission: fixedCommission,
           reteica: reteica,
           profit: profit,
-          total_to_pay: totalToPay,
+          place_profit: place_profit || 0,
+          total_to_pay: cobroDatafono,
           bold_deposit_value: boldDepositValue,
           total_cost_transfer: totalCostTransfer,
         },
       };
-      
+
       await saveSaleApi(saleData);
       message.success("Venta registrada con éxito", 2);
       form.resetFields();
@@ -281,33 +298,31 @@ export default function DataphoneForm(props: Props) {
               <Input className="h-8 rounded-md" />
             </Form.Item>
 
-            <Form.Item
-              name="soat_value"
-              label="Valor SOAT"
-              required={true}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, ingresa el valor del SOAT",
-                },
-              ]}
-            >
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
-
-            <Form.Item
-              name="cash_value_payed"
-              label="Valor pagado en efectivo"
-              required={true}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, ingresa el valor pagado en efectivo",
-                },
-              ]}
-            >
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
+            <div className="flex items-center gap-2">
+              <Form.Item
+                name="soat_value"
+                label="Valor SOAT"
+                required={true}
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor, ingresa el valor del SOAT",
+                  },
+                ]}
+                className="flex-grow "
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  disabled={isSoatValueDisabled}
+                />
+              </Form.Item>
+              <Button
+                className="mt-1.5"
+                onClick={() => setIsSoatValueDisabled(!isSoatValueDisabled)}
+              >
+                {isSoatValueDisabled ? "Habilitar" : "Deshabilitar"}
+              </Button>
+            </div>
 
             <Form.Item
               name="credit_type"
@@ -332,8 +347,7 @@ export default function DataphoneForm(props: Props) {
                 ]}
               />
             </Form.Item>
-          </Col>
-          <Col xs={24} sm={12}>
+
             <Form.Item
               name="soat_state"
               label="Estado"
@@ -349,6 +363,20 @@ export default function DataphoneForm(props: Props) {
                 ]}
               />
             </Form.Item>
+          </Col>
+          <Col xs={24} sm={12}>
+            {method.fixedCost?.can_add_profit && (
+              <Form.Item
+                name="place_profit"
+                label="Utilidad"
+                required={true}
+                rules={[
+                  { required: true, message: "Por favor, ingresa la utilidad" },
+                ]}
+              >
+                <InputNumber style={{ width: "100%" }} />
+              </Form.Item>
+            )}
 
             <Form.Item name="remarks" label="Observaciones">
               <Input.TextArea rows={6} />
@@ -373,23 +401,23 @@ export default function DataphoneForm(props: Props) {
               </div>
               <div className="flex justify-between">
                 <Text>Cobro del datafono:</Text> $
-                {cobroDatafono.toLocaleString()}
+                {(cobroDatafono || 0).toLocaleString()}
               </div>
               <div className="flex justify-between">
                 <Text>Valor a consignar Bold:</Text> $
-                {boldDepositValue.toLocaleString()}
+                {(boldDepositValue || 0).toLocaleString()}
               </div>
               <div className="flex justify-between">
-                <Text>Utilidad:</Text> ${profit.toLocaleString()}
+                <Text>Utilidad:</Text> ${(profit || 0).toLocaleString()}
               </div>
               <div className="flex justify-between">
                 <Text>Total a trasferir costos:</Text> $
-                {totalCostTransfer.toLocaleString()}
+                {(totalCostTransfer || 0).toLocaleString()}
               </div>
               <Divider />
               <div className="flex justify-between">
                 <Text strong>Total a pagar:</Text> $
-                {totalToPay.toLocaleString()}
+                {(cobroDatafono || 0).toLocaleString()}
               </div>
               <Divider />
             </section>

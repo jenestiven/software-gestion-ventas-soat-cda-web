@@ -48,13 +48,15 @@ export default function CreateNewSellHandler() {
     getInitialData();
   }, [user]);
 
-  const paymentsMethods = PAYMENTS_METHODS.map((method: any) => {
-    const fixedCost = salesPlace?.fixed_costs?.[method.id];
-    return {
-      ...method,
-      fixedCost: fixedCost,
-    };
-  });
+  const paymentsMethods: PaymentMethod[] = PAYMENTS_METHODS.map(
+    (method: { id: string; name: string; description: string }) => {
+      const fixedCost = salesPlace?.fixed_costs?.[method.id];
+      return {
+        ...method,
+        fixedCost: fixedCost,
+      };
+    }
+  );
 
   return (
     <>
