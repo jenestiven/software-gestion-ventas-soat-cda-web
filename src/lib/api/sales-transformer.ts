@@ -47,7 +47,6 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
       saleCreation.sale_summary.fixed_commission;
     sale.sale_sumary.profit = saleCreation.sale_summary.profit;
     sale.sale_sumary.total_payed = saleCreation.sale_summary.total_to_pay;
-
   } else if (saleCreation.payment_method_id === "dataphone") {
     sale.credit_card_type = saleCreation.credit_type;
     sale.soat_status = saleCreation.soat_state;
@@ -65,14 +64,15 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
     sale.sale_sumary.total_to_tranfer_costs =
       saleCreation.sale_summary.total_cost_transfer;
     sale.sale_sumary.place_profit = saleCreation.sale_summary.place_profit;
-    sale.sale_sumary.place_total_gains = saleCreation.sale_summary.place_total_gains;
-
+    sale.sale_sumary.place_total_gains =
+      saleCreation.sale_summary.place_total_gains;
   } else if (saleCreation.payment_method_id === "addi") {
     sale.receipt_required = true;
     sale.receipt_status = saleCreation.invoice_file ? "delivered" : "pending";
     sale.has_payed_soat = saleCreation.soat_payed;
     sale.invoice_number = saleCreation.invoice_number;
     sale.invoice_file = saleCreation.invoice_file;
+    sale.financed_amount = saleCreation.financed_amount;
     sale.sale_sumary.fixed_comission =
       saleCreation.sale_summary.fixed_commission;
     sale.sale_sumary.addi_commission =
@@ -83,8 +83,9 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
     sale.sale_sumary.gross_profit = saleCreation.sale_summary.gross_profit;
     sale.sale_sumary.value_to_be_deposited =
       saleCreation.sale_summary.value_to_deposit;
-    sale.sale_sumary.total_payed = saleCreation.sale_summary.total_to_pay;
-
+    sale.sale_sumary.total_payed = saleCreation.sale_summary.total;
+    sale.sale_sumary.place_total_gains =
+      saleCreation.sale_summary.place_total_gains;
   } else if (saleCreation.payment_method_id === "sistecredito") {
     sale.receipt_required = true;
     sale.receipt_status = saleCreation.pagare_file ? "delivered" : "pending";
@@ -113,8 +114,8 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
     sale.sale_sumary.profit = saleCreation.sale_summary.profit;
     sale.sale_sumary.gross_profit = saleCreation.sale_summary.gross_profit;
     sale.sale_sumary.total_payed = saleCreation.sale_summary.total;
-    sale.sale_sumary.place_total_gains = saleCreation.sale_summary.place_total_gains;
-    
+    sale.sale_sumary.place_total_gains =
+      saleCreation.sale_summary.place_total_gains;
   } else if (saleCreation.payment_method_id === "brilla") {
     sale.receipt_required = true;
     sale.receipt_status = saleCreation.contract_file ? "delivered" : "pending";
@@ -131,7 +132,9 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
       saleCreation.sale_summary.partners_commission;
     sale.sale_sumary.profit = saleCreation.sale_summary.profit;
     sale.sale_sumary.gross_profit = saleCreation.sale_summary.gross_profit;
-    sale.sale_sumary.total_payed = saleCreation.sale_summary.total_to_pay;
+    sale.sale_sumary.total_payed = saleCreation.sale_summary.total;
+    sale.sale_sumary.place_total_gains =
+      saleCreation.sale_summary.place_total_gains;
   }
 
   return sale;

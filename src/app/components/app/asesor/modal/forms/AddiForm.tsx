@@ -12,18 +12,21 @@ import {
   Select,
   Typography,
   Divider,
+  Cascader,
 } from "antd";
 import dayjs from "dayjs";
 import { AntdUpload } from "../../../admin/users/AntdUpload";
-import { PaymentMethod } from "@/types/types";
+import { PaymentMethod, Tariff } from "@/types/types";
 import useAddiForm from "@/hooks/use-sale-creation/useAddiForm";
+import { moneyFormat } from "@/utils/utils";
 
 const { Text, Title } = Typography;
 
 type Props = {
   onCloseModal: (open: boolean) => void;
   method: PaymentMethod | null;
-}
+  tariffSchedule: Tariff;
+};
 
 export default function AddiForm(props: Props) {
   const {
@@ -38,6 +41,12 @@ export default function AddiForm(props: Props) {
     grossProfit,
     valueToDeposit,
     totalToPay,
+    cascaderOptions,
+    isSoatValueDisabled,
+    setIsSoatValueDisabled,
+    place_total_gains,
+    user,
+    financedAmount,
   } = useAddiForm(props);
 
   return (
@@ -58,42 +67,111 @@ export default function AddiForm(props: Props) {
       >
         <Row gutter={16}>
           <Col xs={24} sm={12}>
-            <Form.Item name="date" label="Fecha" required={true} rules={[{ required: true, message: "Por favor, selecciona una fecha" }]}>
-              <DatePicker placeholder="Selecciona una fecha" style={{ width: "100%" }} />
-            </Form.Item>
-
-            <Form.Item name="vehicle_type" label="Tipo de vehículo" required={true} rules={[{ required: true, message: "Por favor, selecciona un tipo de vehículo" }]}>
-              <Select
-                options={[
-                  { label: "Moto", value: "motorcycle" },
-                  { label: "Carro", value: "car" },
-                  { label: "Camioneta", value: "suv" },
-                  { label: "Taxi", value: "taxi" },
-                ]}
+            <Form.Item
+              name="date"
+              label="Fecha"
+              required={true}
+              rules={[
+                { required: true, message: "Por favor, selecciona una fecha" },
+              ]}
+            >
+              <DatePicker
+                placeholder="Selecciona una fecha"
+                style={{ width: "100%" }}
               />
             </Form.Item>
 
-            <Form.Item name="client_name" label="Nombre del cliente" required={true} rules={[{ required: true, message: "Por favor, ingresa el nombre del cliente" }]}>
+            <Form.Item
+              name="vehicle_type"
+              label="Tipo de vehículo"
+              required={true}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, selecciona un tipo de vehículo",
+                },
+              ]}
+            >
+              <Cascader
+                options={cascaderOptions}
+                placeholder="Selecciona un tipo de vehículo"
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="plate"
+              label="Placa"
+              required={true}
+              rules={[
+                { required: true, message: "Por favor, ingresa la placa" },
+              ]}
+            >
               <Input className="h-8 rounded-md" />
             </Form.Item>
 
-            <Form.Item name="client_id" label="No. Identificación" required={true} rules={[{ required: true, message: "Por favor, ingresa el número de identificación" }]}>
+            <Form.Item
+              name="client_name"
+              label="Nombre del cliente"
+              required={true}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, ingresa el nombre del cliente",
+                },
+              ]}
+            >
               <Input className="h-8 rounded-md" />
             </Form.Item>
 
-            <Form.Item name="plate" label="Placa" required={true} rules={[{ required: true, message: "Por favor, ingresa la placa" }]}>
+            <Form.Item
+              name="client_id"
+              label="No. Identificación"
+              required={true}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, ingresa el número de identificación",
+                },
+              ]}
+            >
               <Input className="h-8 rounded-md" />
             </Form.Item>
 
-            <Form.Item name="soat_value" label="Valor SOAT" required={true} rules={[{ required: true, message: "Por favor, ingresa el valor del SOAT" }]}>
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
+            <div className="flex items-center gap-2">
+              <Form.Item
+                name="soat_value"
+                label="Valor SOAT"
+                required={true}
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor, ingresa el valor del SOAT",
+                  },
+                ]}
+                className="flex-grow "
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  disabled={isSoatValueDisabled}
+                />
+              </Form.Item>
+              <Button
+                className="mt-1.5"
+                onClick={() => setIsSoatValueDisabled(!isSoatValueDisabled)}
+              >
+                {isSoatValueDisabled ? "Habilitar" : "Deshabilitar"}
+              </Button>
+            </div>
 
-            <Form.Item name="financed_amount" label="Valor financiado" required={true} rules={[{ required: true, message: "Por favor, ingresa el valor financiado" }]}>
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
-
-            <Form.Item name="SOAT_state" label="Estado" required={true} rules={[{ required: true, message: "Por favor, selecciona un estado" }]}>
+            <Form.Item
+              name="SOAT_state"
+              label="Estado"
+              required={true}
+              rules={[
+                { required: true, message: "Por favor, selecciona un estado" },
+              ]}
+            >
               <Select
                 options={[
                   { label: "SOAT Pendiente", value: "pending" },
@@ -101,10 +179,30 @@ export default function AddiForm(props: Props) {
                 ]}
               />
             </Form.Item>
+            
+            {props.method?.fixedCost?.can_add_profit && (
+              <Form.Item
+                name="place_profit"
+                label="Utilidad"
+                required={true}
+                rules={[
+                  { required: true, message: "Por favor, ingresa la utilidad" },
+                ]}
+              >
+                <InputNumber style={{ width: "100%" }} />
+              </Form.Item>
+            )}
           </Col>
 
           <Col xs={24} sm={12}>
-            <Form.Item name="soat_payed" label="¿Ha pagado el SOAT?" required={true} rules={[{ required: true, message: "Por favor, selecciona una opción" }]}>
+            <Form.Item
+              name="soat_payed"
+              label="¿Ha pagado el SOAT?"
+              required={true}
+              rules={[
+                { required: true, message: "Por favor, selecciona una opción" },
+              ]}
+            >
               <Select
                 options={[
                   { label: "Pagado", value: true },
@@ -113,7 +211,17 @@ export default function AddiForm(props: Props) {
               />
             </Form.Item>
 
-            <Form.Item name="invoice_number" label="Número de Factura" required={true} rules={[{ required: true, message: "Por favor, ingresa el número de factura" }]}>
+            <Form.Item
+              name="invoice_number"
+              label="Número de Factura"
+              required={true}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, ingresa el número de factura",
+                },
+              ]}
+            >
               <Input className="h-8 rounded-md" />
             </Form.Item>
 
@@ -123,40 +231,51 @@ export default function AddiForm(props: Props) {
 
             <AntdUpload fileList={fileList} setFileList={setFileList} />
 
-            <Divider orientation="left">Resumen de venta</Divider>
+            {user?.main_place ? (
+              <>
+                <Divider orientation="left">Resumen de venta</Divider>
 
-            <section className="px-4 flex flex-col gap-1">
-              <div className="flex justify-between">
-                <Text>Comision fija:</Text> $
-                {Number(fixedCommission).toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Comisión Addi:</Text> $
-                {Number(addiCommission).toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Comisión Aliados:</Text> $
-                {Number(partnersCommission).toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Utilidad:</Text> $
-                {profit ? Number(profit).toLocaleString() : 0}
-              </div>
-              <div className="flex justify-between">
-                <Text>Utilidad neta:</Text> $
-                {grossProfit ? Number(grossProfit).toLocaleString() : 0}
-              </div>
-              <div className="flex justify-between">
-                <Text>Valor a consignar:</Text> $
-                {Number(valueToDeposit).toLocaleString()}
-              </div>
-              <Divider />
-              <div className="flex justify-between">
-                <Text strong>Total a pagar:</Text> $
-                {totalToPay ? Number(totalToPay).toLocaleString() : 0}
-              </div>
-              <Divider />
-            </section>
+                <section className="px-4 flex flex-col gap-1">
+                  <div className="flex justify-between">
+                    <Text>Comision fija:</Text> ${moneyFormat(fixedCommission)}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Comisión Addi:</Text> ${moneyFormat(addiCommission)}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Comisión Aliados:</Text> $
+                    {moneyFormat(partnersCommission)}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Utilidad:</Text> ${moneyFormat(profit)}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Utilidad neta:</Text> ${moneyFormat(grossProfit)}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Valor a consignar:</Text> $
+                    {moneyFormat(valueToDeposit)}
+                  </div>
+                  <Divider />
+                  <div className="flex justify-between">
+                    <Text strong>Total a financiar:</Text> $
+                    {moneyFormat(financedAmount)}
+                  </div>
+                  <Divider />
+                </section>
+              </>
+            ) : (
+              <>
+                <Divider />
+                <div className="flex justify-between">
+                  <Text>Ganancias:</Text> ${moneyFormat(place_total_gains)}
+                </div>
+                <div className="flex justify-between">
+                  <Text strong>Total a financiar:</Text> $
+                  {moneyFormat(financedAmount)}
+                </div>
+              </>
+            )}
           </Col>
           <Col xs={24} md={24}>
             <Form.Item>

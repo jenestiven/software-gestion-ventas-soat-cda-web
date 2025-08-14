@@ -12,17 +12,20 @@ import {
   Col,
   Select,
   Divider,
+  Cascader,
 } from "antd";
 import dayjs from "dayjs";
 import { AntdUpload } from "../../../admin/users/AntdUpload";
-import { PaymentMethod } from "@/types/types";
+import { PaymentMethod, Tariff } from "@/types/types";
 import useBrillaForm from "@/hooks/use-sale-creation/useBrillaForm";
+import { moneyFormat } from "@/utils/utils";
 
 const { Text, Title } = Typography;
 
 type Props = {
   onCloseModal: (open: boolean) => void;
   method: PaymentMethod | null;
+  tariffSchedule: Tariff;
 };
 
 export default function BrillaForm(props: Props) {
@@ -35,7 +38,12 @@ export default function BrillaForm(props: Props) {
     partnersCommission,
     profit,
     grossProfit,
-    totalToPay,
+    financedAmount,
+    isSoatValueDisabled,
+    setIsSoatValueDisabled,
+    user,
+    place_total_gains,
+    cascaderOptions,
   } = useBrillaForm(props);
 
   return (
@@ -98,13 +106,10 @@ export default function BrillaForm(props: Props) {
                 },
               ]}
             >
-              <Select
-                options={[
-                  { label: "Moto", value: "motorcycle" },
-                  { label: "Carro", value: "car" },
-                  { label: "Camioneta", value: "suv" },
-                  { label: "Taxi", value: "taxi" },
-                ]}
+              <Cascader
+                options={cascaderOptions}
+                placeholder="Selecciona un tipo de vehículo"
+                style={{ width: "100%" }}
               />
             </Form.Item>
 
@@ -119,33 +124,44 @@ export default function BrillaForm(props: Props) {
               <Input className="h-8 rounded-md" />
             </Form.Item>
 
-            <Form.Item
-              name="soat_value"
-              label="Valor SOAT"
-              required={true}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, ingresa el valor del SOAT",
-                },
-              ]}
-            >
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
+            <div className="flex items-center gap-2">
+              <Form.Item
+                name="soat_value"
+                label="Valor SOAT"
+                required={true}
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor, ingresa el valor del SOAT",
+                  },
+                ]}
+                className="flex-grow "
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  disabled={isSoatValueDisabled}
+                />
+              </Form.Item>
+              <Button
+                className="mt-1.5"
+                onClick={() => setIsSoatValueDisabled(!isSoatValueDisabled)}
+              >
+                {isSoatValueDisabled ? "Habilitar" : "Deshabilitar"}
+              </Button>
+            </div>
 
-            <Form.Item
-              name="financed_amount"
-              label="Valor financiado"
-              required={true}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, ingresa el valor financiado",
-                },
-              ]}
-            >
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
+            {props.method?.fixedCost?.can_add_profit && (
+              <Form.Item
+                name="place_profit"
+                label="Utilidad"
+                required={true}
+                rules={[
+                  { required: true, message: "Por favor, ingresa la utilidad" },
+                ]}
+              >
+                <InputNumber style={{ width: "100%" }} />
+              </Form.Item>
+            )}
 
             <Form.Item
               name="soat_state"
@@ -217,33 +233,45 @@ export default function BrillaForm(props: Props) {
 
             <AntdUpload fileList={fileList} setFileList={setFileList} />
 
-            <Divider orientation="left">Resumen de venta</Divider>
+            {!user?.main_place ? (
+              <>
+                <Divider orientation="left">Resumen de venta</Divider>
 
-            <section className="px-4 flex flex-col gap-1">
-              <div className="flex justify-between">
-                <Text>Comision fija:</Text> $
-                {Number(fixedCommission).toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Comisión Aliados:</Text> $
-                {Number(partnersCommission).toLocaleString()}
-              </div>
-              <div className="flex justify-between">
-                <Text>Utilidad bruta:</Text> $
-                {profit ? Number(profit).toLocaleString() : 0}
-              </div>
-              <div className="flex justify-between">
-                <Text>Utilidad neta:</Text> $
-                {grossProfit ? Number(grossProfit).toLocaleString() : 0}
-              </div>
+                <section className="px-4 flex flex-col gap-1">
+                  <div className="flex justify-between">
+                    <Text>Comision fija:</Text> ${moneyFormat(fixedCommission)}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Comisión Aliados:</Text> $
+                    {moneyFormat(partnersCommission)}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Utilidad bruta:</Text> ${moneyFormat(profit)}
+                  </div>
+                  <div className="flex justify-between">
+                    <Text>Utilidad neta:</Text> ${moneyFormat(grossProfit)}
+                  </div>
 
-              <Divider />
-              <div className="flex justify-between">
-                <Text strong>Total a pagar:</Text> $
-                {totalToPay ? Number(totalToPay).toLocaleString() : 0}
-              </div>
-              <Divider />
-            </section>
+                  <Divider />
+                  <div className="flex justify-between">
+                    <Text strong>Total a financiar:</Text> $
+                    {moneyFormat(financedAmount)}
+                  </div>
+                  <Divider />
+                </section>
+              </>
+            ) : (
+              <>
+                <Divider />
+                <div className="flex justify-between">
+                  <Text>Ganancias:</Text> ${moneyFormat(place_total_gains)}
+                </div>
+                <div className="flex justify-between">
+                  <Text strong>Total a financiar:</Text> $
+                  {moneyFormat(financedAmount)}
+                </div>
+              </>
+            )}
           </Col>
 
           <Col xs={24} md={24}>

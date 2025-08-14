@@ -54,7 +54,8 @@ export type AddiSale = {
     profit: number;
     gross_profit: number;
     value_to_deposit: number;
-    total_to_pay: number;
+    total: number;
+    place_total_gains: number;
   };
 };
 
@@ -110,7 +111,8 @@ export type BrillaSale = {
     partners_commission: number;
     profit: number;
     gross_profit: number;
-    total_to_pay: number;
+    total: number;
+    place_total_gains: number;
   };
 };
 
