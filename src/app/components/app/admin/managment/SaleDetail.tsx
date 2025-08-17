@@ -107,14 +107,14 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
           </span>
           <Divider />
           <div>
-            {sale?.sale_sumary?.asesor_sale_commission !== undefined && (
+            {/* {sale?.sale_sumary?.asesor_sale_commission !== undefined && (
               <span className="flex gap-2 justify-between w-full">
                 <p className="font-light">Comisión aliados:</p>
                 <h2>
                   ${sale?.sale_sumary.asesor_sale_commission.toLocaleString()}
                 </h2>
               </span>
-            )}
+            )} */}
             {sale?.sale_sumary?.fixed_comission !== undefined && (
               <span className="flex gap-2 justify-between w-full">
                 <p className="font-light">Comisión fija:</p>

@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server";
-import { firestore } from "@/firebase/firebaseAdmin";
+import { db } from "@/firebase/firebaseAdmin";
 
 export async function POST(request: Request) {
   try {
@@ -10,10 +10,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
     }
 
-    const batch = firestore.batch();
+    const batch = db.batch();
 
     saleIds.forEach((id) => {
-      const saleRef = firestore.collection("sales").doc(id);
+      const saleRef = db.collection("sales").doc(id);
       batch.update(saleRef, { conciliation_status: "conciliated" });
     });
 
