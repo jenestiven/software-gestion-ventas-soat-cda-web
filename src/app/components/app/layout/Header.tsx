@@ -6,10 +6,14 @@ import useStore from "@/store";
 import type { MenuProps } from "antd";
 import { logout } from "@/firebase/firebaseClient";
 import "./header.css";
+import ToggleButton from "./ToggleButton";
 
-type Props = {};
+type Props = {
+  isMenuCollapsed: boolean;
+  toggleMenu: () => void;
+};
 
-export default function Header({}: Props) {
+export default function Header({ isMenuCollapsed, toggleMenu }: Props) {
   const user = useStore((state) => state.user);
   const { Title, Text } = Typography;
 
@@ -44,15 +48,18 @@ export default function Header({}: Props) {
 
   return (
     <header className="layout-header">
-      <div>
-        <Title level={2} className="header-title">
-          {headerTitle}
-        </Title>
-        <Text type="secondary">
-          Sede -{" "}
-          {user?.sales_place?.replace(/\b\w/g, (char) => char.toUpperCase()) ??
-            "Moto Gp"}
-        </Text>
+      <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+        <ToggleButton collapsed={isMenuCollapsed} onClick={toggleMenu} />
+        <div>
+          <Title level={2} className="header-title">
+            {headerTitle}
+          </Title>
+          <Text type="secondary">
+            Sede -{" "}
+            {user?.sales_place?.replace(/\b\w/g, (char) => char.toUpperCase()) ??
+              "Moto Gp"}
+          </Text>
+        </div>
       </div>
       <div className="header-user">
         <Title level={5} className="header-title">

@@ -10,11 +10,16 @@
     max-width: 1920px;
     padding: 20px;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 250px 1fr;
     grid-template-rows: auto 1fr;
     grid-template-areas: 
         "sidebar header"
-        "sidebar content"
+        "sidebar content";
+    transition: grid-template-columns 0.3s ease-in-out;
+}
+
+.admin-layout.collapsed{
+    grid-template-columns: 80px 1fr;
 }
 
 .admin-content{

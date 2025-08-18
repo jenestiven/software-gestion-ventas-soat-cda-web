@@ -1,16 +1,39 @@
 .layout-nav {
     grid-area: sidebar;
-    padding-inline: 40px;
+    padding-inline: 10px;
     padding-top: 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    transition: all 0.3s ease-in-out;
+
+    &.collapsed {
+        padding-inline: 10px;
+        width: 80px;
+    }
 
     & .nav-logo {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 10px;
         padding-inline: 10px;
+
+        &.collapsed {
+            padding-inline: 0;
+        }
+
+        & .ant-typography {
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+            transition-delay: 0.2s;
+        }
+    }
+
+    &.collapsed .nav-logo .ant-typography {
+        opacity: 0;
+        transition-delay: 0s;
+        display: none;
     }
 
     & .nav-list {
@@ -38,6 +61,12 @@
             border-radius: 8px;
             border: solid 1px transparent;
 
+            & p {
+                opacity: 1;
+                transition: opacity 0.3s ease-in-out;
+                transition-delay: 0.2s;
+            }
+
             &:hover {
                 border: solid 1px color-mix(in srgb, transparent, var(--color-secondary) 30%);
             }
@@ -53,5 +82,11 @@
                 font-size: 26px;
             }
         }
+    }
+
+    &.collapsed .nav-list-item p {
+        opacity: 0;
+        transition-delay: 0s;
+        display: none;
     }
 }

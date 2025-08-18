@@ -9,11 +9,13 @@ import { adminNavRoutes, asesorNavRoutes } from "@/utils/nav-routes";
 import Image from "next/image";
 import LOGO from "@/images/logo.png";
 
-type Props = {};
+type Props = {
+  isMenuCollapsed: boolean;
+};
 
 const keyPathName = "selectedPath";
 
-export default function NavBar({}: Props) {
+export default function NavBar({ isMenuCollapsed }: Props) {
   const { Text } = Typography;
   const user = useStore((state) => state.user);
   const { setTitle } = useStore();
@@ -44,8 +46,11 @@ export default function NavBar({}: Props) {
   };
 
   return (
-    <nav className="layout-nav">
-      <Link href="/" className="nav-logo">
+    <nav className={`layout-nav ${isMenuCollapsed ? "collapsed" : ""}`}>
+      <Link
+        href="/"
+        className={`nav-logo ${isMenuCollapsed ? "collapsed" : ""}`}
+      >
         <Image
           width={40}
           src={LOGO}
