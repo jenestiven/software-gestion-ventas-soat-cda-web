@@ -15,7 +15,7 @@
     grid-template-areas: 
         "sidebar header"
         "sidebar content";
-    transition: grid-template-columns 0.3s ease-in-out;
+    /* transition: grid-template-columns 0.3s ease-in-out; */
 }
 
 .admin-layout.collapsed{

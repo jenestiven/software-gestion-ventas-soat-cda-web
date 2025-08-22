@@ -22,18 +22,6 @@
         &.collapsed {
             padding-inline: 0;
         }
-
-        & .ant-typography {
-            opacity: 1;
-            transition: opacity 0.3s ease-in-out;
-            transition-delay: 0.2s;
-        }
-    }
-
-    &.collapsed .nav-logo .ant-typography {
-        opacity: 0;
-        transition-delay: 0s;
-        display: none;
     }
 
     & .nav-list {
@@ -82,11 +70,5 @@
                 font-size: 26px;
             }
         }
-    }
-
-    &.collapsed .nav-list-item p {
-        opacity: 0;
-        transition-delay: 0s;
-        display: none;
     }
 }

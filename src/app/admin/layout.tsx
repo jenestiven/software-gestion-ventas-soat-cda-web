@@ -23,8 +23,8 @@ export default function HomeLayout({
   return (
     <div className="admin-layout-container">
       <div className="admin-layout">
-        <Header />
-        <NavBar />
+        <Header isMenuCollapsed={false} toggleMenu={() => { }} />
+        <NavBar isMenuCollapsed={false} />
         <main className="admin-content">{children}</main>
       </div>
     </div>

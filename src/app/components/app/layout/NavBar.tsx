@@ -57,7 +57,9 @@ export default function NavBar({ isMenuCollapsed }: Props) {
           alt="CDA Moto GP Logo"
           className="nav-logo-image"
         />
-        <Text strong>CDA Moto GP</Text>
+        {
+          isMenuCollapsed ? null : <Text strong>CDA Moto GP</Text>
+        }
       </Link>
       <ul className="nav-list">
         {appRoutes?.map((route, index) => {
@@ -84,7 +86,9 @@ export default function NavBar({ isMenuCollapsed }: Props) {
                   }}
                 >
                   {NavIcon && <NavIcon className="item-icon" />}
-                  <p className="font-light text-sm">{title}</p>
+                  {
+                    isMenuCollapsed ? null : <p className="font-light text-sm">{title}</p>
+                  }
                 </Link>
               </Tooltip>
             </li>
