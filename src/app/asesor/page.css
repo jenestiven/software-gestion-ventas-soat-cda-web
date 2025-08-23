@@ -1,9 +1,9 @@
 .asesor-page {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto 1fr;
-    grid-template-areas: "stat1 stat2 stat3 stat4"
-        "table table table table";
+    grid-template-areas: "stat1 stat2 stat3"
+        "table table table";
     padding: 20px;
     gap: 20px;
     height: 100%;

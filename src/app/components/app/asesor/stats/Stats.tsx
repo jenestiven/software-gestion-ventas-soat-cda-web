@@ -16,7 +16,7 @@ const { Title, Text } = Typography;
 type StatCardProps = {
   icon: React.ReactNode;
   title: string;
-  value: number;
+  value: string;
   growth: number;
 };
 
@@ -25,7 +25,7 @@ const StatCard: React.FC<StatCardProps> = ({ icon, title, value, growth }) => (
     <span className="flex items-center justify-between w-full">
       {icon}
       <Title level={3} style={{ margin: 0 }}>
-        ${Number(value).toLocaleString()}
+        {value}
       </Title>
     </span>
     <span className="flex items-center justify-between w-full">
@@ -34,7 +34,7 @@ const StatCard: React.FC<StatCardProps> = ({ icon, title, value, growth }) => (
         className={`stat-growth ${growth < 0 ? "negative" : ""}`}
         type="secondary"
       >
-        {growth}%
+        {growth.toFixed(0)}%
       </Text>
     </span>
   </article>
@@ -54,25 +54,19 @@ export default function Stats({
     {
       icon: <ShoppingOutlined className="icon sell" />,
       title: "Total en ventas",
-      value: totalSalesValue,
+      value: `$${Number(totalSalesValue).toLocaleString()}`,
       growth: salesGrowth,
     },
     {
-      icon: <DollarOutlined className="icon comision" />,
-      title: "Total en comisión",
-      value: totalCommission,
-      growth: commissionGrowth,
-    },
-    {
       icon: <PieChartOutlined className="icon utility" />,
-      title: "Total en utilidad del asesor",
-      value: totalUtility,
+      title: "Cantidad de ventas",
+      value: "4",
       growth: utilityGrowth,
     },
     {
       icon: <RiseOutlined className="icon earning" />,
-      title: "Ganancia neta del asesor",
-      value: netEarnings,
+      title: "Ganancias",
+      value: `$${Number(netEarnings).toLocaleString()}`,
       growth: earningsGrowth,
     },
   ];
