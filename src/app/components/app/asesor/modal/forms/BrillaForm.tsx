@@ -233,7 +233,7 @@ export default function BrillaForm(props: Props) {
 
             <AntdUpload fileList={fileList} setFileList={setFileList} />
 
-            {!user?.main_place ? (
+            {user?.main_place ? (
               <>
                 <Divider orientation="left">Resumen de venta</Divider>
 
