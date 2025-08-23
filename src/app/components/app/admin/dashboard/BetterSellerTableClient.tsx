@@ -57,7 +57,7 @@ export default function BetterSellerTableClient({ dataSource }: Props) {
         <div className="flex items-center justify-between gap-4">
           <span>${item.amount.toLocaleString()}</span>
           <span style={{ color: item.growth > 0 ? "green" : "red" }}>
-            {item.growth}%
+            {item.growth.toFixed(0)}%
           </span>
         </div>
       ),

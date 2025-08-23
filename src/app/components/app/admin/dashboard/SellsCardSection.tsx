@@ -43,7 +43,7 @@ export default function SellsCardSection({}: Props) {
             className={`stat-growth ${data.amountGrowth < 0 ? "negative" : ""}`}
             type="secondary"
           >
-            {data.amountGrowth}%
+            {data.amountGrowth.toFixed(0)}%
           </Text>
         </span>
       </article>

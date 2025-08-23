@@ -31,7 +31,7 @@ export default function SalesByPayMethodClient({ dataSource }: Props) {
         <div className="flex items-center justify-between gap-4">
           <span>${item.sales_amount.toLocaleString()}</span>
           <span style={{ color: item.growth > 0 ? "green" : "red" }}>
-            {item.growth}%
+            {item.growth.toFixed(0)}%
           </span>
         </div>
       ),

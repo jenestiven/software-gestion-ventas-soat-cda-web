@@ -91,11 +91,13 @@ const CompareSellsGraphClient: React.FC<CompareSellsGraphClientProps> = ({
     <div className="month-graph bg-white rounded-lg shadow p-4">
       <Title level={4}>Ventas mensuales</Title>
       <Title level={1} style={{ margin: 0 }}>
-        {salesData.growth ?? 0}%
+        {salesData.growth.toFixed(0) ?? 0}%
       </Title>
       <Text type="secondary">
         Este mes{" "}
-        <span className="text-green-500">{salesData.growth ?? 0}%</span>
+        <span className={salesData.growth > 0 ? "text-green-500" : "text-red-500"}>
+          {salesData.growth.toFixed(0) ?? 0}%
+        </span>
       </Text>
       {chartSeries.length > 0 && chartOptions.xaxis && (
         <Chart
