@@ -119,7 +119,7 @@ export async function getSalesByAsesor(asesorId: string): Promise<Sell[]> {
         total_value: saleData.sale_sumary.total_payed,
         fixed_commission: saleData.sale_sumary.fixed_comission,
         profit: saleData.sale_sumary.profit,
-        //aqui debo poner la data de la ganancia
+        place_profit: saleData.sale_sumary.place_total_gains,
         payment_method: saleData.payment_method_name,
         doc_state: saleData.receipt_status || "pending", // Default to 'pending' if null
       });
@@ -176,52 +176,17 @@ export async function getStatsByAsesor(asesorId: string) {
         ? 100
         : 0;
 
-    const totalCommissionCurrentMonth = salesCurrentMonth.reduce(
-      (acc, sale) =>
-        acc +
-        (sale?.fixed_commission ?? 0) +
-        (sale?.asesor_sale_commission ?? 0),
-      0
-    );
-    const totalCommissionLastMonth = salesLastMonth.reduce(
-      (acc, sale) =>
-        acc +
-        (sale?.fixed_commission ?? 0) +
-        (sale?.asesor_sale_commission ?? 0),
-      0
-    );
-
-    const commissionGrowth =
-      totalCommissionLastMonth > 0
-        ? ((totalCommissionCurrentMonth - totalCommissionLastMonth) /
-            totalCommissionLastMonth) *
-          100
-        : totalCommissionCurrentMonth > 0
-        ? 100
-        : 0;
-
     const totalUtilityCurrentMonth = salesCurrentMonth.reduce(
-      (acc, sale) => acc + (sale?.profit ?? 0),
+      (acc, sale) => acc + (sale?.place_profit ?? 0),
       0
     );
     const totalUtilityLastMonth = salesLastMonth.reduce(
-      (acc, sale) => acc + (sale?.profit ?? 0),
+      (acc, sale) => acc + (sale?.place_profit ?? 0),
       0
     );
 
-    const utilityGrowth =
-      totalUtilityLastMonth > 0
-        ? ((totalUtilityCurrentMonth - totalUtilityLastMonth) /
-            totalUtilityLastMonth) *
-          100
-        : totalUtilityCurrentMonth > 0
-        ? 100
-        : 0;
-
-    const netEarningsCurrentMonth =
-      totalUtilityCurrentMonth + totalCommissionCurrentMonth;
-    const netEarningsLastMonth =
-      totalUtilityLastMonth + totalCommissionLastMonth;
+    const netEarningsCurrentMonth = totalUtilityCurrentMonth;
+    const netEarningsLastMonth = totalUtilityLastMonth;
 
     const netEarningsGrowth =
       netEarningsLastMonth > 0
@@ -234,12 +199,9 @@ export async function getStatsByAsesor(asesorId: string) {
 
     return {
       totalSalesValue: Math.round(totalSalesCurrentMonth),
-      totalCommission: Math.round(totalCommissionCurrentMonth),
-      totalUtility: Math.round(totalUtilityCurrentMonth),
       netEarnings: Math.round(netEarningsCurrentMonth),
       salesGrowth,
-      commissionGrowth,
-      utilityGrowth,
+      salesQuantity: salesCurrentMonth.length,
       earningsGrowth: netEarningsGrowth,
     };
   } catch (error) {

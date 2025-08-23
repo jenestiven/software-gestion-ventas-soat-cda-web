@@ -16,12 +16,9 @@ export default async function StatHandler({}: Props) {
 
   let stats: AsesorStats = {
     totalSalesValue: 0,
-    totalCommission: 0,
-    totalUtility: 0,
     netEarnings: 0,
     salesGrowth: 0,
-    commissionGrowth: 0,
-    utilityGrowth: 0,
+    salesQuantity: 0,
     earningsGrowth: 0,
   };
 

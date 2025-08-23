@@ -17,7 +17,7 @@ type StatCardProps = {
   icon: React.ReactNode;
   title: string;
   value: string;
-  growth: number;
+  growth?: number;
 };
 
 const StatCard: React.FC<StatCardProps> = ({ icon, title, value, growth }) => (
@@ -31,10 +31,10 @@ const StatCard: React.FC<StatCardProps> = ({ icon, title, value, growth }) => (
     <span className="flex items-center justify-between w-full">
       <Text type="secondary">{title}</Text>
       <Text
-        className={`stat-growth ${growth < 0 ? "negative" : ""}`}
+        className={`stat-growth ${growth && growth < 0 ? "negative" : ""}`}
         type="secondary"
       >
-        {growth.toFixed(0)}%
+        {growth ? growth.toFixed(0) + "%" : null}
       </Text>
     </span>
   </article>
@@ -42,26 +42,22 @@ const StatCard: React.FC<StatCardProps> = ({ icon, title, value, growth }) => (
 
 export default function Stats({
   totalSalesValue = 0,
-  totalCommission = 0,
-  totalUtility = 0,
   netEarnings = 0,
   salesGrowth = 0,
-  commissionGrowth = 0,
-  utilityGrowth = 0,
+  salesQuantity = 0,
   earningsGrowth = 0,
 }: AsesorStats) {
   const stats: StatCardProps[] = [
+    {
+      icon: <PieChartOutlined className="icon utility" />,
+      title: "Cantidad de ventas",
+      value: `${salesQuantity}`,
+    },
     {
       icon: <ShoppingOutlined className="icon sell" />,
       title: "Total en ventas",
       value: `$${Number(totalSalesValue).toLocaleString()}`,
       growth: salesGrowth,
-    },
-    {
-      icon: <PieChartOutlined className="icon utility" />,
-      title: "Cantidad de ventas",
-      value: "4",
-      growth: utilityGrowth,
     },
     {
       icon: <RiseOutlined className="icon earning" />,

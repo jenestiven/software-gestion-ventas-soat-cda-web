@@ -201,16 +201,14 @@ export interface Sell {
   doc_state: string;
   fixed_commission?: number; 
   profit?: number; 
+  place_profit?: number;
   asesor_sale_commission?: number; 
 }
 export interface AsesorStats {
   totalSalesValue: number;
-  totalCommission: number;
-  totalUtility: number;
   netEarnings: number;
   salesGrowth: number;
-  commissionGrowth: number;
-  utilityGrowth: number;
+  salesQuantity: number;
   earningsGrowth: number;
 };
 export interface Sale {

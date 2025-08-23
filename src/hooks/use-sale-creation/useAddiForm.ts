@@ -107,6 +107,7 @@ export default function useAddiForm(props: Props) {
     // Calcula el 6.5% de financedAmount y luego suma el 19% de ese resultado
     const addiCommissionValue =
       financedAmount * 0.065 + financedAmount * 0.065 * 0.19;
+
     setAddiCommission(Number(addiCommissionValue.toFixed(1)));
   }, [financedAmount]);
 
