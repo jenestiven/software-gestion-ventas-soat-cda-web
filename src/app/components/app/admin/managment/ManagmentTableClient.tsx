@@ -14,6 +14,7 @@ import {
   Dropdown,
   Tag,
   Divider,
+  Cascader,
 } from "antd";
 import type { TableProps } from "antd";
 import { AuditOutlined, MoreOutlined } from "@ant-design/icons";
@@ -70,12 +71,22 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
         (item) => item.payment_method_id === filters.payment_method
       );
     }
-    if (filters.vehicle_type) {
-      data = data.filter((item) =>
-        item.vehicle_data.vehicle_type_id
-          .toLowerCase()
-          .includes(filters.vehicle_type.toLowerCase())
-      );
+    if (filters.vehicle_type && filters.vehicle_type.length > 0) {
+      data = data.filter((item) => {
+        const vehicleTypeId = item.vehicle_data.vehicle_type_id;
+        if (Array.isArray(vehicleTypeId) && vehicleTypeId.length > 0) {
+          if (filters.vehicle_type.length === 1) {
+            return vehicleTypeId[0] === filters.vehicle_type[0];
+          }
+          if (filters.vehicle_type.length === 2) {
+            return (
+              vehicleTypeId[0] === filters.vehicle_type[0] &&
+              vehicleTypeId[1] === filters.vehicle_type[1]
+            );
+          }
+        }
+        return false;
+      });
     }
     if (filters.plate) {
       data = data.filter((item) =>
@@ -185,7 +196,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       title: "Vehiculo",
       dataIndex: ["vehicle_data", "vehicle_type_id"],
       key: "vehicle_type",
-      render:(item: string) => {
+      render: (item: string[]) => {
         let text = "Desconocido";
         if (item && Array.isArray(item) && item.length >= 2) {
           const vehicle = tariff.find((v) => v.id === item[0]);
@@ -216,7 +227,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       dataIndex: ["sale_sumary", "total_payed"],
       key: "total_payed",
       sorter: (a, b) => a.sale_sumary.total_payed - b.sale_sumary.total_payed,
-      render: (total: number) => `$${total.toLocaleString("es-CO")}`,
+      render: (total: number) => `${total.toLocaleString("es-CO")}`,
     },
     {
       title: "Compobante",
@@ -257,6 +268,15 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       },
     },
   ];
+
+  const cascaderOptions = tariff.map((vehicleClass) => ({
+    label: vehicleClass.vehicle_class,
+    value: vehicleClass.id,
+    children: vehicleClass.categories.map((category) => ({
+      label: category.type,
+      value: category.code,
+    })),
+  }));
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
@@ -301,18 +321,11 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
           </Select>
         </Col>
         <Col>
-          <Select
-            placeholder="Tipo de vehiculo"
-            onChange={(e) => {
-              handleFilterChange("vehicle_type", e);
-            }}
-            options={[
-              { label: "Moto", value: "motorcycle" },
-              { label: "Carro", value: "car" },
-              { label: "Camioneta", value: "suv" },
-              { label: "Taxi", value: "taxi" },
-            ]}
-            style={{ width: 150 }}
+          <Cascader
+            options={cascaderOptions}
+            onChange={(value) => handleFilterChange("vehicle_type", value)}
+            placeholder="Selecciona un tipo de vehículo"
+            style={{ width: "100%" }}
             allowClear
           />
         </Col>
