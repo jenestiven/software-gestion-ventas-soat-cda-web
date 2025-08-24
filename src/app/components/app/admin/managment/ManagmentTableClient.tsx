@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Table,
   Modal,
@@ -17,9 +17,10 @@ import {
 } from "antd";
 import type { TableProps } from "antd";
 import { AuditOutlined, MoreOutlined } from "@ant-design/icons";
-import { PlacesDataType, Sale } from "@/types/types";
+import { PlacesDataType, Sale, VehicleClass } from "@/types/types";
 import SaleDetail from "./SaleDetail";
 import ConciliationModal from "./ConciliationModal";
+import { getTariffScheduleApi } from "@/lib/api/asesor";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -37,6 +38,15 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
   const [selectedRecord, setSelectedRecord] = useState<Sale | null>(null);
   const [isConciliationModalVisible, setIsConciliationModalVisible] = useState(false);
   const [filters, setFilters] = useState<any>({});
+  const [tariff, setTariff] = React.useState<VehicleClass[]>([]);
+
+  useEffect(() => {
+    const fetchTariffSchedule = async () => {
+      const tariffSchedule = await getTariffScheduleApi();
+      setTariff(tariffSchedule);
+    };
+    fetchTariffSchedule();
+  }, []);
 
   const filteredData = useMemo(() => {
     let data = [...initialData];
@@ -146,6 +156,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
     {
       title: "Asesor",
       key: "asesor",
+      width: 200,
       render: (_, record) => (
         <span>
           <Avatar src={record.asesor_data.thumnail} style={{ marginRight: 8 }}>
@@ -174,14 +185,16 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       title: "Vehiculo",
       dataIndex: ["vehicle_data", "vehicle_type_id"],
       key: "vehicle_type",
-      render: (vehicle_type: string) => {
-        const vehicleTypes: Record<string, string> = {
-          motorcycle: "Moto",
-          car: "Carro",
-          suv: "Camioneta",
-          taxi: "Taxi",
-        };
-        return vehicleTypes[vehicle_type] || "Desconocido";
+      render:(item: string) => {
+        let text = "Desconocido";
+        if (item && Array.isArray(item) && item.length >= 2) {
+          const vehicle = tariff.find((v) => v.id === item[0]);
+          const type = vehicle?.categories.find((c) => c.code === item[1]);
+          const vehicleClass = vehicle?.vehicle_class || "Desconocido";
+          const typeName = type?.type || "Desconocido";
+          text = `${vehicleClass}/${typeName}`;
+        }
+        return <span>{text}</span>;
       },
     },
     {
@@ -195,6 +208,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
     {
       title: "Sede",
       dataIndex: ["sale_place", "place_name"],
+      width: 100,
       key: "sale_place",
     },
     {

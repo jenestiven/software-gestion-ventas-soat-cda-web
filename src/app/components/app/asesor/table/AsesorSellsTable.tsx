@@ -1,18 +1,29 @@
 "use client";
 
 import { Button, Table, Tag } from "antd";
-import React from "react";
-import { Sell } from "@/types/types";
+import React, { useEffect } from "react";
+import { Sell, VehicleClass } from "@/types/types";
 import {
   CloudUploadOutlined,
   EditOutlined,
   FilePdfOutlined,
 } from "@ant-design/icons";
+import { getTariffScheduleApi } from "@/lib/api/asesor";
 interface Props {
   data: Sell[];
 }
 
 export default function AsesorSellsTable({ data }: Props) {
+  const [tariff, setTariff] = React.useState<VehicleClass[]>([]);
+
+  useEffect(() => {
+    const fetchTariffSchedule = async () => {
+      const tariffSchedule = await getTariffScheduleApi();
+      setTariff(tariffSchedule);
+    };
+    fetchTariffSchedule();
+  }, []);
+
   return (
     <Table
       dataSource={[...data].sort(
@@ -52,14 +63,15 @@ export default function AsesorSellsTable({ data }: Props) {
         dataIndex="vehicle_type"
         key="vehicle_type"
         render={(item: string) => {
-          const vehicleTypes = [
-            { value: "car", label: "Carro" },
-            { value: "motorcycle", label: "Moto" },
-            { value: "suv", label: "Camioneta" },
-            { value: "taxi", label: "Taxi" },
-          ];
-          const found = vehicleTypes.find((v) => v.value === item);
-          return <span>{found ? found.label : item}</span>;
+          let text = "Desconocido";
+          if (item && Array.isArray(item) && item.length >= 2) {
+            const vehicle = tariff.find((v) => v.id === item[0]);
+            const type = vehicle?.categories.find((c) => c.code === item[1]);
+            const vehicleClass = vehicle?.vehicle_class || "Desconocido";
+            const typeName = type?.type || "Desconocido";
+            text = `${vehicleClass}/${typeName}`;
+          }
+          return <span>{text}</span>;
         }}
       />
       <Table.Column

@@ -28,8 +28,6 @@ export async function createSalesPlace(data: PlacesDataType) {
 
 export const getSalesPlaceById = async (id: string) => {
   try {
-    console.log("Getting sales place by ID:", id);
-    
     const salesPlaceRef = db.collection(SALES_PLACES_COLLECTION).doc(id);
     const salesPlaceSnapshot = await salesPlaceRef.get();
     if (!salesPlaceSnapshot.exists) {

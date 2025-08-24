@@ -20,8 +20,6 @@ export async function getSalesPlacesApi() {
 }
 
 export async function getSalesPlaceByIdApi(id: string) {
-  console.log("Fetching sales place with ID:", id);
-  
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/sales-places/${id}`
   );
