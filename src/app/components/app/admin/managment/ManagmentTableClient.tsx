@@ -388,7 +388,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
         footer={null}
         centered
       >
-        <SaleDetail sale={selectedRecord} />
+        <SaleDetail sale={selectedRecord} tariff={tariff} />
       </Modal>
 
       <ConciliationModal

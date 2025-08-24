@@ -1,24 +1,9 @@
-import { Sale } from "@/types/types";
+import { Sale, VehicleClass } from "@/types/types";
 import { CopyOutlined, DownloadOutlined } from "@ant-design/icons";
-import { Avatar, Button, Divider } from "antd";
+import { Avatar, Button, Divider, message } from "antd";
 import React from "react";
 
-function getVehicleTypeName(type?: string) {
-  switch (type) {
-    case "motorcycle":
-      return "Moto";
-    case "car":
-      return "Carro";
-    case "suv":
-      return "Camioneta";
-    case "taxi":
-      return "Taxi";
-    default:
-      return "Vehículo";
-  }
-}
-
-export default function SaleDetail({ sale }: { sale: Sale | null }) {
+export default function SaleDetail({ sale, tariff }: { sale: Sale | null, tariff: VehicleClass[] }) {
   const handleDownload = (receiptId?: string) => {
     if (receiptId) {
       window.open(sale?.receipts?.at(0)?.receipt_url, "_blank");
@@ -27,12 +12,12 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
 
   const date = sale?.created_at
     ? new Date(sale.created_at).toLocaleString("es-CO", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-      })
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    })
     : "";
 
   return (
@@ -56,6 +41,7 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
                 onClick={() => {
                   if (sale?.id) {
                     navigator.clipboard.writeText(`#${sale.id.toString()}`);
+                    message.success("Copiado al portapapeles");
                   }
                 }}
                 style={{ cursor: "pointer" }}
@@ -77,7 +63,17 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
           </span>
           <span>
             <p className="font-light">Vehiculo</p>
-            <h2>{getVehicleTypeName(sale?.vehicle_data.vehicle_type_id)}</h2>
+            <h2>{
+              sale?.vehicle_data.vehicle_type_id
+                ? tariff?.find((v) => v.id === sale.vehicle_data.vehicle_type_id[0])
+                  ?.vehicle_class
+                : "Desconocido"
+            }</h2>
+            <h2>{
+              sale?.vehicle_data.vehicle_type_id
+                ? tariff?.find((v) => v.id === sale.vehicle_data.vehicle_type_id[0])?.categories.find((c) => c.code === sale.vehicle_data.vehicle_type_id[1])?.type
+                : "Desconocido"
+            }</h2>
             <h2>Placa: {sale?.vehicle_data.vehicle_plate.toUpperCase()}</h2>
           </span>
           <span>
@@ -107,14 +103,6 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
           </span>
           <Divider />
           <div>
-            {/* {sale?.sale_sumary?.asesor_sale_commission !== undefined && (
-              <span className="flex gap-2 justify-between w-full">
-                <p className="font-light">Comisión aliados:</p>
-                <h2>
-                  ${sale?.sale_sumary.asesor_sale_commission.toLocaleString()}
-                </h2>
-              </span>
-            )} */}
             {sale?.sale_sumary?.fixed_comission !== undefined && (
               <span className="flex gap-2 justify-between w-full">
                 <p className="font-light">Comisión fija:</p>
@@ -201,20 +189,18 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
         <div className="flex justify-end items-center">
           <div className="w-2/4">
             <p className="flex gap-2 mb-2">
-              {`${
-                sale?.receipts.at(0)?.receipt_type === "brilla-contract"
-                  ? "Contrato: "
-                  : sale?.receipts.at(0)?.receipt_type === "invoice"
+              {`${sale?.receipts.at(0)?.receipt_type === "brilla-contract"
+                ? "Contrato: "
+                : sale?.receipts.at(0)?.receipt_type === "invoice"
                   ? "Factura: "
                   : "Pagare: "
-              }`}{" "}
-              {`${
-                sale?.receipts.at(0)?.receipt_type === "brilla-contract"
-                  ? `${sale.brilla_contract_number}`
-                  : sale?.receipts.at(0)?.receipt_type === "invoice"
+                }`}{" "}
+              {`${sale?.receipts.at(0)?.receipt_type === "brilla-contract"
+                ? `${sale.brilla_contract_number}`
+                : sale?.receipts.at(0)?.receipt_type === "invoice"
                   ? `${sale.invoice_number}`
                   : `${sale.pagare_number}`
-              }`}{" "}
+                }`}{" "}
             </p>
             <Button
               onClick={() => handleDownload(sale?.receipts?.at(0)?.id)}
@@ -222,13 +208,12 @@ export default function SaleDetail({ sale }: { sale: Sale | null }) {
               icon={<DownloadOutlined />}
             >
               Descargar{" "}
-              {`${
-                sale?.receipts.at(0)?.receipt_type === "brilla-contract"
-                  ? "Contrato: "
-                  : sale?.receipts.at(0)?.receipt_type === "invoice"
+              {`${sale?.receipts.at(0)?.receipt_type === "brilla-contract"
+                ? "Contrato: "
+                : sale?.receipts.at(0)?.receipt_type === "invoice"
                   ? "Factura: "
                   : "Pagare: "
-              }`}
+                }`}
             </Button>
           </div>
         </div>
