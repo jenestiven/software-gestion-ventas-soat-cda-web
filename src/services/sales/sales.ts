@@ -533,3 +533,53 @@ export async function getSalesForMonths(): Promise<SalesForMonthsResponse> {
     throw new Error("Unable to get sales for months");
   }
 }
+
+export async function addReceiptToSale(
+  saleId: string,
+  file: string,
+  receiptType: "brilla-contract" | "pagare" | "invoice" | "receipt"
+) {
+  try {
+    const saleRef = db.collection("sales").doc(saleId);
+    const saleDoc = await saleRef.get();
+
+    if (!saleDoc.exists) {
+      throw new Error("Sale not found");
+    }
+
+    const saleData = saleDoc.data() as Sale;
+
+    const matches = file.match(/^data:(.+);base64,/);
+    const mimeType = matches ? matches[1] : "application/octet-stream";
+    if (!matches) {
+      console.warn(
+        "Could not determine mime type from base64 string. Defaulting to application/octet-stream."
+      );
+    }
+
+    const fileUrl = await uploadBase64FileAndGetUrl(
+      file,
+      mimeType,
+      `${receiptType}_${saleId}.${mimeType?.split("/")[1]}`,
+      `sales/${saleId}`
+    );
+
+    const newReceipt = {
+      id: `${receiptType}_${saleId}_${new Date().getTime()}`,
+      uploaded_at: new Date().toISOString(),
+      receipt_url: fileUrl,
+      receipt_type: receiptType,
+    };
+
+    const updatedReceipts = saleData.receipts
+      ? [...saleData.receipts, newReceipt]
+      : [newReceipt];
+
+    await saleRef.update({ receipts: updatedReceipts, receipt_status: "delivered" });
+
+    return newReceipt;
+  } catch (error) {
+    console.error("Error adding receipt to sale:", error);
+    throw new Error("Unable to add receipt to sale");
+  }
+}
