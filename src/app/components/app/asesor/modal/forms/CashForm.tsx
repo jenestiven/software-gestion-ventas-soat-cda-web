@@ -33,6 +33,8 @@ export default function CashForm(props: Props) {
     onFinish,
     cascaderOptions,
     totalToPay,
+    isSoatValueDisabled,
+    setIsSoatValueDisabled,
   } = useCashForm(props);
 
   return (
@@ -120,19 +122,31 @@ export default function CashForm(props: Props) {
               <Input className="h-8 rounded-md" />
             </Form.Item>
 
-            <Form.Item
-              name="soat_value"
-              label="Valor SOAT"
-              required={true}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, ingresa el valor del SOAT",
-                },
-              ]}
-            >
-              <InputNumber style={{ width: "100%" }} disabled />
-            </Form.Item>
+            <div className="flex items-center gap-2">
+              <Form.Item
+                name="soat_value"
+                label="Valor SOAT"
+                required={true}
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor, ingresa el valor del SOAT",
+                  },
+                ]}
+                className="flex-grow "
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  disabled={isSoatValueDisabled}
+                />
+              </Form.Item>
+              <Button
+                className="mt-1.5"
+                onClick={() => setIsSoatValueDisabled(!isSoatValueDisabled)}
+              >
+                {isSoatValueDisabled ? "Habilitar" : "Deshabilitar"}
+              </Button>
+            </div>
           </Col>
 
           <Col xs={24} sm={12}>

@@ -36,7 +36,7 @@ export const UploadComprobanteModal: React.FC<UploadComprobanteModalProps> = ({
 
     try {
       const fileToProcess = file.originFileObj || file;
-      const base64File = await getBase64(fileToProcess as File);
+      const base64File = await getBase64(fileToProcess as any);
       await uploadComprobanteApi(saleId, base64File);
       message.success("Comprobante subido con éxito.");
       onUploadSuccess();

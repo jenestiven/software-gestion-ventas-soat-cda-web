@@ -35,6 +35,7 @@ export default function useCashForm(props: Props) {
   const [fixedCommission, setFixedCommission] = useState(0);
   const [profit, setProfit] = useState(0);
   const [totalToPay, setTotalToPay] = useState(0);
+  const [isSoatValueDisabled, setIsSoatValueDisabled] = useState(true);
 
   const vehicleTypePath = Form.useWatch("vehicle_type", form);
   const inCashValue = Form.useWatch("cash_value_payed", form);
@@ -114,5 +115,7 @@ export default function useCashForm(props: Props) {
     onFinish,
     cascaderOptions,
     totalToPay,
+    isSoatValueDisabled,
+    setIsSoatValueDisabled,
   };
 }
