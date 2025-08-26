@@ -50,18 +50,18 @@ export default function Stats({
   const stats: StatCardProps[] = [
     {
       icon: <PieChartOutlined className="icon utility" />,
-      title: "Cantidad de ventas",
+      title: "Cantidad de ventas del mes",
       value: `${salesQuantity}`,
     },
     {
       icon: <ShoppingOutlined className="icon sell" />,
-      title: "Total en ventas",
+      title: "Total en ventas del mes",
       value: `$${Number(totalSalesValue).toLocaleString()}`,
       growth: salesGrowth,
     },
     {
       icon: <RiseOutlined className="icon earning" />,
-      title: "Ganancias",
+      title: "Ganancias en el mes",
       value: `$${Number(netEarnings).toLocaleString()}`,
       growth: earningsGrowth,
     },

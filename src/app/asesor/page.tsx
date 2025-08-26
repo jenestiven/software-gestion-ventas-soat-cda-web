@@ -11,7 +11,6 @@ export default function Page() {
 
       <section className="asesor-table">
         <div>
-          <h2 className="p-4 font-semibold">Ventas actuales</h2>
           <Suspense fallback={<h2>Cargando ventas...</h2>}>
             <AsesorSellsTablehandler />
           </Suspense>
