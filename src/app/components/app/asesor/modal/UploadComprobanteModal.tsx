@@ -5,6 +5,7 @@ import { InboxOutlined } from "@ant-design/icons";
 import { UploadFile } from "antd/lib/upload/interface";
 import { uploadComprobanteApi } from "@/lib/api/sales";
 import { getBase64 } from "@/app/components/app/admin/users/AntdUpload";
+import { useRouter } from "next/navigation";
 
 interface UploadComprobanteModalProps {
   visible: boolean;
@@ -23,6 +24,7 @@ export const UploadComprobanteModal: React.FC<UploadComprobanteModalProps> = ({
 }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const router = useRouter();
 
   const handleUpload = async () => {
     if (fileList.length === 0) {
@@ -44,6 +46,7 @@ export const UploadComprobanteModal: React.FC<UploadComprobanteModalProps> = ({
     } catch (error) {
       message.error("Error al subir el comprobante.");
     } finally {
+      router.refresh();
       setIsUploading(false);
     }
   };
