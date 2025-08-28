@@ -2,14 +2,15 @@
 
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "@/firebase/firebaseClient";
-import { doc, getDoc } from "firebase/firestore";
+import { auth } from "@/firebase/firebaseClient";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 import useStore from "@/store";
 
 export function useSessionValidator() {
   const { setUser, clearUser } = useStore();
 
   useEffect(() => {
+    const db = getFirestore();
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         try {
@@ -32,7 +33,7 @@ export function useSessionValidator() {
             const placeDoc = await getDoc(placeDocRef);
             if (placeDoc.exists()) {
               const salesPlaceData = placeDoc.data();
-              
+
               setUser({
                 uid: firebaseUser.uid,
                 email: firebaseUser.email,

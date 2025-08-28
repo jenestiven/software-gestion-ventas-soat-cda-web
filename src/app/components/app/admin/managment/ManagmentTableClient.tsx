@@ -247,6 +247,16 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       },
     },
     {
+      title: "Conciliación",
+      dataIndex: "conciliation_status",
+      key: "conciliation_status",
+      render: (status: string | undefined) => (
+        <Tag color={status === "conciliated" ? "success" : "warning"}>
+          {status === "conciliated" ? "Conciliado" : "Pendiente"}
+        </Tag>
+      ),
+    },
+    {
       title: "Acciones",
       key: "actions",
       render: (_, record) => {

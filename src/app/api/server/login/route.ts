@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
-  
+
   try {
     const { idToken } = await request.json();
 
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("API Login: Entering catch block. Error:", error);
     return NextResponse.json(
-      { message: "Failed to create session cookie" },
+      { message: "Failed to create session cookie", error },
       { status: 500 }
     );
   }

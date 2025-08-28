@@ -214,6 +214,7 @@ const ConciliationModal: React.FC<ConciliationModalProps> = ({
                     dataIndex: ["vehicle_data", "vehicle_plate"],
                     key: "vehicle",
                     },
+                    //pagare
                     {
                     title: "Valor",
                     dataIndex: ["sale_sumary", "total_payed"],

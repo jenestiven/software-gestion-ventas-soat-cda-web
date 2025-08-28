@@ -22,7 +22,8 @@ export default function LoginPage() {
 
     try {
       const role = await login(email, password);
-      
+      console.log("Login successful, user role:", role);
+
       if (role === "admin") {
         router.push("/admin");
       } else if (role === "asesor") {
@@ -33,6 +34,7 @@ export default function LoginPage() {
       }
 
     } catch (err: any) {
+      console.log("Login failed:", err.message);
       setError(err.message);
       setLoading(false);
     }

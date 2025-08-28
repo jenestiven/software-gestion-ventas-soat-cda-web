@@ -4,8 +4,6 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const userCookie = request.cookies.get("user")?.value;
 
-  // console.log("MIDDLEWARE | user cookie RAW:", userCookie);
-
   if (!userCookie) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
@@ -16,11 +14,11 @@ export function middleware(request: NextRequest) {
     const path = url.pathname;
 
     if (path.startsWith("/admin") && !["admin"].includes(role)) {
-      return NextResponse.redirect(new URL("/admin", request.url));
+      return NextResponse.redirect(new URL("/asesor", request.url));
     }
 
     if (path.startsWith("/asesor") && role !== "asesor") {
-      return NextResponse.redirect(new URL("/asesor", request.url));
+      return NextResponse.redirect(new URL("/admin", request.url));
     }
 
     return NextResponse.next();
