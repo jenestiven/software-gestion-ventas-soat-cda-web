@@ -74,7 +74,7 @@ export function useLogin() {
       };
 
       setUser(user);
-      Cookies.set("user", JSON.stringify(user), { expires: 5 });
+      Cookies.set("user", JSON.stringify(user), { path: '/', expires: 5 });
     } catch (error) {
       console.error(
         "❌ Error al obtener el documento del lugar de venta:",

@@ -22,7 +22,6 @@ export default function LoginPage() {
 
     try {
       const role = await login(email, password);
-      console.log("Login successful, user role:", role);
 
       if (role === "admin") {
         router.push("/admin");
