@@ -6,6 +6,8 @@ import SalesByPlaceTable from "../components/app/admin/dashboard/SalesByPlaceTab
 import SalesByPayMethod from "../components/app/admin/dashboard/SalesByPayMethod";
 import "./page.css";
 
+export const dynamic = 'force-dynamic';
+
 type Props = {};
 
 export const Skeleton = () => (
