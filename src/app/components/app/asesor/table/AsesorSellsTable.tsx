@@ -140,10 +140,12 @@ export default function AsesorSellsTable({ data }: Props) {
         ?.toString()
         .toLowerCase()
         .includes((value as string).toLowerCase())) ?? false,
-    onFilterDropdownOpenChange: visible => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
-      }
+    filterDropdownProps: {
+      onOpenChange: (visible: boolean) => {
+        if (visible) {
+          setTimeout(() => searchInput.current?.select(), 100);
+        }
+      },
     },
     render: text =>
       searchedColumn === dataIndex ? (
@@ -272,7 +274,7 @@ export default function AsesorSellsTable({ data }: Props) {
         pagination={{ pageSize: 7 }}
       />
       <UploadComprobanteModal
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={handleCancel}
         saleId={selectedSaleId}
         onUploadSuccess={handleUploadSuccess}

@@ -8,7 +8,7 @@ import { getBase64 } from "@/app/components/app/admin/users/AntdUpload";
 import { useRouter } from "next/navigation";
 
 interface UploadComprobanteModalProps {
-  visible: boolean;
+  open: boolean;
   onCancel: () => void;
   saleId: string;
   onUploadSuccess: () => void;
@@ -17,7 +17,7 @@ interface UploadComprobanteModalProps {
 const { Dragger } = Upload;
 
 export const UploadComprobanteModal: React.FC<UploadComprobanteModalProps> = ({
-  visible,
+  open,
   onCancel,
   saleId,
   onUploadSuccess,
@@ -73,7 +73,7 @@ export const UploadComprobanteModal: React.FC<UploadComprobanteModalProps> = ({
   return (
     <Modal
       title="Subir Comprobante"
-      visible={visible}
+      open={open}
       onOk={handleUpload}
       onCancel={handleCancel}
       confirmLoading={isUploading}
