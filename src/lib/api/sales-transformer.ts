@@ -49,7 +49,6 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
     sale.sale_sumary.total_payed = saleCreation.sale_summary.total_to_pay;
   } else if (saleCreation.payment_method_id === "dataphone") {
     sale.credit_card_type = saleCreation.credit_type;
-    sale.soat_status = saleCreation.soat_state;
     sale.sale_sumary.datafono_commission =
       saleCreation.sale_summary.datafono_commission;
     sale.sale_sumary.client_commission =
@@ -69,7 +68,6 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
   } else if (saleCreation.payment_method_id === "addi") {
     sale.receipt_required = true;
     sale.receipt_status = saleCreation.invoice_file ? "delivered" : "pending";
-    sale.has_payed_soat = saleCreation.soat_payed;
     sale.invoice_number = saleCreation.invoice_number;
     sale.invoice_file = saleCreation.invoice_file;
     sale.financed_amount = saleCreation.financed_amount;
@@ -89,11 +87,9 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
   } else if (saleCreation.payment_method_id === "sistecredito") {
     sale.receipt_required = true;
     sale.receipt_status = saleCreation.pagare_file ? "delivered" : "pending";
-    sale.sistecredito_pay_status = saleCreation.sis_status;
 
     sale.pagare_file = saleCreation.pagare_file;
     sale.pagare_number = saleCreation.pagare_number;
-    sale.soat_status = saleCreation.soat_state;
 
     sale.sale_sumary.fixed_comission =
       saleCreation.sale_summary.fixed_commission;
@@ -103,10 +99,8 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
     sale.financed_amount = saleCreation.financed_amount;
 
     sale.sale_sumary.profit = saleCreation.sale_summary.profit;
-
     sale.sale_sumary.gross_profit = saleCreation.sale_summary.gross_profit;
 
-    sale.has_payed_soat = saleCreation.soat_payed;
     sale.sale_sumary.fixed_comission =
       saleCreation.sale_summary.fixed_commission;
     sale.sale_sumary.sistecredito_commission =
@@ -119,13 +113,9 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
   } else if (saleCreation.payment_method_id === "brilla") {
     sale.receipt_required = true;
     sale.receipt_status = saleCreation.contract_file ? "delivered" : "pending";
-    sale.soat_status = saleCreation.soat_state;
     sale.financed_amount = saleCreation.financed_amount;
-    sale.has_payed_soat = saleCreation.soat_payed;
     sale.contract_file = saleCreation.contract_file;
-    sale.brilla_pay_status = saleCreation.brilla_payed;
     sale.brilla_contract_number = saleCreation.brilla_contract_number;
-    sale.acts = saleCreation.proceedings;
     sale.sale_sumary.fixed_comission =
       saleCreation.sale_summary.fixed_commission;
     sale.sale_sumary.partners_commission =

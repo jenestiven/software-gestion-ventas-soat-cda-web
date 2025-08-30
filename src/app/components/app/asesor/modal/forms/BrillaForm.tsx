@@ -149,7 +149,9 @@ export default function BrillaForm(props: Props) {
                 {isSoatValueDisabled ? "Habilitar" : "Deshabilitar"}
               </Button>
             </div>
+          </Col>
 
+          <Col xs={24} sm={12}>
             {props.method?.fixedCost?.can_add_profit && (
               <Form.Item
                 name="place_profit"
@@ -164,56 +166,6 @@ export default function BrillaForm(props: Props) {
             )}
 
             <Form.Item
-              name="soat_state"
-              label="Estado"
-              required={true}
-              rules={[
-                { required: true, message: "Por favor, selecciona un estado" },
-              ]}
-            >
-              <Select
-                options={[
-                  { label: "SOAT Pendiente", value: "pending" },
-                  { label: "SOAT Entregado", value: "delivered" },
-                ]}
-              />
-            </Form.Item>
-          </Col>
-
-          <Col xs={24} sm={12}>
-            <Form.Item
-              name="soat_payed"
-              label="¿Ha pagado el SOAT?"
-              required={true}
-              rules={[
-                { required: true, message: "Por favor, selecciona una opción" },
-              ]}
-            >
-              <Select
-                options={[
-                  { label: "Pagado", value: true },
-                  { label: "Pendiente", value: false },
-                ]}
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="brilla_payed"
-              label="Pagado/pendiente pagar - BRILLA"
-              required={true}
-              rules={[
-                { required: true, message: "Por favor, selecciona una opción" },
-              ]}
-            >
-              <Select
-                options={[
-                  { label: "Pagado", value: true },
-                  { label: "Pendiente", value: false },
-                ]}
-              />
-            </Form.Item>
-
-            <Form.Item
               name="brilla_contract_number"
               label="Contrato Brilla"
               required={true}
@@ -224,10 +176,6 @@ export default function BrillaForm(props: Props) {
                 },
               ]}
             >
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
-
-            <Form.Item name="proceedings" label="Actas">
               <InputNumber style={{ width: "100%" }} />
             </Form.Item>
 

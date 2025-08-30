@@ -224,16 +224,11 @@ export interface Sale {
   sale_place: { place_name: string; place_id: string };
   asesor_data: { name: string; thumnail: string, uid: string };
   paid_in_cash_value: number;
-  soat_status?: "pending" | "delivered";
   financed_amount?: number;
-  has_payed_soat?: boolean;
-  brilla_pay_status?: boolean;
   brilla_contract_number?: string;
-  acts?: number;
   credit_card_type?: string;
   invoice_number?: string;
   pagare_number?: string;
-  sistecredito_pay_status?: boolean;
   invoice_file?: string;
   pagare_file?: string;
   contract_file?: string;

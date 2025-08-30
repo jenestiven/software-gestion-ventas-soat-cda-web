@@ -152,7 +152,8 @@ export default function DataphoneForm(props: Props) {
                 {isSoatValueDisabled ? "Habilitar" : "Deshabilitar"}
               </Button>
             </div>
-
+          </Col>
+          <Col xs={24} sm={12}>
             <Form.Item
               name="credit_type"
               label="Tipo de tarjeta"
@@ -173,23 +174,6 @@ export default function DataphoneForm(props: Props) {
                   { label: "Alkosto", value: "alkosto" },
                   { label: "Exito", value: "exito" },
                   { label: "Olimpica", value: "olimpica" },
-                ]}
-              />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12}>
-            <Form.Item
-              name="soat_state"
-              label="Estado"
-              required={true}
-              rules={[
-                { required: true, message: "Por favor, selecciona un estado" },
-              ]}
-            >
-              <Select
-                options={[
-                  { label: "SOAT Entregado", value: "delivered" },
-                  { label: "SOAT Pendiente", value: "pending" },
                 ]}
               />
             </Form.Item>

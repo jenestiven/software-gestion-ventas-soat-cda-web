@@ -156,62 +156,18 @@ export default function SistecreditoForm(props: Props) {
               </Button>
             </div>
 
-            <Form.Item
-              name="soat_state"
-              label="Estado"
-              required={true}
+            <Form.Item name="pagare_number" label="Pagare" required={true}
               rules={[
-                { required: true, message: "Por favor, selecciona un estado" },
+                { required: true, message: "Por favor, ingresa el número del pagare" },
               ]}
             >
-              <Select
-                options={[
-                  { label: "SOAT Pendiente", value: "pending" },
-                  { label: "SOAT Entregado", value: "delivered" },
-                ]}
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="soat_payed"
-              label="¿Ha pagado el SOAT?"
-              required={true}
-              rules={[
-                { required: true, message: "Por favor, selecciona una opción" },
-              ]}
-            >
-              <Select
-                options={[
-                  { label: "Pagado", value: true },
-                  { label: "Pendiente", value: false },
-                ]}
-              />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12}>
-            <Form.Item
-              name="sis_status"
-              label="Pagado/pendiente pagar SIS"
-              required={true}
-              rules={[
-                { required: true, message: "Por favor, selecciona una opción" },
-              ]}
-            >
-              <Select
-                options={[
-                  { label: "Pagado", value: true },
-                  { label: "Pendiente", value: false },
-                ]}
-              />
-            </Form.Item>
-
-            <Form.Item name="pagare_number" label="Pagare">
               <InputNumber
                 placeholder="Escribe el número del pagare"
                 style={{ width: "100%" }}
               />
             </Form.Item>
-
+          </Col>
+          <Col xs={24} sm={12}>
             {props.method?.fixedCost?.can_add_profit && (
               <Form.Item
                 name="place_profit"
