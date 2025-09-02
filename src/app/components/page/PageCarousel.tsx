@@ -1,35 +1,32 @@
 import React from "react";
 import { Carousel } from "antd";
-//import Image from "next/image";
-//import headerSectionOne from "@/images/hero-image-1.jpg";
+import Image from "next/image";
 
-type Props = {};
-
-const contentStyle: React.CSSProperties = {
-  margin: 0,
-  height: "96dvh",
-  color: "#fff",
-  lineHeight: "160px",
-  textAlign: "center",
-  background: "#364d79",
+type CarouselItem = {
+  src: string;
+  alt: string;
 };
 
-export default function PageCarousel({}: Props) {
+type Props = {
+  items: CarouselItem[];
+};
+
+export default function PageCarousel({ items }: Props) {
   return (
     <section className="w-full mx-auto">
       <Carousel autoplay={{ dotDuration: true }} autoplaySpeed={10000}>
-        <div>
-          <h3 style={contentStyle}>2</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>2</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>3</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>4</h3>
-        </div>
+        {items.map((item, index) => (
+          <div key={index} className="h-72 md:h-[96vh]">
+            <Image
+              src={item.src}
+              alt={item.alt}
+              width={1920}
+              height={1080}
+              className="w-full h-full object-cover"
+              priority={index === 0}
+            />
+          </div>
+        ))}
       </Carousel>
     </section>
   );

@@ -55,7 +55,7 @@ export default function LoginPage() {
         />
         <h4 className="text-md font-semibold">CDA Moto GP</h4>
       </header>
-      <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="flex min-h-full flex-1 flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Image
             width={80}
@@ -68,7 +68,7 @@ export default function LoginPage() {
             Inicia sesión en tu cuenta
           </h2>
         </div>
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[460px] bg-white rounded-md">
+        <div className="mt-10 sm:mx-auto w-[90%] sm:w-full sm:max-w-[460px] bg-white rounded-md">
           <div className="px-6 py-12 shadow sm:rounded-lg sm:px-12">
             <form className="space-y-6" onSubmit={(e) => handleLogin(e)}>
               <div>
