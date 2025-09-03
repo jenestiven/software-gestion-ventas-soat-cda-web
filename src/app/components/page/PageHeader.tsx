@@ -7,12 +7,37 @@ import { useRouter } from "next/navigation";
 import MenuOutlined from "@ant-design/icons/lib/icons/MenuOutlined";
 import { Button, Drawer } from "antd";
 
+const NAV_LINKS = [
+  { href: "/", label: "Inicio" },
+  { href: "/nosotros", label: "Nosotros" },
+  { href: "/servicios", label: "Servicios" },
+  { href: "/contactanos", label: "Contactanos" },
+];
+
 const anchor =
   "text-lg font-medium text-accent hover:text-secondary transition-colors duration-200";
 const anchorMobile =
   "text-lg font-medium text-secondary transition-colors duration-200";
 
 type Props = {};
+
+function NavLinks({
+  className,
+  onClick,
+}: {
+  className: string;
+  onClick?: () => void;
+}) {
+  return (
+    <>
+      {NAV_LINKS.map(({ href, label }) => (
+        <Link key={href} className={className} href={href} onClick={onClick}>
+          {label}
+        </Link>
+      ))}
+    </>
+  );
+}
 
 export default function PageHeader({ }: Props) {
   const router = useRouter();
@@ -30,47 +55,36 @@ export default function PageHeader({ }: Props) {
           CDA Moto GP
         </h1>
       </div>
-      <Button onClick={() => setOpenMobileMenu(true)} icon={<MenuOutlined />} className="bg-primary px-2 py-1 rounded-md text-white lg:hidden" />
+      <Button
+        onClick={() => setOpenMobileMenu(true)}
+        icon={<MenuOutlined />}
+        className="bg-primary px-2 py-1 rounded-md text-white lg:hidden"
+      />
       <div className="hidden lg:flex items-center gap-12">
         <nav>
           <ul className="flex gap-8">
-            <Link className={anchor} href="/">
-              Inicio
-            </Link>
-            <Link className={anchor} href="/nosotros">
-              Nosotros
-            </Link>
-            <Link className={anchor} href="/servicios">
-              Servicios
-            </Link>
-            <Link className={anchor} href="/contactanos">
-              Contactanos
-            </Link>
+            <NavLinks className={anchor} />
           </ul>
         </nav>
         <button
-          onClick={() => handleLogin()}
-          className="bg-accent text-accent_contrast font-bold px-6 py-2 rounded-lg shadow transition-colors duration-200 cursor-pointer "
+          onClick={handleLogin}
+          className="bg-accent text-accent_contrast font-bold px-6 py-2 rounded-lg shadow transition-colors duration-200 cursor-pointer"
         >
           Ingresar
         </button>
       </div>
-      <Drawer onClose={() => setOpenMobileMenu(false)} open={openMobileMenu} placement="top">
+      <Drawer
+        onClose={() => setOpenMobileMenu(false)}
+        open={openMobileMenu}
+        placement="top"
+      >
         <div className="flex flex-col items-start gap-6 p-4">
           <nav>
             <ul className="flex flex-col gap-4 text-accent_contrast">
-              <Link className={anchorMobile} href="/">
-                Inicio
-              </Link>
-              <Link className={anchorMobile} href="/nosotros">
-                Nosotros
-              </Link>
-              <Link className={anchorMobile} href="/servicios">
-                Servicios
-              </Link>
-              <Link className={anchorMobile} href="/contactanos">
-                Contactanos
-              </Link>
+              <NavLinks
+                className={anchorMobile}
+                onClick={() => setOpenMobileMenu(false)}
+              />
             </ul>
           </nav>
           <button
