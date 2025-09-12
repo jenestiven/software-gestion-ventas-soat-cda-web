@@ -15,7 +15,7 @@ const NAV_LINKS = [
 ];
 
 const anchor =
-  "text-lg font-medium text-accent hover:text-secondary transition-colors duration-200";
+  "text-lg font-medium text-black hover:text-primary hover:font-bold transition-colors duration-200";
 const anchorMobile =
   "text-lg font-medium text-secondary transition-colors duration-200";
 
@@ -39,7 +39,7 @@ function NavLinks({
   );
 }
 
-export default function PageHeader({ }: Props) {
+export default function PageHeader({}: Props) {
   const router = useRouter();
   const [openMobileMenu, setOpenMobileMenu] = React.useState(false);
 
@@ -48,11 +48,11 @@ export default function PageHeader({ }: Props) {
   };
 
   return (
-    <header className="flex items-center justify-between px-12 py-2 shadow-lg bg-primary_transparent absolute top-0 z-50 w-full">
+    <header className="flex items-center justify-between px-12 py-2 shadow-xl rounded-b-lg bg-gradient-to-b from-white to-gray-100 absolute top-0 z-50 w-full max-w-[1920px]">
       <div className="flex items-center">
         <Image src={logo} alt="Astro Logo" width={45} height={45} priority />
-        <h1 className="hidden md:block text-3xl font-bold text-accent tracking-wide ml-4">
-          CDA Moto GP
+        <h1 className="hidden md:block text-3xl font-bold text-black tracking-wide ml-4">
+          CDA Moto <span className="inline text-primary font-extrabold">GP</span>
         </h1>
       </div>
       <Button
@@ -66,13 +66,13 @@ export default function PageHeader({ }: Props) {
             <NavLinks className={anchor} />
           </ul>
         </nav>
-        <button
-          onClick={handleLogin}
-          className="bg-accent text-accent_contrast font-bold px-6 py-2 rounded-lg shadow transition-colors duration-200 cursor-pointer"
-        >
-          Ingresar
-        </button>
       </div>
+      <button
+        onClick={handleLogin}
+        className="hidden lg:block bg-primary text-white font-bold px-6 py-2 rounded-xl shadow transition-colors duration-200 cursor-pointer"
+      >
+        Ingresar
+      </button>
       <Drawer
         onClose={() => setOpenMobileMenu(false)}
         open={openMobileMenu}
@@ -80,7 +80,7 @@ export default function PageHeader({ }: Props) {
       >
         <div className="flex flex-col items-start gap-6 p-4">
           <nav>
-            <ul className="flex flex-col gap-4 text-accent_contrast">
+            <ul className="flex flex-col gap-4 text-black w-full">
               <NavLinks
                 className={anchorMobile}
                 onClick={() => setOpenMobileMenu(false)}

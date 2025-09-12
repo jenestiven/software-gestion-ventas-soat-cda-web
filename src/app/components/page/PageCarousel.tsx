@@ -14,9 +14,9 @@ type Props = {
 export default function PageCarousel({ items }: Props) {
   return (
     <section className="w-full mx-auto relative">
-      <Carousel autoplay={{ dotDuration: true }} autoplaySpeed={8000}>
+      <Carousel arrows autoplay={{ dotDuration: true }} autoplaySpeed={4000}>
         {items.map((item, index) => (
-          <div key={index} className="h-72 md:h-[96vh] relative">
+          <div key={index} className="h-96 md:h-[75vh] relative">
             <Image
               src={item.src}
               alt={item.alt}
