@@ -67,12 +67,20 @@ export default function PageHeader({}: Props) {
           </ul>
         </nav>
       </div>
+      <div className="hidden lg:flex items-center gap-4">
       <button
-        onClick={handleLogin}
+        onClick={() => {}}
         className="hidden lg:block bg-primary text-white font-bold px-6 py-2 rounded-xl shadow transition-colors duration-200 cursor-pointer"
       >
-        Ingresar
+        Cotizar ahora
       </button>
+      <button
+        onClick={handleLogin}
+        className="hidden lg:block bg-accent text-accent_contrast font-bold px-6 py-2 rounded-xl shadow transition-colors duration-200 cursor-pointer"
+      >
+        Ingresar
+      </button>  
+      </div>
       <Drawer
         onClose={() => setOpenMobileMenu(false)}
         open={openMobileMenu}
