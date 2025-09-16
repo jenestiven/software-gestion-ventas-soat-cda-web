@@ -1,8 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
-import { Modal, Button, Select, DatePicker, Upload, message, Table, Spin, Space } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import {
+  Modal,
+  Button,
+  Select,
+  DatePicker,
+  Upload,
+  message,
+  Table,
+  Spin,
+  Space,
+} from "antd";
+import {
+  DownloadOutlined,
+  SafetyCertificateOutlined,
+  SearchOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import { Sale } from "@/types/types";
 
 const { RangePicker } = DatePicker;
@@ -38,10 +53,13 @@ const ConciliationModal: React.FC<ConciliationModalProps> = ({
     formData.append("paymentMethod", paymentMethod!);
 
     try {
-      const response = await fetch("/api/server/sales/process-conciliation-file", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "/api/server/sales/process-conciliation-file",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -50,7 +68,6 @@ const ConciliationModal: React.FC<ConciliationModalProps> = ({
 
       const { ids } = await response.json();
       findMatches(ids);
-
     } catch (error: any) {
       message.error(error.message);
     } finally {
@@ -71,7 +88,7 @@ const ConciliationModal: React.FC<ConciliationModalProps> = ({
       );
     });
 
-    const excelIdsSet = new Set(excelIds.map(id => String(id)));
+    const excelIdsSet = new Set(excelIds.map((id) => String(id)));
 
     const matches = salesToConcile.filter((sale) => {
       const saleId =
@@ -80,16 +97,18 @@ const ConciliationModal: React.FC<ConciliationModalProps> = ({
           : paymentMethod === "brilla"
           ? sale.brilla_contract_number
           : sale.invoice_number;
-      
+
       return excelIdsSet.has(String(saleId));
     });
 
     setMatchedSales(matches);
     if (matches.length > 0) {
-        message.success(`Se encontraron ${matches.length} ventas coincidentes.`);
-        setResultsModalVisible(true);
+      message.success(`Se encontraron ${matches.length} ventas coincidentes.`);
+      setResultsModalVisible(true);
     } else {
-        message.info("No se encontraron ventas coincidentes con los criterios seleccionados.");
+      message.info(
+        "No se encontraron ventas coincidentes con los criterios seleccionados."
+      );
     }
   };
 
@@ -97,13 +116,16 @@ const ConciliationModal: React.FC<ConciliationModalProps> = ({
     setLoading(true);
     try {
       const saleIds = matchedSales.map((sale) => sale.id);
-      const response = await fetch("/api/server/sales/update-conciliation-status", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ saleIds }),
-      });
+      const response = await fetch(
+        "/api/server/sales/update-conciliation-status",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ saleIds }),
+        }
+      );
 
       if (response.ok) {
         message.success("Ventas conciliadas exitosamente.");
@@ -119,9 +141,22 @@ const ConciliationModal: React.FC<ConciliationModalProps> = ({
       setLoading(false);
     }
   };
-
-  const handleDownloadReport = () => {
-    message.info("Funcionalidad de descarga de reporte no implementada aún.");
+  const handleDownloadTemplate = () => {
+    if (!paymentMethod) {
+      message.error("Seleccione un método de pago primero.");
+      return;
+    }
+    try {
+      const fileUrl = `/templates/${paymentMethod}.xlsx`;
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.download = `${paymentMethod}.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      message.error("No se pudo descargar la plantilla.");
+    }
   };
 
   const handleCancel = () => {
@@ -140,39 +175,54 @@ const ConciliationModal: React.FC<ConciliationModalProps> = ({
         onCancel={handleCancel}
         centered
         footer={[
-            <Button key="submit" type="primary" loading={loading} onClick={handleFindSales}>
-              Encontrar ventas para conciliar
-            </Button>,
-          ]}
+          <Button
+            key="submit"
+            type="primary"
+            loading={loading}
+            icon={<SearchOutlined />}
+            onClick={handleFindSales}
+          >
+            Encontrar ventas para conciliar
+          </Button>,
+        ]}
       >
         <Spin spinning={loading} tip="Procesando...">
-            <Space direction="vertical" style={{width: '100%'}}>
-                <Select
-                    placeholder="Método de pago"
-                    style={{ width: "100%"}}
-                    onChange={(value) => setPaymentMethod(value)}
-                    value={paymentMethod}
-                >
-                    <Option value="brilla">Brilla</Option>
-                    <Option value="sistecredito">Sistecredito</Option>
-                    <Option value="addi">Addi</Option>
-                </Select>
-                <RangePicker
-                    style={{ width: "100%" }}
-                    onChange={(dates) => setDateRange(dates)}
-                    value={dateRange}
-                />
-                <Upload 
-                    beforeUpload={(file) => {
-                        setFile(file);
-                        return false; // Evita la subida automática
-                    }}
-                    onRemove={() => setFile(null)}
-                    maxCount={1}
-                >
-                    <Button icon={<UploadOutlined />}>Seleccionar archivo</Button>
-                </Upload>
+          <Space direction="vertical" style={{ width: "100%" }}>
+            <Space direction="horizontal">
+              <Select
+                placeholder="Método de pago"
+                style={{ width: 296 }}
+                onChange={(value) => setPaymentMethod(value)}
+                value={paymentMethod}
+              >
+                <Option value="brilla">Brilla</Option>
+                <Option value="sistecredito">Sistecredito</Option>
+                <Option value="addi">Addi</Option>
+              </Select>
+              <Button
+                icon={<DownloadOutlined />}
+                onClick={handleDownloadTemplate}
+              >
+                Descargar plantilla
+              </Button>
             </Space>
+            <RangePicker
+              style={{ width: "100%" }}
+              onChange={(dates) => setDateRange(dates)}
+              value={dateRange}
+              placeholder={["Fecha inicio", "Fecha fin"]}
+            />
+            <Upload
+              beforeUpload={(file) => {
+                setFile(file);
+                return false; // Evita la subida automática
+              }}
+              onRemove={() => setFile(null)}
+              maxCount={1}
+            >
+              <Button icon={<UploadOutlined />}>Seleccionar archivo</Button>
+            </Upload>
+          </Space>
         </Spin>
       </Modal>
 
@@ -183,47 +233,78 @@ const ConciliationModal: React.FC<ConciliationModalProps> = ({
         width={1000}
         centered
         footer={[
-            <Button key="back" onClick={() => setResultsModalVisible(false)}>
-              Cerrar
-            </Button>,
-          ]}
+          <Button
+            type="primary"
+            key="conciliate"
+            onClick={handleConciliation}
+            icon={<SafetyCertificateOutlined />}
+          >
+            Conciliar
+          </Button>,
+        ]}
       >
         <Spin spinning={loading} tip="Conciliando...">
-            <Space direction="vertical" style={{width: '100%'}}>
-                <Space style={{marginBottom: 16}}>
-                    <Button type="primary" onClick={handleConciliation}>Conciliar</Button>
-                    <Button onClick={handleDownloadReport}>Descargar Reporte</Button>
-                </Space>
-                <Table
-                dataSource={matchedSales}
-                rowKey="id"
-                columns={[
-                    {
-                    title: "Fecha",
-                    dataIndex: "created_at",
-                    key: "date",
-                    render: (date: string) => new Date(date).toLocaleDateString(),
-                    },
-                    {
-                    title: "Cliente",
-                    dataIndex: ["client_data", "client_name"],
-                    key: "client",
-                    },
-                    {
-                    title: "Vehículo",
-                    dataIndex: ["vehicle_data", "vehicle_plate"],
-                    key: "vehicle",
-                    },
-                    //pagare
-                    {
-                    title: "Valor",
-                    dataIndex: ["sale_sumary", "total_payed"],
-                    key: "value",
-                    render: (value: number) => `$${value.toLocaleString("es-CO")}`,
-                    },
-                ]}
-                />
-            </Space>
+          <Space direction="vertical" style={{ width: "100%" }}>
+            <Space style={{ marginBottom: 16 }}></Space>
+            <Table
+              dataSource={matchedSales}
+              rowKey="id"
+              columns={[
+                {
+                  title: "Fecha",
+                  dataIndex: "created_at",
+                  key: "date",
+                  render: (date: string) => new Date(date).toLocaleDateString(),
+                },
+                {
+                  title: "Id",
+                  dataIndex: "",
+                  key: "id",
+                  render: (_: any, record: Sale) =>
+                    paymentMethod === "sistecredito"
+                      ? record.pagare_number
+                      : paymentMethod === "brilla"
+                      ? record.brilla_contract_number
+                      : record.invoice_number,
+                },
+                {
+                  title: "Sede",
+                  dataIndex: ["sale_place", "place_name"],
+                  key: "sale_place",
+                  render: (placeName: string) => placeName,
+                },
+                {
+                  title: "Método de Pago",
+                  dataIndex: "payment_method_name",
+                  key: "payment_method",
+                  render: (paymentMethod: string) => paymentMethod,
+                },
+                {
+                  title: "Cliente",
+                  dataIndex: ["client_data", "client_name"],
+                  key: "client",
+                },
+                {
+                  title: "Vehículo",
+                  dataIndex: ["vehicle_data", "vehicle_plate"],
+                  key: "vehicle",
+                },
+                //pagare
+                {
+                  title: "Valor de venta",
+                  dataIndex: ["sale_sumary", "total_payed"],
+                  key: "value",
+                  render: (value: number) => `${value.toLocaleString("es-CO")}`,
+                },
+                {
+                  title: "Ganancia",
+                  dataIndex: ["sale_sumary", "place_total_gains"],
+                  key: "value",
+                  render: (value: number) => `${value.toLocaleString("es-CO")}`,
+                },
+              ]}
+            />
+          </Space>
         </Spin>
       </Modal>
     </>

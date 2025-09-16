@@ -18,12 +18,12 @@ export const processConciliationFile = async (file: File, paymentMethod: string)
 
   const idColumnName =
     paymentMethod === "sistecredito"
-      ? "pagaré"
+      ? "Pagaré"
       : paymentMethod === "brilla"
       ? "Contrato"
       : "ID Crédito";
 
-  const idColumnIndex = header.findIndex(cell => typeof cell === 'string' && cell.trim() === idColumnName);
+  const idColumnIndex = header.findIndex(cell => typeof cell === 'string' && cell.trim().toLowerCase() === idColumnName.toLowerCase());
 
   if (idColumnIndex === -1) {
     throw new Error(`No se encontró la columna de identificación '${idColumnName}'.`);
