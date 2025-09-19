@@ -267,6 +267,7 @@ export interface PlacesDataType {
   id: string;
   place_name: string;
   place_address: string;
+  main_place?: boolean;
   asesors_number?: number;
   created_at?: string;
   updated_at?: string;

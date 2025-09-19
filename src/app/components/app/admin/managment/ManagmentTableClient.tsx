@@ -15,13 +15,16 @@ import {
   Tag,
   Divider,
   Cascader,
+  message,
 } from "antd";
 import type { TableProps } from "antd";
-import { AuditOutlined, MoreOutlined } from "@ant-design/icons";
+import { AuditOutlined, DownloadOutlined, MoreOutlined } from "@ant-design/icons";
 import { PlacesDataType, Sale, VehicleClass } from "@/types/types";
 import SaleDetail from "./SaleDetail";
 import ConciliationModal from "./ConciliationModal";
 import { getTariffScheduleApi } from "@/lib/api/asesor";
+import ReportGenerationModal from "./ReportGenerationModal";
+import { generateSalesReport } from "@/utils/excel";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -37,7 +40,9 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<Sale | null>(null);
-  const [isConciliationModalVisible, setIsConciliationModalVisible] = useState(false);
+  const [isConciliationModalVisible, setIsConciliationModalVisible] =
+    useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [filters, setFilters] = useState<any>({});
   const [tariff, setTariff] = React.useState<VehicleClass[]>([]);
 
@@ -146,6 +151,23 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       delete newFilters[filterName];
     }
     setFilters(newFilters);
+  };
+
+  const handleGenerateReport = async (
+    salesPlaceId: string,
+    startDate: string,
+    endDate: string
+  ) => {
+    try {
+      const sales = filteredData.filter((sale) => sale.sale_place.place_id === salesPlaceId && new Date(sale.created_at) >= new Date(startDate) && new Date(sale.created_at) <= new Date(endDate));
+      const salesPlace = places.find((p) => p.id === salesPlaceId);
+      if (salesPlace) {
+        await generateSalesReport(sales, salesPlace, startDate, endDate);
+      }
+    } catch (error) {
+      console.error("Error generating report:", error);
+      message.error("Error al generar el reporte. Por favor, intente de nuevo.");
+    }
   };
 
   const columns: TableProps<Sale>["columns"] = [
@@ -293,10 +315,14 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       <Button icon={<AuditOutlined />} type="primary" onClick={() => setIsConciliationModalVisible(true)}>
         Conciliar facturas
       </Button>
+      <Button className="ml-4" icon={<DownloadOutlined />} type="dashed" onClick={() => setIsReportModalOpen(true)}>
+        Descargar reporte de ventas
+      </Button>
       <Divider />
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col>
           <RangePicker
+            placeholder={["Fecha inicio", "Fecha fin"]}
             onChange={(dates) => handleFilterChange("dates", dates)}
           />
         </Col>
@@ -405,6 +431,12 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
         visible={isConciliationModalVisible}
         onCancel={() => setIsConciliationModalVisible(false)}
         initialData={initialData}
+      />
+
+      <ReportGenerationModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        onGenerateReport={handleGenerateReport}
       />
     </div>
   );
