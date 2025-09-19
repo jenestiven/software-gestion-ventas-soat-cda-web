@@ -59,6 +59,7 @@ export default function ReportGenerationModal({
       open={isOpen}
       onCancel={onClose}
       footer={null}
+      centered
     >
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <Form.Item
@@ -90,7 +91,7 @@ export default function ReportGenerationModal({
         </Form.Item>
         <Form.Item className="flex justify-end gap-4">
           <Button onClick={onClose}>Cancelar</Button>
-          <Button type="primary" htmlType="submit">
+          <Button className="ml-2" type="primary" htmlType="submit">
             Generar
           </Button>
         </Form.Item>
