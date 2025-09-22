@@ -62,11 +62,7 @@ export default function useCashForm(props: Props) {
 
     if (selectedCategory && selectedVehicleClass) {
       form.setFieldsValue({ soat_value: selectedCategory.total_to_pay });
-      const commission = selectedVehicleClass.vehicle_class
-        .toLowerCase()
-        .includes("moto")
-        ? 15000
-        : 0;
+      const commission = selectedVehicleClass.fixed_payment_commission || 0;
       setFixedCommission(commission);
     } else {
       form.setFieldsValue({ soat_value: undefined });
@@ -89,9 +85,7 @@ export default function useCashForm(props: Props) {
   useEffect(() => {
     const profitValue = totalValue - totalToPay;
     const profitBeforeTasksValue = profitValue - place_total_gains;
-    //revisemos si toca pagar impuesto por la utilidad
     const transferMethodConfig = props.method.fixedCost?.transfer_method?.find(
-      //encuentra el metodo de transferencia seleccionado
       (m) => m.name.toLowerCase() === transferMethod.toLowerCase()
     );
     const taxRate = transferMethodConfig?.is_exempt

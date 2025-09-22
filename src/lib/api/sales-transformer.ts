@@ -42,11 +42,11 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
   };
 
   if (saleCreation.payment_method_id === "cash") {
-    sale.paid_in_cash_value = saleCreation.cash_value_payed;
     sale.sale_sumary.fixed_comission =
       saleCreation.sale_summary.fixed_commission;
     sale.sale_sumary.profit = saleCreation.sale_summary.profit;
-    sale.sale_sumary.total_payed = saleCreation.sale_summary.total_to_pay;
+    sale.sale_sumary.place_total_gains = saleCreation.sale_summary.place_total_gains;
+    sale.sale_sumary.total_payed = saleCreation.sale_summary.total;
   } else if (saleCreation.payment_method_id === "dataphone") {
     sale.credit_card_type = saleCreation.credit_type;
     sale.sale_sumary.datafono_commission =

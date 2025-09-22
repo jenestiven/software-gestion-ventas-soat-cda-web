@@ -23,11 +23,12 @@ export type CashSale = {
   remarks?: string;
   payment_method_name: string;
   payment_method_id: "cash";
-  cash_value_payed: number;
+  cash_value_payed?: number;
   sale_summary: {
     fixed_commission: number;
     profit: number;
-    total_to_pay: number;
+    total: number;
+    place_total_gains: number;
   };
 };
 
@@ -401,8 +402,8 @@ export interface Category {
 export interface VehicleClass {
   id: string;
   vehicle_class: string;
-  categories: Category[];
   fixed_payment_commission?: number;
+  categories: Category[];
 }
 
 /**

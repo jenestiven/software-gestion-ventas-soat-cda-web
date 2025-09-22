@@ -13,6 +13,7 @@ export async function getTariffSchedule(): Promise<VehicleClass[]> {
         id: doc.id,
         vehicle_class: tariffData.vehicle_class,
         categories: tariffData.categories,
+        fixed_payment_commission: tariffData.fixed_payment_commission || 0,
       };
       tariffs.push(vehicleClass);
     });

@@ -59,11 +59,7 @@ export default function useSistecreditoForm(props: Props) {
 
     if (selectedCategory && selectedVehicleClass) {
       form.setFieldsValue({ soat_value: selectedCategory.total_to_pay });
-      const commission = selectedVehicleClass.vehicle_class
-        .toLowerCase()
-        .includes("moto")
-        ? 15000
-        : 0;
+      const commission = selectedVehicleClass.fixed_payment_commission || 0;
       setFixedCommission(commission);
     } else {
       form.setFieldsValue({ soat_value: undefined });
