@@ -1,12 +1,8 @@
-
 "use client";
 
 import { saveSaleApi } from "@/lib/api/sales";
 import useStore from "@/store";
-import {
-  Form,
-  message,
-} from "antd";
+import { Form, message } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PaymentMethod, Tariff } from "@/types/types";
@@ -36,10 +32,16 @@ export default function useCashForm(props: Props) {
   const [profit, setProfit] = useState(0);
   const [totalToPay, setTotalToPay] = useState(0);
   const [isSoatValueDisabled, setIsSoatValueDisabled] = useState(true);
+  const [totalValue, setTotalValue] = useState(0);
 
   const vehicleTypePath = Form.useWatch("vehicle_type", form);
-  const inCashValue = Form.useWatch("cash_value_payed", form);
   const soatValue = Form.useWatch("soat_value", form);
+  const placeProfit = Form.useWatch("place_profit", form);
+  const transferMethod = Form.useWatch("transfer_method", form) || "";
+
+  const place_total_gains = placeProfit
+    ? placeProfit + props.method?.fixedCost?.place_profit
+    : props.method?.fixedCost?.place_profit || 0;
 
   useEffect(() => {
     if (!vehicleTypePath || vehicleTypePath.length < 2) {
@@ -73,9 +75,39 @@ export default function useCashForm(props: Props) {
   }, [vehicleTypePath, tariffSchedule, form]);
 
   useEffect(() => {
-    const profitValue = (inCashValue || 0) - totalToPay;
-    setProfit(Number(profitValue.toFixed(1)));
-  }, [totalToPay, inCashValue]);
+    const baseValue =
+      props.method?.fixedCost?.base_value_type === "fixed"
+        ? props.method.fixedCost?.base_value
+        : soatValue > 1000000
+        ? props.method?.fixedCost?.base_value_gt_1m
+        : props.method?.fixedCost?.base_value_lt_1m;
+
+    const total = soatValue + (place_total_gains || 0) + baseValue;
+    setTotalValue(total);
+  }, [soatValue, place_total_gains, props?.method?.fixedCost]);
+
+  useEffect(() => {
+    const profitValue = totalValue - totalToPay;
+    const profitBeforeTasksValue = profitValue - place_total_gains;
+    //revisemos si toca pagar impuesto por la utilidad
+    const transferMethodConfig = props.method.fixedCost?.transfer_method?.find(
+      //encuentra el metodo de transferencia seleccionado
+      (m) => m.name.toLowerCase() === transferMethod.toLowerCase()
+    );
+    const taxRate = transferMethodConfig?.is_exempt
+      ? 0
+      : (totalToPay * 4) / 1000;
+
+    const realProfit = profitBeforeTasksValue - taxRate;
+    setProfit(Number(realProfit.toFixed(1)));
+  }, [
+    totalToPay,
+    totalValue,
+    place_total_gains,
+    transferMethod,
+    soatValue,
+    props.method.fixedCost,
+  ]);
 
   useEffect(() => {
     const value = (soatValue || 0) + fixedCommission;
@@ -94,7 +126,8 @@ export default function useCashForm(props: Props) {
         sale_summary: {
           fixed_commission: fixedCommission,
           profit: profit,
-          total_to_pay: totalToPay,
+          place_total_gains: place_total_gains,
+          total: totalValue,
         },
       };
 
@@ -114,7 +147,7 @@ export default function useCashForm(props: Props) {
     form,
     onFinish,
     cascaderOptions,
-    totalToPay,
+    totalToPay: totalValue,
     isSoatValueDisabled,
     setIsSoatValueDisabled,
   };

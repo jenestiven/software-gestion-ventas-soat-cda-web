@@ -12,6 +12,7 @@ import {
   Cascader,
   Divider,
   Typography,
+  Select,
 } from "antd";
 import dayjs from "dayjs";
 import {
@@ -150,19 +151,29 @@ export default function CashForm(props: Props) {
           </Col>
 
           <Col xs={24} sm={12}>
+              {props.method?.fixedCost?.can_add_profit && (
+              <Form.Item
+                name="place_profit"
+                label="Utilidad"
+                required={true}
+                rules={[
+                  { required: true, message: "Por favor, ingresa la utilidad" },
+                ]}
+              >
+                <InputNumber style={{ width: "100%" }} />
+              </Form.Item>
+            )}
+
             <Form.Item
-              name="cash_value_payed"
-              label="Valor pagado en efectivo"
-              required={true}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, ingresa el valor pagado en efectivo",
-                },
-              ]}
-            >
-              <InputNumber style={{ width: "100%" }} />
-            </Form.Item>
+                name="transfer_method"
+                label="Método de transferencia"
+                required={true}
+                rules={[
+                  { required: true, message: "Por favor, selecciona un método de transferencia" },
+                ]}
+              >
+                <Select options={props.method?.fixedCost?.transfer_method?.map((method) => ({ label: method.name, value: method.name }))} />
+              </Form.Item>
 
             <Form.Item name="remarks" label="Observaciones">
               <Input.TextArea rows={5} />
