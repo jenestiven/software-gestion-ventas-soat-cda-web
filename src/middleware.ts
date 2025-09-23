@@ -17,6 +17,7 @@ export const config = {
   matcher: [
     '/admin/:path*',
     '/asesor/:path*',
-    // '/api/:path*',
+    // Protect all API routes except the login route
+    '/api/((?!server/login).*)',
   ],
 };

@@ -17,9 +17,11 @@ export async function POST(request: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
     });
+
+    console.log({ message: "API Login: Session cookie created and set." });
     return response;
   } catch (error) {
-    console.error("API Login: Entering catch block. Error:", error);
+    console.error({ message: "API Login: Entering catch block. Error:", error });
     return NextResponse.json(
       { message: "Failed to create session cookie", error },
       { status: 500 }
