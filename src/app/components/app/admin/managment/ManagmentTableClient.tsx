@@ -18,13 +18,19 @@ import {
   message,
 } from "antd";
 import type { TableProps } from "antd";
-import { AuditOutlined, DownloadOutlined, MoreOutlined } from "@ant-design/icons";
+import {
+  AuditOutlined,
+  DownloadOutlined,
+  MoreOutlined,
+} from "@ant-design/icons";
 import { PlacesDataType, Sale, VehicleClass } from "@/types/types";
 import SaleDetail from "./SaleDetail";
 import ConciliationModal from "./ConciliationModal";
 import { getTariffScheduleApi } from "@/lib/api/asesor";
 import ReportGenerationModal from "./ReportGenerationModal";
 import { generateSalesReport } from "@/utils/excel";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "@/firebase/firebaseClient";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -38,6 +44,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
   initialData,
   places,
 }) => {
+  const [sales, setSales] = useState<Sale[]>(initialData);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<Sale | null>(null);
   const [isConciliationModalVisible, setIsConciliationModalVisible] =
@@ -54,8 +61,23 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
     fetchTariffSchedule();
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "sales"), (snapshot) => {
+      const salesData = snapshot.docs.map(
+        (doc) =>
+          ({
+            id: doc.id,
+            ...doc.data(),
+          } as Sale)
+      );
+      setSales(salesData);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const filteredData = useMemo(() => {
-    let data = [...initialData];
+    let data = [...sales];
 
     if (filters.dates) {
       const [startDate, endDate] = filters.dates;
@@ -129,7 +151,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
     }
 
     return data;
-  }, [initialData, filters]);
+  }, [sales, filters]);
 
   const handleViewMore = (record: Sale) => {
     setSelectedRecord(record);
@@ -430,7 +452,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       <ConciliationModal
         visible={isConciliationModalVisible}
         onCancel={() => setIsConciliationModalVisible(false)}
-        initialData={initialData}
+        initialData={sales}
       />
 
       <ReportGenerationModal
