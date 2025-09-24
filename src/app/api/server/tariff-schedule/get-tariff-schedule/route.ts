@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const tariff = await getTariffSchedule();
 
-    console.log({ message: "GET Tariff Schedule: Success", tariff });
+    //console.log({ message: "GET Tariff Schedule: Success", tariff });
     return NextResponse.json(tariff);
   } catch (error) {
     console.error({ message: "GET Tariff Schedule: Error", error });

@@ -58,11 +58,14 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       const tariffSchedule = await getTariffScheduleApi();
       setTariff(tariffSchedule);
     };
+    
     fetchTariffSchedule();
   }, []);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "sales"), (snapshot) => {
+      console.log("Received sales snapshot with", snapshot.docs.length, "documents");
+      
       const salesData = snapshot.docs.map(
         (doc) =>
           ({

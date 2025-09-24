@@ -87,7 +87,7 @@ export default function ReportGenerationModal({
             },
           ]}
         >
-          <RangePicker className="w-full" />
+          <RangePicker placeholder={["Fecha de inicio", "Fecha de fin"]} className="w-full" />
         </Form.Item>
         <Form.Item className="flex justify-end gap-4">
           <Button onClick={onClose}>Cancelar</Button>
