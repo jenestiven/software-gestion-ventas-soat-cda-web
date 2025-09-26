@@ -6,6 +6,7 @@ import logo from "@/images/logo.png";
 import { useRouter } from "next/navigation";
 import MenuOutlined from "@ant-design/icons/lib/icons/MenuOutlined";
 import { Button, Drawer } from "antd";
+import useScrollEvent from "@/hooks/useScrollEvent";
 
 const NAV_LINKS = [
   { href: "/", label: "Inicio" },
@@ -43,12 +44,14 @@ export default function PageHeader({}: Props) {
   const router = useRouter();
   const [openMobileMenu, setOpenMobileMenu] = React.useState(false);
 
+  const { scrollY } = useScrollEvent();
+
   const handleLogin = () => {
     router.push("/auth");
   };
 
   return (
-    <header className="flex items-center justify-between px-12 py-2 shadow-xl rounded-b-lg bg-gradient-to-b from-white to-gray-100 absolute top-0 z-50 w-full max-w-[1920px]">
+    <header className={`flex items-center justify-between px-12 py-2 shadow-xl rounded-b-lg bg-gradient-to-b from-white to-gray-100 absolute top-0 z-50 w-full max-w-[1920px]` + (scrollY > 780 ? "bg-primary" : "bg-transparent")}>
       <div className="flex items-center">
         <Image src={logo} alt="Astro Logo" width={45} height={45} priority />
         <h1 className="hidden md:block text-3xl font-bold text-black tracking-wide ml-4">

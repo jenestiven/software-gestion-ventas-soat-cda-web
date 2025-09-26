@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es-ES">
-      <body className={inter.className}>{children}</body>
+      <body style={{ overflowY: "auto" }} className={inter.className}>{children}</body>
     </html>
   );
 }

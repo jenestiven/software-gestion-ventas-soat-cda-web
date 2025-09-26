@@ -1,0 +1,25 @@
+.loading-screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-accent);
+}
+
+.loading-screen .loader {
+    width: 100px;
+    height: 100px;
+    animation: bounce 1s infinite alternate;
+}
+
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-40px);
+    }
+}

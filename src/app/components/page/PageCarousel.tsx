@@ -78,6 +78,7 @@ const CarouselSlide: React.FC<{ slide: SlideData }> = ({ slide }) => (
       fill
       className="object-cover"
       priority={slide.priority}
+      quality={100}
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
     />
   </div>
