@@ -2,10 +2,13 @@
 
 import { saveSaleApi } from "@/lib/api/sales";
 import useStore from "@/store";
-import { Form, message } from "antd";
+import { Form, GetProp, message, UploadFile, UploadProps } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PaymentMethod, Tariff } from "@/types/types";
+import { getBase64 } from "@/app/components/app/admin/users/AntdUpload";
+
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 type Props = {
   onCloseModal: (open: boolean) => void;
@@ -33,11 +36,12 @@ export default function useCashForm(props: Props) {
   const [totalToPay, setTotalToPay] = useState(0);
   const [isSoatValueDisabled, setIsSoatValueDisabled] = useState(true);
   const [totalValue, setTotalValue] = useState(0);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const vehicleTypePath = Form.useWatch("vehicle_type", form);
   const soatValue = Form.useWatch("soat_value", form);
   const placeProfit = Form.useWatch("place_profit", form);
-  const transferMethod = Form.useWatch("transfer_method", form) || "";
+  const transferMethod = Form.useWatch("transfer_method", form) || false;    
 
   const place_total_gains = placeProfit
     ? placeProfit + props.method?.fixedCost?.place_profit
@@ -85,10 +89,8 @@ export default function useCashForm(props: Props) {
   useEffect(() => {
     const profitValue = totalValue - totalToPay;
     const profitBeforeTasksValue = profitValue - place_total_gains;
-    const transferMethodConfig = props.method.fixedCost?.transfer_method?.find(
-      (m) => m.name.toLowerCase() === transferMethod.toLowerCase()
-    );
-    const taxRate = transferMethodConfig?.is_exempt
+    
+    const taxRate = transferMethod
       ? 0
       : (totalToPay * 4) / 1000;
 
@@ -111,8 +113,15 @@ export default function useCashForm(props: Props) {
   const onFinish = async (values: any) => {
     try {
       message.loading("Registrando venta...", 0);
+
+      let file = null;
+            if (fileList?.length > 0 && fileList[0]?.originFileObj) {
+              file = await getBase64(fileList[0]?.originFileObj as FileType);
+            }
+      
       const saleData = {
         ...values,
+        transfer_proof: file,
         vehicle_type: values.vehicle_type,
         seller: user,
         payment_method_id: props.method?.id,
@@ -144,5 +153,8 @@ export default function useCashForm(props: Props) {
     totalToPay: totalValue,
     isSoatValueDisabled,
     setIsSoatValueDisabled,
+    payByTransfer: transferMethod,
+    fileList,
+    setFileList,
   };
 }

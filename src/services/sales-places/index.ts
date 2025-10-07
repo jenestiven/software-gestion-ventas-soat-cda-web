@@ -12,6 +12,7 @@ export async function createSalesPlace(data: PlacesDataType) {
       place_name: data.place_name,
       place_address: data.place_address,
       created_at: new Date().toISOString(),
+      fixed_costs: data.fixed_costs || {},
     });
     return NextResponse.json(
       { message: "Sales place created successfully", id: newPlaceRef.id },

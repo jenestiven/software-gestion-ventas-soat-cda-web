@@ -12,7 +12,7 @@ import {
   Cascader,
   Divider,
   Typography,
-  Select,
+  Switch,
 } from "antd";
 import dayjs from "dayjs";
 import {
@@ -20,6 +20,7 @@ import {
   Tariff,
 } from "@/types/types";
 import useCashForm from "@/hooks/use-sale-creation/useCashForm";
+import { AntdUpload } from "../../../admin/users/AntdUpload";
 
 type Props = {
   onCloseModal: (open: boolean) => void;
@@ -36,6 +37,9 @@ export default function CashForm(props: Props) {
     totalToPay,
     isSoatValueDisabled,
     setIsSoatValueDisabled,
+    payByTransfer,
+    fileList,
+    setFileList,
   } = useCashForm(props);
 
   return (
@@ -166,14 +170,21 @@ export default function CashForm(props: Props) {
 
             <Form.Item
                 name="transfer_method"
-                label="Método de transferencia"
-                required={true}
-                rules={[
-                  { required: true, message: "Por favor, selecciona un método de transferencia" },
-                ]}
+                label="Pagó por transferencia"
               >
-                <Select options={props.method?.fixedCost?.transfer_method?.map((method) => ({ label: method.name, value: method.name }))} />
-              </Form.Item>
+                <Switch />
+            </Form.Item>
+
+            {
+              payByTransfer && (
+                <Form.Item
+                name="transfer_proof"
+                label="Subir comprobante de transferencia"
+                >
+                  <AntdUpload setFileList={setFileList} fileList={fileList} />
+                </Form.Item>
+              )
+            }
 
             <Form.Item name="remarks" label="Observaciones">
               <Input.TextArea rows={5} />

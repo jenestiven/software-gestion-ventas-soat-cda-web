@@ -35,8 +35,10 @@ export default function CreateNewSellHandler() {
     const getInitialData = async () => {
       if (user?.sales_place_id) {
         try {
-          const tariffSchedule = await getTariffScheduleApi();
+          const tariffSchedule = await getTariffScheduleApi();          
           const placeData = await getSalesPlaceByIdApi(user.sales_place_id);
+          console.log(placeData);
+          
           setTariffSchedule(tariffSchedule);
           setSalesPlace(placeData);
         } catch (error) {
@@ -56,7 +58,7 @@ export default function CreateNewSellHandler() {
         fixedCost: fixedCost,
       };
     }
-  );
+  );  
   
   return (
     <>

@@ -21,6 +21,7 @@ export type CashSale = {
   soat_state: "pending" | "delivered";
   soat_payed: boolean;
   remarks?: string;
+  transfer_proof?: string;
   payment_method_name: string;
   payment_method_id: "cash";
   cash_value_payed?: number;
@@ -233,6 +234,7 @@ export interface Sale {
   invoice_file?: string;
   pagare_file?: string;
   contract_file?: string;
+  transfer_proof?: string;
   sale_sumary: {
     total_payed: number;
     client_commission?: number;

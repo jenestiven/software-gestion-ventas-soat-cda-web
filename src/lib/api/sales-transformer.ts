@@ -44,6 +44,8 @@ export const transformSaleCreationToSale = (saleCreation: SaleCreation) => {
   if (saleCreation.payment_method_id === "cash") {
     sale.sale_sumary.fixed_comission =
       saleCreation.sale_summary.fixed_commission;
+    sale.transfer_proof = saleCreation.transfer_proof;
+    sale.receipt_status = saleCreation.transfer_proof ? "delivered" : "pending";
     sale.sale_sumary.profit = saleCreation.sale_summary.profit;
     sale.sale_sumary.place_total_gains = saleCreation.sale_summary.place_total_gains;
     sale.sale_sumary.total_payed = saleCreation.sale_summary.total;

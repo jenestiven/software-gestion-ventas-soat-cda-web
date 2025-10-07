@@ -18,7 +18,7 @@ export async function createSale(saleData: Omit<Sale, "id" | "receipts">) {
     const saleId = saleRef.id;
 
     let fileUrl: string | null = null;
-    let receiptType: "brilla-contract" | "pagare" | "invoice" | null = null;
+    let receiptType: "brilla-contract" | "pagare" | "invoice" | "transfer-proof" | null = null;
     let file: string | undefined;
     let mimeType: string | undefined;
 
@@ -58,6 +58,16 @@ export async function createSale(saleData: Omit<Sale, "id" | "receipts">) {
         );
       }
       receiptType = "brilla-contract";
+    } else if (
+      saleData.payment_method_id === "cash" && saleData.transfer_proof
+    ) {
+      file = saleData.transfer_proof;
+      const matches = file.match(/^data:(.+);base64,/);
+      mimeType = matches ? matches[1] : "aplication/ocret-stream";
+      if (!matches) {
+        console.warn("could not determine mime type from base64 stirng. Defaulting to application/octet-stream")
+      }
+      receiptType ="transfer-proof"
     }
 
     if (file && receiptType) {
@@ -90,6 +100,7 @@ export async function createSale(saleData: Omit<Sale, "id" | "receipts">) {
     delete finalSaleData.invoice_file;
     delete finalSaleData.pagare_file;
     delete finalSaleData.contract_file;
+    delete finalSaleData.transfer_proof;
 
     await saleRef.set(finalSaleData);
 
