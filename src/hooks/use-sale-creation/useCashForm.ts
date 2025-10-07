@@ -41,11 +41,14 @@ export default function useCashForm(props: Props) {
   const vehicleTypePath = Form.useWatch("vehicle_type", form);
   const soatValue = Form.useWatch("soat_value", form);
   const placeProfit = Form.useWatch("place_profit", form);
-  const transferMethod = Form.useWatch("transfer_method", form) || false;    
+  const transferMethod = Form.useWatch("transfer_method", form) || false;  
+  const coop = Form.useWatch("cooperative", form) || false;
+  const custom_base_value = Form.useWatch("custom_base_value", form) || 0;
+  const custom_place_profit = Form.useWatch("custom_place_profit", form) || 0;
 
   const place_total_gains = placeProfit
     ? placeProfit + props.method?.fixedCost?.place_profit
-    : props.method?.fixedCost?.place_profit || 0;
+    : custom_place_profit ? custom_place_profit : props.method?.fixedCost?.place_profit || 0;
 
   useEffect(() => {
     if (!vehicleTypePath || vehicleTypePath.length < 2) {
@@ -75,7 +78,7 @@ export default function useCashForm(props: Props) {
   }, [vehicleTypePath, tariffSchedule, form]);
 
   useEffect(() => {
-    const baseValue =
+    const baseValue = custom_base_value ? custom_base_value :
       props.method?.fixedCost?.base_value_type === "fixed"
         ? props.method.fixedCost?.base_value
         : soatValue > 1000000
@@ -84,7 +87,7 @@ export default function useCashForm(props: Props) {
 
     const total = soatValue + (place_total_gains || 0) + baseValue;
     setTotalValue(total);
-  }, [soatValue, place_total_gains, props?.method?.fixedCost]);
+  }, [soatValue, place_total_gains, props?.method?.fixedCost, custom_base_value]);
 
   useEffect(() => {
     const profitValue = totalValue - totalToPay;
@@ -156,5 +159,6 @@ export default function useCashForm(props: Props) {
     payByTransfer: transferMethod,
     fileList,
     setFileList,
+    coop,
   };
 }

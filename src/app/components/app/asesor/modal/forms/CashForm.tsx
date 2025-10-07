@@ -40,6 +40,7 @@ export default function CashForm(props: Props) {
     payByTransfer,
     fileList,
     setFileList,
+    coop,
   } = useCashForm(props);
 
   return (
@@ -127,6 +128,10 @@ export default function CashForm(props: Props) {
               <Input className="h-8 rounded-md" />
             </Form.Item>
 
+            <Form.Item name="cooperative" label="¿Es venta de aliado?">
+              <Switch />
+            </Form.Item>
+
             <div className="flex items-center gap-2">
               <Form.Item
                 name="soat_value"
@@ -155,7 +160,29 @@ export default function CashForm(props: Props) {
           </Col>
 
           <Col xs={24} sm={12}>
-              {props.method?.fixedCost?.can_add_profit && (
+            {coop && <Form.Item
+              name="custom_base_value"
+              label="Valor base personalizado"
+              required={true}
+              rules={[
+                { required: true, message: "Por favor, ingresa el valor base personalizado" },
+              ]}
+            >
+              <InputNumber style={{ width: "100%" }} />
+            </Form.Item>}
+
+             {coop && <Form.Item
+              name="custom_place_profit"
+              label="Ganancia del aliado personalizada"
+              required={true}
+              rules={[
+                { required: true, message: "Por favor, ingresa la ganancia del aliado personalizada" },
+              ]}
+            >
+              <InputNumber style={{ width: "100%" }} />
+            </Form.Item>}
+
+            {props.method?.fixedCost?.can_add_profit && (
               <Form.Item
                 name="place_profit"
                 label="Utilidad"
@@ -168,36 +195,29 @@ export default function CashForm(props: Props) {
               </Form.Item>
             )}
 
-            <Form.Item
-                name="transfer_method"
-                label="Pagó por transferencia"
-              >
-                <Switch />
+            <Form.Item name="transfer_method" label="Pagó por transferencia">
+              <Switch />
             </Form.Item>
 
-            {
-              payByTransfer && (
-                <Form.Item
+            {payByTransfer && (
+              <Form.Item
                 name="transfer_proof"
                 label="Subir comprobante de transferencia"
-                >
-                  <AntdUpload setFileList={setFileList} fileList={fileList} />
-                </Form.Item>
-              )
-            }
+              >
+                <AntdUpload setFileList={setFileList} fileList={fileList} />
+              </Form.Item>
+            )}
 
             <Form.Item name="remarks" label="Observaciones">
               <Input.TextArea rows={5} />
             </Form.Item>
 
-              <Divider />
+            <Divider />
             <section className="px-2">
-
               <div className="flex justify-between">
                 <Text strong>Total a pagar:</Text> $
                 {totalToPay ? Number(totalToPay).toLocaleString() : 0}
               </div>
-
             </section>
           </Col>
           <Col xs={24} md={24}>
