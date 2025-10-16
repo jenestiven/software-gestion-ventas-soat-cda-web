@@ -13,6 +13,7 @@ import {
   Divider,
   Typography,
   Cascader,
+  Switch,
 } from "antd";
 import dayjs from "dayjs";
 import { PaymentMethod, Tariff } from "@/types/types";
@@ -43,6 +44,7 @@ export default function DataphoneForm(props: Props) {
     totalCostTransfer,
     place_total_gains,
     user,
+    coop,
   } = useDataphoneForm(props);
 
   return (
@@ -127,6 +129,10 @@ export default function DataphoneForm(props: Props) {
               <Input className="h-8 rounded-md" />
             </Form.Item>
 
+            <Form.Item name="cooperative" label="¿Es venta de aliado?">
+              <Switch />
+            </Form.Item>
+
             <div className="flex items-center gap-2">
               <Form.Item
                 name="soat_value"
@@ -177,6 +183,28 @@ export default function DataphoneForm(props: Props) {
                 ]}
               />
             </Form.Item>
+
+            {coop && <Form.Item
+              name="custom_base_value"
+              label="Valor base personalizado"
+              required={true}
+              rules={[
+                { required: true, message: "Por favor, ingresa el valor base personalizado" },
+              ]}
+            >
+              <InputNumber style={{ width: "100%" }} />
+            </Form.Item>}
+
+             {coop && <Form.Item
+              name="custom_place_profit"
+              label="Ganancia del aliado personalizada"
+              required={true}
+              rules={[
+                { required: true, message: "Por favor, ingresa la ganancia del aliado personalizada" },
+              ]}
+            >
+              <InputNumber style={{ width: "100%" }} />
+            </Form.Item>}
 
             {props.method.fixedCost?.can_add_profit && (
               <Form.Item

@@ -39,11 +39,14 @@ export default function useDataphoneForm(props: Props) {
   const soatValue = Form.useWatch("soat_value", form);
   const vehicleTypePath = Form.useWatch("vehicle_type", form);
   const place_profit = Form.useWatch("place_profit", form);
+  const coop = Form.useWatch("cooperative", form) || false;
+  const custom_base_value = Form.useWatch("custom_base_value", form) || 0;
+  const custom_place_profit = Form.useWatch("custom_place_profit", form) || 0;
 
   const cobroDatafono = effectiveValue + clientCommission;
   const place_total_gains = place_profit
     ? place_profit + method.fixedCost?.place_profit
-    : method.fixedCost?.place_profit;
+    : custom_place_profit ? custom_place_profit : method.fixedCost?.place_profit;
 
   useEffect(() => {
     if (
@@ -143,7 +146,7 @@ export default function useDataphoneForm(props: Props) {
   }, [soatValue, fixedCommission]);
 
   useEffect(() => {
-    const baseValue =
+    const baseValue = custom_base_value ? custom_base_value :
       method.fixedCost?.base_value_type === "fixed"
         ? method.fixedCost?.base_value
         : soatValue > 1000000
@@ -152,7 +155,7 @@ export default function useDataphoneForm(props: Props) {
 
     const effectiveValue = soatValue + (place_profit || 0) + baseValue;
     setEffectiveValue(effectiveValue);
-  }, [soatValue, place_profit, method.fixedCost]);
+  }, [soatValue, place_profit, method.fixedCost, custom_base_value]);
 
   useEffect(() => {
     const boldDepositValueValue = cobroDatafono - datafonoCommission - reteica;
@@ -222,5 +225,6 @@ export default function useDataphoneForm(props: Props) {
     totalCostTransfer,
     place_total_gains,
     user,
+    coop,
   };
 }
