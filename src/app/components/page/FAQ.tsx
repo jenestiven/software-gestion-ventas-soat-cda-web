@@ -30,18 +30,19 @@ const faqItems = [
 ];
 
 export default function FAQ() {
-  const [ref, isVisible] = useScrollAnimation();
+  const [ref, isVisible] = useScrollAnimation<HTMLDivElement>();
 
   return (
     <section
-      ref={ref}
-      className={`w-full py-12 md:py-24 lg:py-32 bg-gray-100 ${isVisible ? "animate-fade-in-up" : ""} transition-all duration-500`}
+      className={`w-full py-12 md:py-24 lg:py-32 bg-gray-100 transition-all duration-500`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl font-bold tracking-tighter text-center mb-12 md:text-4xl/tight">
           Preguntas Frecuentes
         </h2>
-        <div className="max-w-3xl mx-auto">
+        <div
+          ref={ref}
+          className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}>
           <Collapse accordion>
             {faqItems.map((item) => (
               <Panel header={item.question} key={item.key}>

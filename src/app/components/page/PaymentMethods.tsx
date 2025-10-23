@@ -7,20 +7,22 @@ type PaymentMethodCardProps = {
   name: string;
 };
 
-const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({ icon, name }) => (
-  <div className="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
-    <div className="text-primary text-4xl mb-3">{icon}</div>
-    <h3 className="text-lg font-semibold">{name}</h3>
-  </div>
-);
+const PaymentMethodCard: React.FC<PaymentMethodCardProps> = ({ icon, name }) => {
+  const [ref, isVisible] = useScrollAnimation<HTMLDivElement>();
+  return (
+    <div
+      ref={ref}
+      className={`flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}>
+      <div className="text-primary text-4xl mb-3">{icon}</div>
+      <h3 className="text-lg font-semibold">{name}</h3>
+    </div>
+  );
+};
 
 export default function PaymentMethods() {
-  const [ref, isVisible] = useScrollAnimation();
-
   return (
     <section
-      ref={ref}
-      className={`w-full py-12 md:py-24 lg:py-32 bg-gray-50 ${isVisible ? "animate-fade-in-up" : ""} transition-all duration-500`}
+      className={`w-full py-12 md:py-24 lg:py-32 bg-gray-50 transition-all duration-500`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl font-bold tracking-tighter text-center mb-12 md:text-4xl/tight">

@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
-export const useScrollAnimation = () => {
-  const ref = useRef(null);
+export const useScrollAnimation = <T extends HTMLElement>(): [
+  React.RefObject<T>,
+  boolean
+] => {
+  const ref = useRef<T>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

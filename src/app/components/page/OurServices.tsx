@@ -8,21 +8,23 @@ type ServiceCardProps = {
   description: string;
 };
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description }) => (
-  <div className="flex flex-col items-center text-center p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-    <div className="text-primary text-5xl mb-4">{icon}</div>
-    <h3 className="text-xl font-bold mb-2">{title}</h3>
-    <p className="text-gray-600">{description}</p>
-  </div>
-);
+const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description }) => {
+  const [ref, isVisible] = useScrollAnimation<HTMLDivElement>();
+  return (
+    <div
+      ref={ref}
+      className={`flex flex-col items-center text-center p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}>
+      <div className="text-primary text-5xl mb-4">{icon}</div>
+      <h3 className="text-xl font-bold mb-2">{title}</h3>
+      <p className="text-gray-600">{description}</p>
+    </div>
+  );
+};
 
 export default function OurServices() {
-  const [ref, isVisible] = useScrollAnimation();
-
   return (
     <section
-      ref={ref}
-      className={`w-full py-12 md:py-24 lg:py-32 bg-white ${isVisible ? "animate-fade-in-up" : ""} transition-all duration-500`}
+      className={`w-full py-12 md:py-24 lg:py-32 bg-white transition-all duration-500`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl font-bold tracking-tighter text-center mb-12 md:text-4xl/tight">

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import PageHeader from "@/app/components/page/PageHeader";
 import AboutUs from "./components/page/AboutUs";
-import PageCarouselClient from "./components/page/PageCarouselClient";
 import Loading from "./loading";
 import OurServices from "./components/page/OurServices";
 import PaymentMethods from "./components/page/PaymentMethods";
@@ -12,6 +11,7 @@ import ContactUs from "./components/page/ContactUs";
 import Partners from "./components/page/Partners";
 import FAQ from "./components/page/FAQ";
 import Footer from "./components/page/Footer";
+import NativePageCarousel from "./components/page/NativePageCarousel";
 
 export default function WebHomePage() {
   const [loading, setLoading] = useState(true);
@@ -37,7 +37,7 @@ export default function WebHomePage() {
   return (
     <main className="flex flex-col items-center justify-start min-h-screen">
       <PageHeader />
-      <PageCarouselClient />
+      <NativePageCarousel />
       <AboutUs />
       <OurServices />
       <PaymentMethods />

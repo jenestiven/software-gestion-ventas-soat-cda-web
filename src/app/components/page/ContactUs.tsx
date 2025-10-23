@@ -3,12 +3,12 @@ import { MailOutlined, PhoneOutlined, EnvironmentOutlined } from "@ant-design/ic
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export default function ContactUs() {
-  const [ref, isVisible] = useScrollAnimation();
+  const [leftColRef, isLeftColVisible] = useScrollAnimation<HTMLDivElement>();
+  const [rightColRef, isRightColVisible] = useScrollAnimation<HTMLDivElement>();
 
   return (
     <section
-      ref={ref}
-      className={`w-full py-12 md:py-24 lg:py-32 bg-gray-50 ${isVisible ? "animate-fade-in-up" : ""} transition-all duration-500`}
+      className={`w-full py-12 md:py-24 lg:py-32 bg-gray-50 transition-all duration-500`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl font-bold tracking-tighter text-center mb-12 md:text-4xl/tight">
@@ -16,7 +16,9 @@ export default function ContactUs() {
         </h2>
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Contact Information */}
-          <div className="flex flex-col space-y-6">
+          <div
+            ref={leftColRef}
+            className={`flex flex-col space-y-6 ${isLeftColVisible ? "animate-fade-in-up" : "opacity-0"}`}>
             <div className="flex items-center space-x-4">
               <EnvironmentOutlined className="text-primary text-3xl" />
               <div>
@@ -54,7 +56,9 @@ export default function ContactUs() {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white p-8 rounded-lg shadow-md">
+          <div
+            ref={rightColRef}
+            className={`bg-white p-8 rounded-lg shadow-md ${isRightColVisible ? "animate-fade-in-up" : "opacity-0"}`}>
             <form className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">

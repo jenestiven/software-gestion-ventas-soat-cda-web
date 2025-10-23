@@ -6,15 +6,17 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 type Props = {};
 
 export default function AboutUs({}: Props) {
-  const [ref, isVisible] = useScrollAnimation();
+  const [textRef, isTextVisible] = useScrollAnimation<HTMLDivElement>();
+  const [imageRef, isImageVisible] = useScrollAnimation<HTMLDivElement>();
 
   return (
     <section
-      ref={ref}
-      className={`w-full py-12 md:py-24 lg:py-32 bg-white ${isVisible ? "animate-fade-in-up" : ""} transition-all duration-500`}
+      className={`w-full py-12 md:py-24 lg:py-32 bg-white transition-all duration-500`}
     >
       <div className="container mx-auto grid items-center gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-10">
-        <div className="space-y-2">
+        <div
+          ref={textRef}
+          className={`space-y-2 ${isTextVisible ? "animate-fade-in-up" : "opacity-0"}`}>
           <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
             Sobre Nosotros
           </h2>
@@ -25,7 +27,9 @@ export default function AboutUs({}: Props) {
             normas de seguridad y emisiones.
           </p>
         </div>
-        <div className="flex justify-center">
+        <div
+          ref={imageRef}
+          className={`flex justify-center ${isImageVisible ? "animate-fade-in-up" : "opacity-0"}`}>
           <Image
             src={HERO_ABOUT_US}
             alt={"CDA Moto Gp Team"}

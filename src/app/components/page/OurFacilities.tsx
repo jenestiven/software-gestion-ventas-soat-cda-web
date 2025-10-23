@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 // Import images from public/images
@@ -15,13 +15,27 @@ const facilityImages = [
   { src: facility4, alt: "Instalación 4" },
 ];
 
-export default function OurFacilities() {
-  const [ref, isVisible] = useScrollAnimation();
+const FacilityImage: React.FC<{ src: StaticImageData; alt: string }> = ({ src, alt }) => {
+  const [ref, isVisible] = useScrollAnimation<HTMLDivElement>();
+  return (
+    <div
+      ref={ref}
+      className={`relative w-full h-60 rounded-lg overflow-hidden shadow-md ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}>
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-cover"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+      />
+    </div>
+  );
+};
 
+export default function OurFacilities() {
   return (
     <section
-      ref={ref}
-      className={`w-full py-12 md:py-24 lg:py-32 bg-white ${isVisible ? "animate-fade-in-up" : ""} transition-all duration-500`}
+      className={`w-full py-12 md:py-24 lg:py-32 bg-white transition-all duration-500`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl font-bold tracking-tighter text-center mb-12 md:text-4xl/tight">
@@ -29,15 +43,7 @@ export default function OurFacilities() {
         </h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {facilityImages.map((img, index) => (
-            <div key={index} className="relative w-full h-60 rounded-lg overflow-hidden shadow-md">
-              <Image
-                src={img.src}
-                alt={img.alt}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-              />
-            </div>
+            <FacilityImage key={index} src={img.src} alt={img.alt} />
           ))}
         </div>
       </div>
