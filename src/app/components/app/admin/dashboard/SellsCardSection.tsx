@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { DollarOutlined, PieChartOutlined } from "@ant-design/icons";
+import { DollarOutlined, PieChartOutlined, RiseOutlined } from "@ant-design/icons";
 import { Typography } from "antd";
-import "@/app/admin/page.css";
 import useStore from "@/store";
 import Logo from "@/images/logo.png";
 
@@ -47,9 +46,25 @@ export default function SellsCardSection({}: Props) {
           </Text>
         </span>
       </article>
+      <article className="stat-3 admin-stat-card">
+        <Text type="secondary">Utilidad</Text>
+        <span className="flex items-center justify-between w-full">
+          <RiseOutlined className="icon earning" />
+          <span className="flex flex-col items-end">
+            <Title level={3} style={{ margin: 0 }}>
+              {data.totalSalesAmount.toLocaleString("es-CO", {
+                style: "currency",
+                currency: "COP",
+              })}
+            </Title>
+            <Text type="secondary">Credito $600000</Text>
+            <Text type="secondary">Efectivo $5000000</Text>
+          </span>
+        </span>
+      </article>
       <div className="flex gap-5">
         <article
-          className="stat-3 flex flex-col items-center justify-center bg-white p-5 rounded-lg shadow w-6/12"
+          className="stat-4 flex flex-col items-center justify-center bg-white p-5 rounded-lg shadow w-6/12"
           style={{
             backgroundImage: `url(${data.betterSellerImage ?? Logo})`,
             backgroundSize: "cover",
@@ -63,7 +78,7 @@ export default function SellsCardSection({}: Props) {
             </Text>
           </span>
         </article>
-        <article className="stat-3 flex flex-col items-center justify-center bg-white p-5 rounded-lg shadow w-6/12">
+        <article className="stat-4 flex flex-col items-center justify-center bg-white p-5 rounded-lg shadow w-6/12">
           <span className="flex flex-col items-center">
             <Text strong>{data.betterPlaceName}</Text>
             <Text type="secondary" className="text-xs mt-1">

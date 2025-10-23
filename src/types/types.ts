@@ -372,6 +372,7 @@ export interface SalesByPlaceData {
   place_name: string;
   sales_quantity: number;
   sales_amount: number;
+  sales_profit: number;
   growth: number;
 }
 

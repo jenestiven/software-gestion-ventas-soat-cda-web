@@ -1,11 +1,11 @@
 .admin-home-page {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: auto 1fr 1fr;
     grid-template-areas:
-        "stat1 stat2 stat3"
-        "monthly-sales-compare monthly-sales-compare bypaymethod"
-        "betterseller betterseller byplace" ;
+        "stat1 stat2 stat3 stat4"
+        "monthly-sales-compare monthly-sales-compare monthly-sales-compare bypaymethod"
+        "betterseller betterseller byplace byplace" ;
     gap: 20px;
     height: 100%;
     overflow-y: auto;
@@ -71,11 +71,12 @@
 
 .stat-1 {
     grid-area: stat1;
-}
-.stat-2 {
+}.stat-2 {
     grid-area: stat2;
 }.stat-3 {
     grid-area: stat3;
+}.stat-4 {
+    grid-area: stat4;
 }
 
 .month-graph {

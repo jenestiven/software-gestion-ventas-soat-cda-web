@@ -11,6 +11,7 @@ interface UserState {
     betterPlaceName: string;
     salesCount: number;
     totalSalesCount: number;
+    totalProfit: number;
     totalSalesAmount: number;
     amountGrowth: number;
     salesGrowth: number;
@@ -40,6 +41,7 @@ const useStore = create<UserState>((set, get) => ({
   dataForDashboard: {
     betterSellerName: "",
     betterSellerImage: "",
+    totalProfit: 0,
     betterPlaceName: "",
     salesCount: 0,
     totalSalesCount: 0,
@@ -98,6 +100,7 @@ const useStore = create<UserState>((set, get) => ({
     betterPlaceName?: string;
     salesCount?: number;
     totalSalesCount?: number;
+    totalProfit?: number;
     totalSalesAmount?: number;
     amountGrowth?: number;
     salesGrowth?: number;
