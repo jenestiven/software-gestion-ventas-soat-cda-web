@@ -5,6 +5,13 @@ import PageHeader from "@/app/components/page/PageHeader";
 import AboutUs from "./components/page/AboutUs";
 import PageCarouselClient from "./components/page/PageCarouselClient";
 import Loading from "./loading";
+import OurServices from "./components/page/OurServices";
+import PaymentMethods from "./components/page/PaymentMethods";
+import OurFacilities from "./components/page/OurFacilities";
+import ContactUs from "./components/page/ContactUs";
+import Partners from "./components/page/Partners";
+import FAQ from "./components/page/FAQ";
+import Footer from "./components/page/Footer";
 
 export default function WebHomePage() {
   const [loading, setLoading] = useState(true);
@@ -31,13 +38,14 @@ export default function WebHomePage() {
     <main className="flex flex-col items-center justify-start min-h-screen">
       <PageHeader />
       <PageCarouselClient />
-      <PageCarouselClient />
-      <PageCarouselClient />
-      <PageCarouselClient />
-      <PageCarouselClient />
-      <PageCarouselClient />
-      <PageCarouselClient />
       <AboutUs />
+      <OurServices />
+      <PaymentMethods />
+      <OurFacilities />
+      <ContactUs />
+      <Partners />
+      <FAQ />
+      <Footer />
     </main>
   );
 }
