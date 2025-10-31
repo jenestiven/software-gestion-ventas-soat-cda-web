@@ -415,9 +415,7 @@ export async function getBetterSellers(): Promise<BetterSeller[]> {
 export async function getSalesByPlace(): Promise<SalesByPlaceData[]> {
   try {
     const allSalesPlaces = await getSalesPlaces();
-    const sales = await getAllSales();
-    console.log(sales.slice(0,5), " :sales sample");
-    
+    const sales = await getAllSales();    
 
     const now = new Date();
     const currentMonth = now.getMonth();
@@ -430,8 +428,8 @@ export async function getSalesByPlace(): Promise<SalesByPlaceData[]> {
       string,
       {
         place_name: string;
-        currentMonth: { sales_quantity: number; sales_amount: number; sales_profit: number };
-        lastMonth: { sales_quantity: number; sales_amount: number; sales_profit: number };
+        currentMonth: { sales_quantity: number; sales_amount: number; sales_profit: number, cash_profit: number; credit_profit: number };
+        lastMonth: { sales_quantity: number; sales_amount: number; sales_profit: number, cash_profit: number; credit_profit: number };
       }
     > = {};
 
@@ -439,8 +437,8 @@ export async function getSalesByPlace(): Promise<SalesByPlaceData[]> {
     allSalesPlaces.forEach((place) => {
       placeSales[place.id] = {
         place_name: place.place_name,
-        currentMonth: { sales_quantity: 0, sales_amount: 0, sales_profit: 0 },
-        lastMonth: { sales_quantity: 0, sales_amount: 0, sales_profit: 0 },
+        currentMonth: { sales_quantity: 0, sales_amount: 0, sales_profit: 0, cash_profit: 0, credit_profit: 0 },
+        lastMonth: { sales_quantity: 0, sales_amount: 0, sales_profit: 0, cash_profit: 0, credit_profit: 0 },
       };
     });
 
@@ -448,7 +446,7 @@ export async function getSalesByPlace(): Promise<SalesByPlaceData[]> {
       const saleDate = new Date(sale.created_at);
       const placeId = sale.sale_place.place_id;
       const totalPayed = sale.sale_sumary.total_payed;
-      const profit = sale.sale_sumary.place_total_gains || 0;
+      const profit = sale.sale_sumary.gross_profit || 0;
 
       // Ensure the place exists in our aggregated data (it should, due to initialization)
       if (placeSales[placeId]) {
@@ -459,6 +457,12 @@ export async function getSalesByPlace(): Promise<SalesByPlaceData[]> {
           placeSales[placeId].currentMonth.sales_quantity += 1;
           placeSales[placeId].currentMonth.sales_amount += totalPayed;
           placeSales[placeId].currentMonth.sales_profit += profit;
+
+          if (sale.payment_method_id === 'efectivo' || sale.payment_method_id === 'datafono') {
+            placeSales[placeId].currentMonth.cash_profit += profit;
+          } else if (['sistecredito', 'addi', 'brilla'].includes(sale.payment_method_id)) {
+            placeSales[placeId].currentMonth.credit_profit += profit;
+          }
         } else if (
           saleDate.getMonth() === lastMonth &&
           saleDate.getFullYear() === lastMonthYear
@@ -466,6 +470,12 @@ export async function getSalesByPlace(): Promise<SalesByPlaceData[]> {
           placeSales[placeId].lastMonth.sales_quantity += 1;
           placeSales[placeId].lastMonth.sales_amount += totalPayed;
           placeSales[placeId].lastMonth.sales_profit += profit;
+
+          if (sale.payment_method_id === 'efectivo' || sale.payment_method_id === 'datafono') {
+            placeSales[placeId].lastMonth.cash_profit += profit;
+          } else if (['sistecredito', 'addi', 'brilla'].includes(sale.payment_method_id)) {
+            placeSales[placeId].lastMonth.credit_profit += profit;
+          }
         }
       }
     });
@@ -480,17 +490,16 @@ export async function getSalesByPlace(): Promise<SalesByPlaceData[]> {
             100;
         } else if (data.currentMonth.sales_amount > 0) {
           growth = 100; // Infinite growth from zero
-        }
-
-        console.log(data, " :data");
-        
-
+        }        
+                
         return {
           id,
           place_name: data.place_name,
           sales_quantity: data.currentMonth.sales_quantity,
           sales_profit: data.currentMonth.sales_profit,
           sales_amount: data.currentMonth.sales_amount,
+          cash_profit: data.currentMonth.cash_profit,
+          credit_profit: data.currentMonth.credit_profit,
           growth: parseFloat(growth.toFixed(2)),
         };
       })

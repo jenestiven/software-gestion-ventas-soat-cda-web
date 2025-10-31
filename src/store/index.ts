@@ -12,6 +12,8 @@ interface UserState {
     salesCount: number;
     totalSalesCount: number;
     totalProfit: number;
+    cash_profit: number;
+    credit_profit: number;
     totalSalesAmount: number;
     amountGrowth: number;
     salesGrowth: number;
@@ -26,6 +28,9 @@ interface UserState {
     betterSellerImage?: string;
     betterPlaceName?: string;
     salesCount?: number;
+    totalProfit?: number;
+    cash_profit?: number;
+    credit_profit?: number;
     totalSalesCount?: number;
     totalSalesAmount?: number;
     amountGrowth?: number;
@@ -42,6 +47,8 @@ const useStore = create<UserState>((set, get) => ({
     betterSellerName: "",
     betterSellerImage: "",
     totalProfit: 0,
+    cash_profit: 0,
+    credit_profit: 0,
     betterPlaceName: "",
     salesCount: 0,
     totalSalesCount: 0,

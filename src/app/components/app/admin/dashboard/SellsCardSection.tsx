@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
-import { DollarOutlined, PieChartOutlined, RiseOutlined } from "@ant-design/icons";
+import {
+  DollarOutlined,
+  PieChartOutlined,
+  RiseOutlined,
+} from "@ant-design/icons";
 import { Typography } from "antd";
 import useStore from "@/store";
 import Logo from "@/images/logo.png";
@@ -11,7 +15,7 @@ type Props = {};
 const { Title, Text } = Typography;
 
 export default function SellsCardSection({}: Props) {
-  const data = useStore((state) => state.dataForDashboard);
+  const data = useStore((state) => state.dataForDashboard);    
 
   return (
     <>
@@ -47,18 +51,26 @@ export default function SellsCardSection({}: Props) {
         </span>
       </article>
       <article className="stat-3 admin-stat-card">
-        <Text type="secondary">Utilidad</Text>
         <span className="flex items-center justify-between w-full">
           <RiseOutlined className="icon earning" />
+          <Title level={3} style={{ margin: 0 }}>
+            {data.totalProfit.toLocaleString("es-CO", {
+              style: "currency",
+              currency: "COP",
+            })}
+          </Title>
+        </span>
+        <span className="flex items-center justify-between w-full">
+          <Text type="secondary">Utilidad</Text>
           <span className="flex flex-col items-end">
-            <Title level={3} style={{ margin: 0 }}>
-              {data.totalSalesAmount.toLocaleString("es-CO", {
-                style: "currency",
-                currency: "COP",
-              })}
-            </Title>
-            <Text type="secondary">Credito $600000</Text>
-            <Text type="secondary">Efectivo $5000000</Text>
+            <Text type="secondary">Credito {data.credit_profit.toLocaleString("es-CO", {
+              style: "currency",
+              currency: "COP",
+            })}</Text>
+            <Text type="secondary">Efectivo {data.cash_profit.toLocaleString("es-CO", {
+              style: "currency",
+              currency: "COP",
+            })}</Text>
           </span>
         </span>
       </article>

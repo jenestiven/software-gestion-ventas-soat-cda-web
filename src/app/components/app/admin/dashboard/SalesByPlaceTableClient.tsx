@@ -2,9 +2,9 @@
 
 import React, { useEffect } from "react";
 import { Table, Typography } from "antd";
-import "@/app/admin/page.css";
 import useStore from "@/store";
 import { SalesByPlaceData } from "@/types/types";
+import "@/app/admin/page.css";
 
 const { Title } = Typography;
 
@@ -25,6 +25,9 @@ export default function SalesByPlaceTableClient({ dataSource }: Props) {
       setDataForDashboard({
         betterPlaceName: betterPlace?.place_name ?? "",
         salesCount: betterPlace?.sales_quantity ?? 0,
+        totalProfit: betterPlace?.sales_profit ?? 0,
+        cash_profit: betterPlace?.cash_profit ?? 0,
+        credit_profit: betterPlace?.credit_profit ?? 0,
       });
     }
   }, [betterPlace]); //eslint-disable-line react-hooks/exhaustive-deps

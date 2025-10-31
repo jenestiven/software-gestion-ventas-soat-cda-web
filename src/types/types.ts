@@ -373,6 +373,8 @@ export interface SalesByPlaceData {
   sales_quantity: number;
   sales_amount: number;
   sales_profit: number;
+  cash_profit: number;
+  credit_profit: number;
   growth: number;
 }
 
