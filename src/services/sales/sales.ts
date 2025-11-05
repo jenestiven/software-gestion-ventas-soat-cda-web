@@ -446,7 +446,7 @@ export async function getSalesByPlace(): Promise<SalesByPlaceData[]> {
       const saleDate = new Date(sale.created_at);
       const placeId = sale.sale_place.place_id;
       const totalPayed = sale.sale_sumary.total_payed;
-      const profit = sale.sale_sumary.gross_profit || 0;
+      const profit = sale.sale_sumary.profit || 0;
 
       // Ensure the place exists in our aggregated data (it should, due to initialization)
       if (placeSales[placeId]) {
@@ -478,7 +478,7 @@ export async function getSalesByPlace(): Promise<SalesByPlaceData[]> {
           }
         }
       }
-    });
+    });    
 
     const salesByPlace: SalesByPlaceData[] = Object.entries(placeSales)
       .map(([id, data]) => {
