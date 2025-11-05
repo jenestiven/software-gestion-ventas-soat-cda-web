@@ -27,6 +27,7 @@ import { PlacesDataType, Sale, VehicleClass } from "@/types/types";
 import SaleDetail from "./SaleDetail";
 import ConciliationModal from "./ConciliationModal";
 import { getTariffScheduleApi } from "@/lib/api/asesor";
+import { deleteSaleApi } from "@/lib/api/sales";
 import ReportGenerationModal from "./ReportGenerationModal";
 import { generateSalesReport } from "@/utils/excel";
 import { collection, onSnapshot } from "firebase/firestore";
@@ -50,6 +51,9 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
   const [isConciliationModalVisible, setIsConciliationModalVisible] =
     useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [saleToDelete, setSaleToDelete] = useState<Sale | null>(null);
+  const [deleteConfirmationInput, setDeleteConfirmationInput] = useState("");
   const [filters, setFilters] = useState<any>({});
   const [tariff, setTariff] = React.useState<VehicleClass[]>([]);
 
@@ -165,6 +169,41 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
     setIsModalVisible(false);
     setSelectedRecord(null);
   };
+
+  const showDeleteModal = (record: Sale) => {
+    setSaleToDelete(record);
+    setIsDeleteModalVisible(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalVisible(false);
+    setSaleToDelete(null);
+    setDeleteConfirmationInput("");
+  };
+
+    const handleDeleteConfirm = async () => {
+
+      if (deleteConfirmationInput === "eliminar" && saleToDelete) {
+
+        try {
+
+          await deleteSaleApi(saleToDelete.id);
+
+          message.success("Venta eliminada con éxito");
+
+          handleDeleteCancel();
+
+        } catch (error) {
+
+          console.error("Error al eliminar la venta:", error);
+
+          message.error("Error al eliminar la venta. Por favor, intente de nuevo.");
+
+        }
+
+      }
+
+    };
 
   const handleFilterChange = (filterName: string, value: any) => {
     const newFilters = { ...filters, [filterName]: value };
@@ -310,7 +349,11 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
         const menu = [
           {
             key: "1",
-            label: <a onClick={() => handleViewMore(record)}>ver detalle</a>,
+            label: <a onClick={() => handleViewMore(record)}>Ver detalle</a>,
+          },
+          {
+            key: "2",
+            label: <a onClick={() => showDeleteModal(record)}>Eliminar</a>,
           },
         ];
         return (
@@ -463,6 +506,34 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
         onClose={() => setIsReportModalOpen(false)}
         onGenerateReport={handleGenerateReport}
       />
+
+      <Modal
+        title="Confirmar Eliminación"
+        open={isDeleteModalVisible}
+        onCancel={handleDeleteCancel}
+        footer={[
+          <Button key="back" onClick={handleDeleteCancel}>
+            Cancelar
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            danger
+            disabled={deleteConfirmationInput !== "eliminar"}
+            onClick={handleDeleteConfirm}
+          >
+            Eliminar
+          </Button>,
+        ]}
+      >
+                <p>Para confirmar la eliminación, por favor escriba &quot;eliminar&quot; en el campo de abajo.</p>
+        <Input
+          className="mt-2 rounded-md"
+          value={deleteConfirmationInput}
+          onChange={(e) => setDeleteConfirmationInput(e.target.value)}
+          placeholder='eliminar'
+        />
+      </Modal>
     </div>
   );
 };

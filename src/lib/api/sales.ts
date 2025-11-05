@@ -43,3 +43,26 @@ export const uploadComprobanteApi = async (saleId: string, file: string) => {
     throw error;
   }
 };
+
+export const deleteSaleApi = async (id: string) => {
+  try {
+    const response = await fetch("/api/server/sales/delete-sale", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error al eliminar la venta");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error en deleteSaleApi:", error);
+    throw error;
+  }
+};
+

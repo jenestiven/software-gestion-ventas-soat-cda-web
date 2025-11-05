@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { Table, Typography } from "antd";
 import useStore from "@/store";
 import { SalesByPlaceData } from "@/types/types";
-import "@/app/admin/page.css";
+//import "@/app/admin/page.css";
 
 const { Title } = Typography;
 
