@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { CustomUser, PlacesDataType } from "@/types/types";
+
 interface UserState {
   user: CustomUser | null;
   isAuthenticated: boolean;
@@ -38,7 +39,7 @@ interface UserState {
   }) => void;
 }
 
-const useStore = create<UserState>((set, get) => ({
+const initialState = {
   user: null,
   isAuthenticated: false,
   headerTitle: "",
@@ -56,6 +57,21 @@ const useStore = create<UserState>((set, get) => ({
     amountGrowth: 0,
     salesGrowth: 0,
   },
+};
+
+// Initialize salesPlaces from localStorage
+if (typeof window !== "undefined") {
+  const storedSalesPlaces = localStorage.getItem("salesPlaces");
+  if (storedSalesPlaces) {
+    try {
+      initialState.salesPlaces = JSON.parse(storedSalesPlaces);
+    } catch (error) {
+      console.error("Error parsing salesPlaces from localStorage:", error);
+    }
+  }
+}
+const useStore = create<UserState>((set, get) => ({
+  ...initialState,
 
   setUser: (user) => {
     set({ user, isAuthenticated: !!user });
