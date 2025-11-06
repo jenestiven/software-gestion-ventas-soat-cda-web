@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import PageHeader from "@/app/components/page/PageHeader";
-import AboutUs from "./components/page/AboutUs";
 import PageCarouselClient from "./components/page/PageCarouselClient";
 import Loading from "./loading";
 
@@ -31,13 +30,6 @@ export default function WebHomePage() {
     <main className="flex flex-col items-center justify-start min-h-screen">
       <PageHeader />
       <PageCarouselClient />
-      <PageCarouselClient />
-      <PageCarouselClient />
-      <PageCarouselClient />
-      <PageCarouselClient />
-      <PageCarouselClient />
-      <PageCarouselClient />
-      <AboutUs />
     </main>
   );
 }

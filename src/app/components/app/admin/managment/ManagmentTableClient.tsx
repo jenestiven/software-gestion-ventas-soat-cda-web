@@ -32,6 +32,7 @@ import ReportGenerationModal from "./ReportGenerationModal";
 import { generateSalesReport } from "@/utils/excel";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebase/firebaseClient";
+import { useRouter } from "next/navigation";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -56,6 +57,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
   const [deleteConfirmationInput, setDeleteConfirmationInput] = useState("");
   const [filters, setFilters] = useState<any>({});
   const [tariff, setTariff] = React.useState<VehicleClass[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchTariffSchedule = async () => {
@@ -190,6 +192,8 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
           await deleteSaleApi(saleToDelete.id);
 
           message.success("Venta eliminada con éxito");
+
+          router.refresh();
 
           handleDeleteCancel();
 
