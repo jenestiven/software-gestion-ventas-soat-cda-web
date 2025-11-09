@@ -17,7 +17,7 @@ const faqItems = [
   },
   {
     key: "3",
-    question: "¿Qué documentos necesito para vender mi SOAT?",
+    question: "¿Qué documentos necesito para comprar mi SOAT?",
     answer:
       "Generalmente, necesitarás la tarjeta de propiedad del vehículo, tu cédula de ciudadanía y el SOAT anterior (si aplica).",
   },
