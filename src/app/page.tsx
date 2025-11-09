@@ -6,12 +6,12 @@ import AboutUs from "./components/page/AboutUs";
 import Loading from "./loading";
 import OurServices from "./components/page/OurServices";
 import PaymentMethods from "./components/page/PaymentMethods";
-import OurFacilities from "./components/page/OurFacilities";
 import ContactUs from "./components/page/ContactUs";
 import Partners from "./components/page/Partners";
 import FAQ from "./components/page/FAQ";
 import Footer from "./components/page/Footer";
 import NativePageCarousel from "./components/page/NativePageCarousel";
+import PictureGallery from "./components/page/PictureGallery";
 
 export default function WebHomePage() {
   const [loading, setLoading] = useState(true);
@@ -35,13 +35,13 @@ export default function WebHomePage() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-start min-h-screen">
+    <main className="flex flex-col items-center justify-start min-h-screen bg-white">
       <PageHeader />
       <NativePageCarousel />
       <AboutUs />
       <OurServices />
       <PaymentMethods />
-      <OurFacilities />
+      <PictureGallery />
       <ContactUs />
       <Partners />
       <FAQ />
