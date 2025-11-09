@@ -10,11 +10,7 @@ export const useScrollAnimation = <T extends HTMLElement>(): [
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          // Optionally, unobserve after it becomes visible if you only want the animation to play once
-          observer.unobserve(entry.target);
-        }
+        setIsVisible(entry.isIntersecting);
       },
       {
         root: null, // viewport
@@ -23,16 +19,17 @@ export const useScrollAnimation = <T extends HTMLElement>(): [
       }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
-  }, []);
+  }, [ref]);
 
   return [ref, isVisible];
 };

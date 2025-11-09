@@ -34,12 +34,15 @@ export default function FAQ() {
 
   return (
     <section
-      className={`w-full py-12 md:py-24 lg:py-32 bg-gray-100 transition-all duration-500`}
+      className={`w-11/12 rounded-3xl py-12 md:py-24 lg:py-32 transition-all duration-500`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl font-bold tracking-tighter text-center mb-12 md:text-4xl/tight">
-          Preguntas Frecuentes
+          ¿Tienes dudas?
         </h2>
+        <h4 className="text-md tracking-tighter text-center mb-8 md:text-2xl/tight">
+          Aquí respondemos las preguntas más frecuentes sobre nuestros servicios.
+        </h4>
         <div
           ref={ref}
           className={`max-w-3xl mx-auto ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}>

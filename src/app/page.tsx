@@ -43,8 +43,8 @@ export default function WebHomePage() {
       <PaymentMethods />
       <PictureGallery />
       <ContactUs />
-      <Partners />
       <FAQ />
+      <Partners />
       <Footer />
     </main>
   );

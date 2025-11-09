@@ -21,6 +21,15 @@ const config: Config = {
         accent_contrast: "#2e2e2f",
         color_mix_primary: "color-mix(in srgb, #a60d12 70%, transparent)",
         color_mix_secondary: "color-mix(in srgb, #aeafb1 90%, transparent)",
+      },
+      animation: {
+        'infinite-scroll': 'infinite-scroll 40s linear infinite',
+      },
+      keyframes: {
+        'infinite-scroll': {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-100%)' },
+        }
       }
     },
   },
