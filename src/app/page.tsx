@@ -13,6 +13,7 @@ import Footer from "./components/page/Footer";
 import NativePageCarousel from "./components/page/NativePageCarousel";
 import PictureGallery from "./components/page/PictureGallery";
 import WhatsAppButton from "./components/common/WhatsAppButton";
+import OurTeam from "./components/page/OurTeam";
 
 export default function WebHomePage() {
   const [loading, setLoading] = useState(true);
@@ -43,6 +44,7 @@ export default function WebHomePage() {
       <OurServices />
       <PaymentMethods />
       <PictureGallery />
+      <OurTeam />
       <ContactUs />
       <FAQ />
       <Partners />

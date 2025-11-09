@@ -73,6 +73,14 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="#equipo"
+                  className="text-gray-400 hover:text-primary transition-colors"
+                >
+                  Equipo
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="#contactanos"
                   className="text-gray-400 hover:text-primary transition-colors"
                 >

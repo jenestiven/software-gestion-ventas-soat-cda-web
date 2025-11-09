@@ -41,6 +41,7 @@ const NAV_LINKS = [
   { href: "#inicio", label: "Inicio" },
   { href: "#nosotros", label: "Nosotros" },
   { href: "#servicios", label: "Servicios" },
+  { href: "#equipo", label: "Equipo" },
   { href: "#contactanos", label: "Contactanos" },
 ];
 
