@@ -22,7 +22,7 @@ export default function Partners() {
 
   return (
     <section
-      className={`w-full py-12 md:py-24 lg:py-0 bg-white transition-all duration-500`}
+      className={`w-full py-12 md:py-24 lg:py-6 transition-all duration-500`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <div

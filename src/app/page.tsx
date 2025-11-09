@@ -35,7 +35,7 @@ export default function WebHomePage() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-start min-h-screen bg-white">
+    <main className="flex flex-col items-center justify-start min-h-screen bg-[#fefefe]">
       <PageHeader />
       <NativePageCarousel />
       <AboutUs />
