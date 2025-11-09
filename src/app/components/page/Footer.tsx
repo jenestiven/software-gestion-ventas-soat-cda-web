@@ -57,7 +57,7 @@ export default function Footer() {
                 height={40}
                 priority
               />
-              <span className="text-xl font-bold">
+              <span className="text-xl text-black font-bold">
                 CDA Moto <span className="text-primary">GP</span>
               </span>
             </Link>
@@ -76,7 +76,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-primary transition-colors"
                 >
                   Inicio
                 </Link>
@@ -84,7 +84,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-primary transition-colors"
                 >
                   Nosotros
                 </Link>
@@ -92,7 +92,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-primary transition-colors"
                 >
                   Servicios
                 </Link>
@@ -100,7 +100,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-primary transition-colors"
                 >
                   Contáctanos
                 </Link>
@@ -115,7 +115,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-primary transition-colors"
                 >
                   Política de Privacidad
                 </Link>
@@ -123,7 +123,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-primary transition-colors"
                 >
                   Términos de Servicio
                 </Link>
@@ -153,21 +153,21 @@ export default function Footer() {
           <div className="flex space-x-5">
             <Link
               href="#"
-              className="text-gray-500 hover:text-white transition-colors"
+              className="text-gray-500 hover:text-primary transition-colors"
               aria-label="Facebook"
             >
               <FacebookIcon />
             </Link>
             <Link
               href="#"
-              className="text-gray-500 hover:text-white transition-colors"
+              className="text-gray-500 hover:text-primary transition-colors"
               aria-label="Twitter"
             >
               <TwitterIcon />
             </Link>
             <Link
               href="#"
-              className="text-gray-500 hover:text-white transition-colors"
+              className="text-gray-500 hover:text-primary transition-colors"
               aria-label="Instagram"
             >
               <InstagramIcon />
