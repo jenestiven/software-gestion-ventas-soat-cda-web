@@ -1,51 +1,126 @@
 import React from "react";
-import { CarOutlined, FileTextOutlined, ToolOutlined } from "@ant-design/icons"; // Example icons, assuming Ant Design is available
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
-type ServiceCardProps = {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-};
+// Custom SVG Icons
+const SoatIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-8 w-8"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={1.5}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+    />
+  </svg>
+);
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description }) => {
-  const [ref, isVisible] = useScrollAnimation<HTMLDivElement>();
-  return (
-    <div
-      ref={ref}
-      className={`flex flex-col items-center text-center p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}>
-      <div className="text-primary text-5xl mb-4">{icon}</div>
-      <h3 className="text-xl font-bold mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
-    </div>
-  );
-};
+const CheckIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-8 w-8"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={1.5}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
+  </svg>
+);
+
+const WrenchIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-8 w-8"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={1.5}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z"
+    />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+    />
+  </svg>
+);
+
+const services = [
+  {
+    icon: <SoatIcon />,
+    title: "Venta de SOAT",
+    description:
+      "Protege tu vehículo y a terceros con nuestro servicio de venta de SOAT. Rápido, fácil y seguro.",
+  },
+  {
+    icon: <CheckIcon />,
+    title: "Revisión Técnico-Mecánica",
+    description:
+      "Asegura el buen funcionamiento de tu vehículo con nuestra revisión técnico-mecánica exhaustiva y certificada.",
+  },
+  {
+    icon: <WrenchIcon />,
+    title: "Asesorías y Mantenimiento",
+    description:
+      "Ofrecemos asesoría experta y servicios de mantenimiento para prolongar la vida útil de tu vehículo.",
+  },
+];
 
 export default function OurServices() {
+  const [ref, isVisible] = useScrollAnimation<HTMLDivElement>();
+
   return (
-    <section
-      className={`w-full py-12 md:py-24 lg:py-32 bg-white transition-all duration-500`}
-    >
+    <section className="w-full py-20 md:py-32 bg-white">
       <div className="container mx-auto px-4 md:px-6">
-        <h2 className="text-3xl font-bold tracking-tighter text-center mb-12 md:text-4xl/tight">
-          Nuestros Servicios
-        </h2>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <ServiceCard
-            icon={<FileTextOutlined />}
-            title="Venta de SOATs"
-            description="Protege tu vehículo y a terceros con nuestro servicio de venta de SOATs. Rápido, fácil y seguro."
-          />
-          <ServiceCard
-            icon={<CarOutlined />}
-            title="Revisión Técnico-Mecánica"
-            description="Asegura el buen funcionamiento de tu vehículo con nuestra revisión técnico-mecánica exhaustiva y certificada."
-          />
-          <ServiceCard
-            icon={<ToolOutlined />}
-            title="Asesorías y Mantenimiento"
-            description="Ofrecemos asesoría experta y servicios de mantenimiento para prolongar la vida útil de tu vehículo."
-          />
+        <div className="text-center mb-16">
+          <span className="text-primary font-semibold tracking-wider">
+            NUESTROS SERVICIOS
+          </span>
+          <h2 className="mt-2 text-3xl md:text-4xl font-bold tracking-tighter text-accent-contrast">
+            Todo lo que necesitas para tu vehículo
+          </h2>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+            Desde la compra de tu SOAT hasta el mantenimiento preventivo, te
+            ofrecemos soluciones integrales.
+          </p>
+        </div>
+
+        <div
+          ref={ref}
+          className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+        >
+          {services.map((service, index) => (
+            <div
+              key={index}
+              className={`bg-white p-8 rounded-2xl shadow-lg border border-transparent hover:border-primary/50 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-10"
+              }`}
+              style={{ transitionDelay: `${index * 100}ms` }}
+            >
+              <div className="bg-primary/10 text-primary rounded-xl p-4 w-max mb-6">
+                {service.icon}
+              </div>
+              <h3 className="text-xl font-bold mb-2 text-accent-contrast">
+                {service.title}
+              </h3>
+              <p className="text-gray-600">{service.description}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
