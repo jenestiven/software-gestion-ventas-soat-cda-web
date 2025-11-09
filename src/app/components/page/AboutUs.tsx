@@ -8,6 +8,7 @@ export default function AboutUs() {
 
   return (
     <section
+      id="nosotros"
       ref={ref}
       className={`w-full py-20 md:py-32 bg-gray-50/50 transition-opacity duration-1000 ${
         isVisible ? "opacity-100" : "opacity-0"

@@ -38,10 +38,10 @@ const CloseIcon = () => (
 );
 
 const NAV_LINKS = [
-  { href: "/", label: "Inicio" },
-  { href: "/nosotros", label: "Nosotros" },
-  { href: "/servicios", label: "Servicios" },
-  { href: "/contactanos", label: "Contactanos" },
+  { href: "#inicio", label: "Inicio" },
+  { href: "#nosotros", label: "Nosotros" },
+  { href: "#servicios", label: "Servicios" },
+  { href: "#contactanos", label: "Contactanos" },
 ];
 
 const NavLinks = ({
