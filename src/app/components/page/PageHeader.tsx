@@ -115,12 +115,12 @@ export default function PageHeader() {
               <NavLinks className={navLinkClasses} />
             </ul>
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => {}}
+              <Link
+                href="#quote"
                 className="bg-primary text-white font-bold px-6 py-2 rounded-xl shadow-md hover:bg-primary_transparent transition-all duration-300"
               >
                 Cotizar ahora
-              </button>
+              </Link>
               <button
                 onClick={handleLogin}
                 className="bg-accent text-accent_contrast font-bold px-6 py-2 rounded-xl shadow-md hover:bg-gray-200 transition-all duration-300"
@@ -161,12 +161,12 @@ export default function PageHeader() {
               onClick={() => setIsMobileMenuOpen(false)}
             />
             <li className="w-full pt-4">
-              <button
-                onClick={() => {}}
+              <Link
+                href="#quote"
                 className="w-full bg-primary text-white font-bold px-6 py-3 rounded-xl shadow-md hover:bg-primary_transparent transition-all duration-300"
               >
-                Cotizar ahora
-              </button>
+                Cotizar ahoraaa
+              </Link>
             </li>
             <li className="w-full">
               <button

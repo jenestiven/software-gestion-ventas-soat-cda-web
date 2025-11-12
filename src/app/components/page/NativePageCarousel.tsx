@@ -5,6 +5,7 @@ import HERO_TWO from "@/images/GP__45.webp";
 import HERO_THREE from "@/images/GP__2.webp";
 import HERO_FOUR from "@/images/GP__8.webp";
 import HERO_FIVE from "@/images/GP__7.webp";
+import Link from "next/link";
 
 interface SlideData {
   image: StaticImageData;
@@ -118,9 +119,11 @@ export default function NativePageCarousel() {
               <p className="mt-4 text-lg md:text-xl text-gray-200">
                 {slide.subtitle}
               </p>
-              <button className="mt-8 bg-primary text-white font-bold px-8 py-3 rounded-xl shadow-lg hover:bg-primary_transparent transition-all duration-300">
+              <div className="mt-8">
+              <Link href="#quote" className="bg-primary text-white font-bold px-8 py-3 rounded-xl shadow-lg hover:bg-primary_transparent transition-all duration-300">
                 Cotizar ahora
-              </button>
+              </Link>
+              </div>
             </div>
           </div>
         </div>

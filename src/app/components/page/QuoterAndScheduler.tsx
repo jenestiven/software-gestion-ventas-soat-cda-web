@@ -112,7 +112,7 @@ const SoatQuoterForm = () => {
 
 const SoatQuoter = ({ onQuoteClick }: { onQuoteClick: () => void }) => {
   return (
-    <div className="relative h-[600px] w-[900px] rounded-3xl shadow-xl overflow-hidden">
+    <div id="quote" className="relative h-[600px] w-[900px] rounded-3xl shadow-xl overflow-hidden">
       <Image
         src="/images/GP__20.webp"
         alt="SOAT"
