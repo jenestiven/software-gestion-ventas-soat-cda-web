@@ -49,7 +49,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="#inicio"
+                  href="#start"
                   className="text-gray-400 hover:text-primary transition-colors"
                 >
                   Inicio
@@ -57,7 +57,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="#nosotros"
+                  href="#us"
                   className="text-gray-400 hover:text-primary transition-colors"
                 >
                   Nosotros
@@ -65,7 +65,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="#servicios"
+                  href="#services"
                   className="text-gray-400 hover:text-primary transition-colors"
                 >
                   Servicios
@@ -73,7 +73,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="#equipo"
+                  href="#team"
                   className="text-gray-400 hover:text-primary transition-colors"
                 >
                   Equipo
@@ -81,7 +81,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="#contactanos"
+                  href="#contact"
                   className="text-gray-400 hover:text-primary transition-colors"
                 >
                   Contáctanos

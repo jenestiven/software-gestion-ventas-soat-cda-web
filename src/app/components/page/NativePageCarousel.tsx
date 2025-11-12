@@ -91,7 +91,7 @@ export default function NativePageCarousel() {
   }, [nextSlide]);
 
   return (
-    <section id="inicio" className="w-full h-[90vh] md:h-screen relative overflow-hidden">
+    <section id="start" className="w-full h-[90vh] md:h-screen relative overflow-hidden">
       {/* Slides */}
       {slidesData.map((slide, index) => (
         <div

@@ -5,6 +5,7 @@ import PageHeader from "@/app/components/page/PageHeader";
 import AboutUs from "./components/page/AboutUs";
 import Loading from "./loading";
 import OurServices from "./components/page/OurServices";
+import QuoterAndScheduler from "./components/page/QuoterAndScheduler";
 import PaymentMethods from "./components/page/PaymentMethods";
 import ContactUs from "./components/page/ContactUs";
 import Partners from "./components/page/Partners";
@@ -37,11 +38,12 @@ export default function WebHomePage() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-start min-h-screen bg-[#fefefe]">
+    <main className="flex flex-col justify-start min-h-screen bg-[#fefefe]">
       <PageHeader />
       <NativePageCarousel />
       <AboutUs />
       <OurServices />
+      <QuoterAndScheduler />
       <PaymentMethods />
       <PictureGallery />
       <OurTeam />

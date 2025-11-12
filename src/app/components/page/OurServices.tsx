@@ -83,7 +83,7 @@ export default function OurServices() {
   const [ref, isVisible] = useScrollAnimation<HTMLDivElement>();
 
   return (
-    <section id="servicios" className="w-full py-20 md:py-32 bg-white">
+    <section id="services" className="w-full py-20 md:py-32 bg-white">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
           <span className="text-primary font-semibold tracking-wider">
