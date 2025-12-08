@@ -1,2 +1,5 @@
 NEXT_PUBLIC_API_URL=https://cdamotogp.com/api/server
 NEXT_PUBLIC_COOKIE_DOMAIN=cdamotogp.com
+
+NEXT_PUBLIC_API_URL=http://localhost:3000/api/server
+NEXT_PUBLIC_COOKIE_DOMAIN=localhost
