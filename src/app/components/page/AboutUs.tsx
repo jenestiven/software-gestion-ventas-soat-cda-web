@@ -41,18 +41,19 @@ export default function AboutUs() {
             SOBRE NOSOTROS
           </span>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tighter text-accent-contrast">
-            Más de 10 años garantizando tu seguridad en la vía
+            Más de 5 años garantizando tu seguridad en la vía
           </h2>
           <p className="max-w-[600px] text-gray-600 md:text-xl/relaxed">
-            Somos un equipo de profesionales apasionados por la seguridad vial.
-            Nuestro centro de diagnóstico automotor (CDA) cuenta con la última
-            tecnología para garantizar que tu vehículo cumpla con todas las
-            normas de seguridad y emisiones.
+            Somos <strong>CDA MOTO GP</strong>, tu aliado de confianza en Cali para la Revisión Técnico Mecánica y SOAT. Sabemos lo importante que es mantener tu vehículo en regla y protegido, por eso trabajamos cada día para hacer tu experiencia más fácil y rápida.
+            <br />
+            Con años de experiencia en el sector ofrecemos un servicio profesional, incluyendo opciones de financiamiento para que nada detenga tu camino.
+            <br />
+            <strong>Porque tu seguridad y la de tu familia nos importa.</strong>
           </p>
           {/* Stats */}
           <div className="flex gap-8 pt-6">
             <div>
-              <p className="text-4xl font-bold text-primary">10+</p>
+              <p className="text-4xl font-bold text-primary">5+</p>
               <p className="text-gray-500">Años de experiencia</p>
             </div>
             <div>

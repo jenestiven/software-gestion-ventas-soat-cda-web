@@ -5,7 +5,7 @@ import THREE from "@/images/payment-methods/sistecredito.png";
 import FOUR from "@/images/payment-methods/brilla.png";
 import FIVE from "@/images/payment-methods/visa.png";
 import SIX from "@/images/payment-methods/mastercard.png";
-import SEVEN from "@/images/payment-methods/efectivo.png";
+import SEVEN from "@/images/payment-methods/efectivo.webp";
 
 import Image from "next/image";
 

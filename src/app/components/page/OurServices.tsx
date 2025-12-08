@@ -60,22 +60,22 @@ const WrenchIcon = () => (
 
 const services = [
   {
-    icon: <SoatIcon />,
-    title: "Venta de SOAT",
+    icon: <CheckIcon />,
+    title: "Revisión Técnico Mecánica",
     description:
-      "Protege tu vehículo y a terceros con nuestro servicio de venta de SOAT. Rápido, fácil y seguro.",
+      "Certifica tu vehículo con personal calificado y con equipos modernos que garantizan tu seguridad en la vía.",
   },
   {
-    icon: <CheckIcon />,
-    title: "Revisión Técnico-Mecánica",
+    icon: <SoatIcon />,
+    title: "Seguro Obligatorio de accidente de Tránsito – SOAT",
     description:
-      "Asegura el buen funcionamiento de tu vehículo con nuestra revisión técnico-mecánica exhaustiva y certificada.",
+      "Protege tu vehículo comprando tu SOAT de forma rápida y segura. Puedes comprarlo en efectivo o con nuestros métodos de financiamiento como: Brilla, Sistecredito o Addi.",
   },
   {
     icon: <WrenchIcon />,
-    title: "Asesorías y Mantenimiento",
+    title: "Revisión técnico mecánica Preventiva",
     description:
-      "Ofrecemos asesoría experta y servicios de mantenimiento para prolongar la vida útil de tu vehículo.",
+      "verifica el estado mecánico y de seguridad de tu vehículo.",
   },
 ];
 

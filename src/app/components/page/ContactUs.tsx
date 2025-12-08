@@ -89,15 +89,15 @@ export default function ContactUs() {
               </div>
               <div>
                 <label
-                  htmlFor="email"
+                  htmlFor="phone"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Correo Electrónico
+                  Teléfono
                 </label>
                 <input
-                  type="email"
-                  id="email"
-                  name="email"
+                  type="tel"
+                  id="phone"
+                  name="phone"
                   className="mt-1 block w-full border-gray-200 rounded-lg shadow-sm p-3 bg-gray-50 focus:ring-primary focus:border-primary transition"
                 />
               </div>

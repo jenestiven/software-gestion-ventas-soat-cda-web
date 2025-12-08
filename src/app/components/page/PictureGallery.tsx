@@ -31,9 +31,7 @@ export default function PictureGallery() {
           Nuestras Instalaciones
         </h2>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
-          Visita nuestras modernas instalaciones. Contamos con equipos
-          certificados y personal calificado para ofrecerte un servicio seguro,
-          confiable y orientado a la satisfacción del cliente.
+          Visita nuestras modernas instalaciones, las cuales fueron realizadas pensando en tu bienestar y comodidad durante tu tiempo de permanencia, contamos con cafetería, maquinas para tu entretenimiento, sillas cómodas y además puedes venir con tu mascota.
         </p>
 
         <div

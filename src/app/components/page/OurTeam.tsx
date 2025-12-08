@@ -6,13 +6,13 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import img1 from '@/images/GP__30.webp';
 import img2 from '@/images/GP__35.webp';
 import img3 from '@/images/GP__37.webp';
-import img4 from '@/images/GP__42.webp';
+import img4 from '@/images/GP__40.webp';
 
 const teamMembers = [
   {
     src: img1,
-    name: 'Nuestros Asesores',
-    role: 'Listos para guiarte en cada paso.',
+    name: 'Nuestras Asesoras',
+    role: 'Listas para guiarte en cada paso.',
   },
   {
     src: img2,
@@ -21,13 +21,13 @@ const teamMembers = [
   },
   {
     src: img3,
-    name: 'Equipo de Mecánicos',
+    name: 'Inspectores de Línea',
     role: 'Expertos que cuidan de tu vehículo.',
   },
   {
     src: img4,
     name: 'Familia CDA Moto GP',
-    role: 'Todos juntos con un cliente satisfecho.',
+    role: 'Todos juntos para brindarte la mejor experiencia.',
   },
 ];
 
