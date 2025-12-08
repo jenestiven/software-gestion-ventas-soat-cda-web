@@ -2,8 +2,19 @@
 
 import { useEffect, useState } from "react";
 import PageHeader from "@/app/components/page/PageHeader";
-import PageCarouselClient from "./components/page/PageCarouselClient";
+import AboutUs from "./components/page/AboutUs";
 import Loading from "./loading";
+import OurServices from "./components/page/OurServices";
+import QuoterAndScheduler from "./components/page/QuoterAndScheduler";
+import PaymentMethods from "./components/page/PaymentMethods";
+import ContactUs from "./components/page/ContactUs";
+import Partners from "./components/page/Partners";
+import FAQ from "./components/page/FAQ";
+import Footer from "./components/page/Footer";
+import NativePageCarousel from "./components/page/NativePageCarousel";
+import PictureGallery from "./components/page/PictureGallery";
+import WhatsAppButton from "./components/common/WhatsAppButton";
+import OurTeam from "./components/page/OurTeam";
 
 export default function WebHomePage() {
   const [loading, setLoading] = useState(true);
@@ -27,9 +38,20 @@ export default function WebHomePage() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-start min-h-screen">
+    <main className="flex flex-col justify-start min-h-screen bg-[#fefefe]">
       <PageHeader />
-      <PageCarouselClient />
+      <NativePageCarousel />
+      <AboutUs />
+      <OurServices />
+      <QuoterAndScheduler />
+      <PaymentMethods />
+      <PictureGallery />
+      <OurTeam />
+      <ContactUs />
+      <FAQ />
+      <Partners />
+      <Footer />
+      <WhatsAppButton />
     </main>
   );
 }

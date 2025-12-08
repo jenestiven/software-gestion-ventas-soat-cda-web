@@ -1,6 +1,11 @@
+@import "antd/dist/reset.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
 
 :root {
   --color-primary: #a60d12;
@@ -44,6 +49,13 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
 
 .ant-typography {
@@ -64,4 +76,20 @@ body {
 .ant-radio-checked .ant-radio-inner {
   background-color: color-mix(in srgb, var(--color-primary) 90%, transparent 40%) !important;
   border-color: var(--color-primary) !important;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0; /* Start invisible */
 }
