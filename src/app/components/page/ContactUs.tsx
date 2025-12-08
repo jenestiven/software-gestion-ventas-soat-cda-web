@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
@@ -43,6 +45,15 @@ const PhoneIcon = () => (
 export default function ContactUs() {
   const [ref, isVisible] = useScrollAnimation<HTMLDivElement>();
 
+  const handleWhatsAppClick = () => {
+    const phoneNumber = "573017719589";
+    const message = "Hola, me gustaría ponerme en contacto con ustedes.";
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      message
+    )}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
   return (
     <section id="contact" ref={ref} className="w-full py-20 md:py-32 bg-gray-50/50">
       <div className="container mx-auto px-4 md:px-6">
@@ -54,117 +65,35 @@ export default function ContactUs() {
             Ponte en contacto con nosotros
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
-            ¿Tienes preguntas o necesitas ayuda? Completa el formulario o
-            visítanos.
+            ¿Tienes preguntas o necesitas ayuda? Encuéntranos en nuestra sede o contáctanos directamente.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 xl:gap-16 items-start">
-          {/* Left Column: Form and Info */}
-          <div
-            className={`bg-white p-8 md:p-12 rounded-2xl shadow-2xl transition-all duration-500 ease-in-out ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-            style={{ transitionDelay: "200ms" }}
-          >
-            <h3 className="text-2xl font-bold mb-6 text-accent-contrast">
-              Envíanos un mensaje
-            </h3>
-            <form className="space-y-6">
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Nombre
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="mt-1 block w-full border-gray-200 rounded-lg shadow-sm p-3 bg-gray-50 focus:ring-primary focus:border-primary transition"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Teléfono
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  className="mt-1 block w-full border-gray-200 rounded-lg shadow-sm p-3 bg-gray-50 focus:ring-primary focus:border-primary transition"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Mensaje
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={4}
-                  className="mt-1 block w-full border-gray-200 rounded-lg shadow-sm p-3 bg-gray-50 focus:ring-primary focus:border-primary transition"
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-primary text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:bg-primary_transparent transition-all duration-300"
-              >
-                Enviar Mensaje
-              </button>
-            </form>
+        <div
+          className={`max-w-5xl mx-auto transition-all duration-500 ease-in-out ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}
+        >
+          <div className="w-full h-96 md:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d995.6401842481662!2d-76.51946563043535!3d3.4563915997823913!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e30a711ecc02335%3A0x28f191fcdb66bab5!2sCDA%20MOTO%20GP%20S.A.S!5e0!3m2!1ses!2sco!4v1762672194499!5m2!1ses!2sco"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen={true}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Ubicación de CDA Moto GP"
+            ></iframe>
           </div>
 
-          {/* Right Column: Map and Info */}
-          <div
-            className={`space-y-8 transition-all duration-500 ease-in-out ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-            style={{ transitionDelay: "400ms" }}
-          >
-            <div className="w-full h-96 rounded-2xl overflow-hidden shadow-2xl">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d995.6401842481662!2d-76.51946563043535!3d3.4563915997823913!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e30a711ecc02335%3A0x28f191fcdb66bab5!2sCDA%20MOTO%20GP%20S.A.S!5e0!3m2!1ses!2sco!4v1762672194499!5m2!1ses!2sco"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen={true}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Ubicación de CDA Moto GP"
-              ></iframe>
-            </div>
-            <div className="grid md:grid-cols-2 gap-8">
-                <div className="flex items-start gap-4">
-                    <div className="bg-primary/10 text-primary rounded-xl p-3">
-                        <LocationIcon />
-                    </div>
-                    <div>
-                        <h3 className="text-xl font-semibold text-accent-contrast">Dirección</h3>
-                        <p className="text-gray-600">Cra. 6 #26-3, COMUNA 4, Cali, Valle del Cauca</p>
-                    </div>
-                </div>
-                <div className="flex items-start gap-4">
-                    <div className="bg-primary/10 text-primary rounded-xl p-3">
-                        <PhoneIcon />
-                    </div>
-                    <div>
-                        <h3 className="text-xl font-semibold text-accent-contrast">Teléfono</h3>
-                        <p className="text-gray-600">+57 301 7719589</p>
-                    </div>
-                </div>
-            </div>
+          <div className="mt-16 text-center">
+            <button
+              onClick={handleWhatsAppClick}
+              className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 text-lg"
+            >
+              Contactar por WhatsApp
+            </button>
           </div>
         </div>
       </div>
