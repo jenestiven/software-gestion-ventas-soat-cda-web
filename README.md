@@ -1,102 +1,76 @@
-# Next + Firebase starter
+# Software Gestión Ventas SOAT & CDA
 
-![zen and the art of coding logo](https://res.cloudinary.com/dwvlpyo5f/image/upload/v1718811910/next-firebase-starter_v6dold.jpg)
+## ℹ️ Sobre el Proyecto
 
-## ℹ️ About
+Aplicación web full-stack diseñada para la gestión de ventas de SOAT y servicios de CDA (Centro de Diagnóstico Automotor). La plataforma permite a los administradores y asesores llevar un control detallado de las ventas, gestionar usuarios, y visualizar reportes.
 
-This is a full-stack web-app boilerplate starter.
+## 🚀 Tecnologías Utilizadas
 
-This is a [Next.js](https://nextjs.org/) web-app using the `app directory`, [Tailwind CSS](https://tailwindcss.com/), TypeScript, Google's [Firebase](https://firebase.google.com/) SDK and [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) for state management.
+- **Framework:** [Next.js](https://nextjs.org/) (con App Router)
+- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
+- **UI:** [Ant Design](https://ant.design/) y [Tailwind CSS](https://tailwindcss.com/)
+- **Backend y Base de Datos:** [Firebase](https://firebase.google.com/) (Firestore, Authentication, Storage)
+- **Gestión de Estado:** [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction)
+- **Visualización de Datos:** [ApexCharts](https://apexcharts.com/)
+- **Testing:** [Jest](https://jestjs.io/) y [React Testing Library](https://testing-library.com/)
 
-## 🔔 Features
+## 🏃‍➡️ Cómo Empezar
 
-### 🔐 Auth
+Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
 
-- Fully functional **Sign Up** _(email, password, and username)_, **Login** and **Forgot Password** pages
+### Prerrequisitos
 
-### 👤 Profile
+- [Node.js](https://nodejs.org/) (versión 20 o superior)
+- [pnpm](https://pnpm.io/installation)
 
-- A protected user **Profile Page** where profile details and created posts are displayed, has links to other pages and a _Log Out_ button
-- A **Profile Settings Page** where details _(email, password, username and profile image)_ can be managed
+### Instalación
 
-### 📝 Posts
+1.  **Clona el repositorio:**
 
-- A **Create Post Page** for authenticated users that includes fields for _Title, Description, Images, Location, Tags,_ and _Price_
-- A dynamic **Edit Post Page** (based on post ID) where all post attributes can be managed by the author
-- A public **Posts Page** where all user generated posts are fetched and displayed
-- A dynamic **Post Page** for individual posts
+    ```bash
+    git clone https://github.com/TU_USUARIO/TU_REPOSITORIO.git
+    cd software-gestion-ventas-soat-cda-web
+    ```
 
-### 🐻 State Management
+2.  **Instala las dependencias:**
 
-- The Zustand store syncs the frontend to the backend databases and provides a cookie 🍪 to maintain auth state
+    ```bash
+    pnpm install
+    ```
 
-## 🏃‍➡️ Getting Started
+3.  **Configura Firebase:**
+    - Crea un proyecto en la [consola de Firebase](https://console.firebase.google.com/).
+    - Registra una nueva aplicación web y obtén tus credenciales de Firebase.
+    - Renombra el archivo `.env.local.example` a `.env.local` (si no existe, créalo) y agrega tus variables de entorno de Firebase.
+    - Configura las reglas de Firestore y Storage según las necesidades de tu aplicación.
 
-- Create & Register a Firebase App
-  - From Firebase Console, "Add project" and follow setup steps
-  - From "Project Settings", register the web-app to get credentials
-- Rename `.env.example` to `.env.local`
-- Add project environment variables
-- Create Firestore Database:
+4.  **Ejecuta el servidor de desarrollo:**
 
-  - Create Firestore Collection `posts`
+    ```bash
+    pnpm run dev
+    ```
 
-    - Define data structure:
-      ```
-      title: string
-      description: string
-      tags: array of strings
-      images: array of strings (URLs to the uploaded images)
-      userId: string (reference to the user who created the post)
-      createdAt: timestamp
-      location: string
-      geoPoint: geopoint
-      price: string
-      ```
-    - Update Firestore Database Rules:
+    Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver la aplicación.
 
-      ```
-        rules_version = '2';
-        service cloud.firestore {
-        match /databases/{database}/documents {
-            match /users/{userId} {
-            allow read: if true;
-            allow write: if request.auth != null && request.auth.uid == userId;
-            }
-            match /posts/{postId} {
-            allow read: if true;
-            allow write: if request.auth != null && request.auth.uid == request.resource.data.userId;
-            allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
-            }
-        }
-        }
-      ```
+## 📝 Scripts Disponibles
 
-- Create Firebase Storage (Images)
+- `pnpm dev`: Inicia el servidor de desarrollo.
+- `pnpm build`: Compila la aplicación para producción.
+- `pnpm start`: Inicia el servidor de producción.
+- `pnpm lint`: Ejecuta el linter para verificar el código.
+- `pnpm test`: Ejecuta los tests.
 
-  - Update Storage Rules:
+## 📂 Estructura del Proyecto
 
-  ```
-    service firebase.storage {
-        match /b/{bucket}/o {
-            match /{allPaths=**} {
-            allow read: if true;
-            allow write: if request.auth != null;
-            }
-        }
-    }
-  ```
-
-### 💻 Local Development
-
-- Install dependencies
-
-```bash
-npm i
 ```
-
-- Start Node.js local development server
-
-```bash
-npm run dev
+/src
+├── app/         # Páginas y layouts de la aplicación (App Router)
+├── components/  # Componentes reutilizables de React
+├── firebase/    # Configuración del cliente y admin de Firebase
+├── hooks/       # Hooks de React personalizados
+├── lib/         # Lógica de negocio y wrappers de API
+├── services/    # Servicios para interactuar con Firebase (Firestore, Storage, etc.)
+├── store/       # Store de Zustand para gestión de estado global
+├── types/       # Definiciones de tipos de TypeScript
+└── utils/       # Funciones de utilidad
 ```
