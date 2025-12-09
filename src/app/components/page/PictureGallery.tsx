@@ -55,7 +55,7 @@ export default function PictureGallery() {
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 width={600}
                 height={600}
-                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           ))}
