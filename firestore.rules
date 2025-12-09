@@ -1,24 +1,33 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Solo el usuario autenticado puede leer su propio documento
+    // Helper function para verificar si el usuario es admin
+    function isAdmin() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Reglas para la colección 'users'
     match /users/{userId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      // Permitir crear: solo si es admin
+      allow create: if request.auth != null && isAdmin();
+      // Permitir actualizar: si es el propio usuario O si es admin
+      allow update: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      // Permitir eliminar: solo si es admin
+      allow delete: if request.auth != null && isAdmin();
     }
     
-    // Cualquier usuario autenticado puede leer las sedes de venta
+    // Reglas para la colección 'places' (sedes)
     match /places/{placeId} {
       allow read: if request.auth != null;
+      // Permitir crear, actualizar, eliminar: solo si es admin
+      allow create, update, delete: if request.auth != null && isAdmin();
     }
 
-    // Cualquier usuario autenticado puede leer y escribir ventas
+    // Reglas para la colección 'sales'
     match /sales/{saleId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if request.auth != null; // Asumiendo que cualquier usuario autenticado puede leer/escribir sus propias ventas. Si esto es solo para admins/asesores, ajusta la regla.
     }
-
-    // Puedes permitir escritura si tienes formularios tipo "editar perfil":
-    // allow write: if request.auth != null && request.auth.uid == userId;
   }
 }

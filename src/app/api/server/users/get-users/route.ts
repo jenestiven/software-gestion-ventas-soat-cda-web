@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { getUsers } from "@/services/users";
 import { NextResponse } from "next/server";
 
