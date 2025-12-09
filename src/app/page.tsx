@@ -38,7 +38,7 @@ export default function WebHomePage() {
   }
 
   return (
-    <main className="flex flex-col justify-start min-h-screen bg-[#fefefe]">
+    <main className="flex flex-col justify-start min-h-screen bg-[#fefefe] overflow-x-hidden lg:overflow-x-visible">
       <PageHeader />
       <NativePageCarousel />
       <AboutUs />
