@@ -12,7 +12,12 @@ export async function createUserApi(userData: any) {
 }
 
 export async function getUsersApi() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/get-users`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/get-users`,
+    {
+      cache: "no-store",
+    }
+  );
   if (!res.ok) throw new Error("Error obteniendo usuarios");
   return await res.json();
 }

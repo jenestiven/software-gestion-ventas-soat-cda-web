@@ -13,7 +13,10 @@ export async function createSalesPlaceApi(salesPlaceData: any) {
 
 export async function getSalesPlacesApi() {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/sales-places/get-sales-places`
+    `${process.env.NEXT_PUBLIC_API_URL}/sales-places/get-sales-places`,
+    {
+      cache: "no-store",
+    }
   );
   if (!res.ok) throw new Error("Error obteniendo lugares de venta");
   return await res.json();
