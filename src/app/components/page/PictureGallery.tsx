@@ -36,7 +36,7 @@ export default function PictureGallery() {
 
         <div
           ref={ref}
-          className="grid grid-cols-2 md:grid-cols-4 auto-rows-[250px] gap-4"
+          className="grid grid-cols-1 md:grid-cols-4 auto-rows-[250px] gap-4"
         >
           {galleryItems.map((item, index) => (
             <div
