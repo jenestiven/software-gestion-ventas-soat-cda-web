@@ -1,5 +1,6 @@
 import { deleteUser } from "@/services/users";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function DELETE(req: NextRequest) {
   try {
@@ -8,6 +9,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ message: "User ID is required" }, { status: 400 });
     }
     await deleteUser(uid);
+    revalidatePath("/admin/users");
     return NextResponse.json({ message: "User deleted successfully" }, { status: 200 });
   } catch (error: any) {
     console.error("Error deleting user:", error);
