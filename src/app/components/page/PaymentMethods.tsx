@@ -23,7 +23,7 @@ export default function PaymentMethods() {
 
   return (
     <section
-      className={`w-full md:py-12 transition-all duration-500`}
+      className={`w-full py-12 transition-all duration-500`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl font-bold tracking-tighter text-center md:text-4xl/tight">

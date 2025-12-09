@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/images/logo.png";
@@ -33,7 +33,11 @@ const CloseIcon = () => (
     stroke="currentColor"
     strokeWidth={2}
   >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M6 18L18 6M6 6l12 12"
+    />
   </svg>
 );
 
@@ -68,6 +72,17 @@ export default function PageHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollY } = useScrollEvent();
 
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isMobileMenuOpen]);
+
   const isScrolled = scrollY > 10;
 
   const handleLogin = () => {
@@ -75,7 +90,7 @@ export default function PageHeader() {
   };
 
   const headerClasses = `fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-    isScrolled ? "bg-white/80 shadow-md backdrop-blur-sm" : "bg-transparent"
+    isScrolled ? "bg-white/80 shadow-md backdrop-blur-sm": "bg-transparent"
   }`;
 
   const navLinkClasses = `font-medium transition-colors duration-300 ${
@@ -144,7 +159,7 @@ export default function PageHeader() {
 
       {/* Mobile Menu Panel */}
       <div
-        className={`fixed inset-0 z-50 bg-white transform transition-transform duration-300 ease-in-out lg:hidden ${
+        className={`w-full fixed inset-0 z-50 bg-white transform transition-transform duration-300 ease-in-out lg:hidden ${
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -161,12 +176,15 @@ export default function PageHeader() {
               onClick={() => setIsMobileMenuOpen(false)}
             />
             <li className="w-full pt-4">
-              <Link
-                href="#quote"
-                className="w-full bg-primary text-white font-bold px-6 py-3 rounded-xl shadow-md hover:bg-primary_transparent transition-all duration-300"
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  router.push("#quote");
+                }}
+                className="w-full bg-primary text-white font-bold px-6 py-3 rounded-xl shadow-md transition-all duration-300"
               >
-                Cotizar ahoraaa
-              </Link>
+                Cotizar ahora
+              </button>
             </li>
             <li className="w-full">
               <button
@@ -174,7 +192,7 @@ export default function PageHeader() {
                   setIsMobileMenuOpen(false);
                   handleLogin();
                 }}
-                className="w-full bg-accent text-accent_contrast font-bold px-6 py-3 rounded-xl shadow-md hover:bg-gray-200 transition-all duration-300"
+                className="w-full bg-accent text-accent_contrast font-bold px-6 py-3 rounded-xl shadow-md transition-all duration-300"
               >
                 Ingresar
               </button>

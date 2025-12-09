@@ -113,14 +113,14 @@ export default function NativePageCarousel() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
           <div className="absolute inset-0 container mx-auto px-4 md:px-6 flex flex-col items-start justify-center text-white">
             <div className="max-w-2xl">
-              <h2 className="text-4xl md:text-6xl font-bold !leading-tight">
+              <h2 className="text-3xl md:text-6xl font-bold !leading-tight">
                 {slide.title}
               </h2>
-              <p className="mt-4 text-lg md:text-xl text-gray-200">
+              <p className="mt-4 text-base md:text-xl text-gray-200">
                 {slide.subtitle}
               </p>
               <div className="mt-8">
-              <Link href="#quote" className="bg-primary text-white font-bold px-8 py-3 rounded-xl shadow-lg hover:bg-primary_transparent transition-all duration-300">
+              <Link href="#quote" className="bg-primary text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-primary_transparent transition-all duration-300 md:px-8">
                 Cotizar ahora
               </Link>
               </div>

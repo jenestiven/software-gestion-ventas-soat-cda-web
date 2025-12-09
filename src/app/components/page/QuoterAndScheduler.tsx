@@ -8,7 +8,7 @@ const SoatQuoter = () => {
   return (
     <div
       id="quote"
-      className="relative h-[600px] w-[900px] rounded-3xl shadow-xl overflow-hidden"
+      className="relative h-[500px] w-full max-w-[450px] md:h-[600px] md:w-[900px] md:max-w-none rounded-3xl shadow-xl overflow-hidden"
     >
       <Image
         src="/images/GP__20.webp"
@@ -18,8 +18,8 @@ const SoatQuoter = () => {
         className="z-0"
       />
       {/* Overlay for text content */}
-      <div className="absolute bottom-0 left-0 w-full md:w-2/3 lg:w-1/2 bg-white p-8 rounded-tr-3xl z-20">
-        <h3 className="text-3xl font-bold text-gray-800 mb-4 text-left">
+      <div className="absolute bottom-0 left-0 w-full md:w-2/3 lg:w-1/2 bg-white p-6 md:p-8 rounded-tr-3xl z-20">
+        <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 text-left">
           Cotiza tu SOAT
         </h3>
         <p className="text-gray-700 mb-6 text-left">
@@ -46,7 +46,7 @@ const SoatQuoter = () => {
 
 const AppointmentScheduler = () => {
   return (
-    <div className="relative h-[600px] w-[900px] rounded-3xl shadow-xl overflow-hidden">
+    <div className="relative h-[500px] w-full max-w-[450px] md:h-[600px] md:w-[900px] md:max-w-none rounded-3xl shadow-xl overflow-hidden">
       <Image
         src="/images/GP__6.webp"
         alt="Agenda tu cita"
@@ -55,8 +55,8 @@ const AppointmentScheduler = () => {
         className="z-0"
       />
       {/* Overlay for text content */}
-      <div className="absolute bottom-0 left-0 w-full md:w-2/3 lg:w-1/2 bg-white p-8 rounded-tr-3xl z-20">
-        <h3 className="text-3xl font-bold text-gray-800 mb-4 text-left">
+      <div className="absolute bottom-0 left-0 w-full md:w-2/3 lg:w-1/2 bg-white p-6 md:p-8 rounded-tr-3xl z-20">
+        <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 text-left">
           Agenda tu Cita
         </h3>
         <p className="text-gray-700 mb-6 text-left">
@@ -83,18 +83,29 @@ const AppointmentScheduler = () => {
 };
 
 const QuoterAndScheduler = () => {
+  const [isDesktop, setIsDesktop] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  useEffect(() => {
+    if (!isDesktop) return;
+
     const handleScroll = () => {
       if (!sectionRef.current) return;
 
       const { top, height } = sectionRef.current.getBoundingClientRect();
       const screenHeight = window.innerHeight;
-
       const scrollArea = height - screenHeight;
-
       const scrolled = -top;
 
       let newProgress = 0;
@@ -111,11 +122,32 @@ const QuoterAndScheduler = () => {
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isDesktop]);
 
+  if (!isDesktop) {
+    // Mobile and Tablet View: Simple Vertical Layout
+    return (
+      <section id="quote" className="py-16 lg:py-24 bg-gray-50">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">
+            Tu cotización en segundos
+          </h2>
+          <p className="max-w-2xl mx-auto text-base sm:text-lg text-gray-600 mb-12">
+            En esta sección puedes cotizar tu SOAT en simples pasos. O si lo
+            prefieres, agenda una cita para visitarnos en nuestras oficinas.
+          </p>
+        </div>
+        <div className="container mx-auto px-4 flex flex-col items-center gap-12">
+          <SoatQuoter />
+          <AppointmentScheduler />
+        </div>
+      </section>
+    );
+  }
+
+  // Desktop View: Original Scrolling Animation
   const cardWidth = 800;
   const travelDistance = cardWidth * 1.2;
-
   const card1TranslateX = -progress * travelDistance;
   const card2TranslateX = travelDistance - progress * travelDistance;
 
