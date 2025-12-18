@@ -38,7 +38,7 @@ export default function UserCreationModal({
   const [rol, setRol] = useState<"admin" | "asesor">();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const salesPlaces = useStore((state) => state.salesPlaces);
+  const salesPlaces = useStore((state) => state.salesPlaces);  
   const isEditMode = !!userToEdit;
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export default function UserCreationModal({
           name: values.name,
           tel: values.tel,
           role: values.rol,
-          sales_place: values?.sales_place || null,
+          sales_place: values.rol === "admin" ? salesPlaces.find(p => p.main_place)?.id : values?.sales_place ?? null,
           file: file ?? null,
         };
         await updateUserApi(userData);
@@ -97,7 +97,7 @@ export default function UserCreationModal({
           tel: values.tel,
           rol: values.rol,
           cc: values.cc,
-          sales_place: values?.sales_place || "",
+          sales_place: values.rol === "admin" ? salesPlaces.find(p => p.main_place)?.id : values?.sales_place ?? null,
           file: file ?? null,
         };
         await createUserApi(userData);

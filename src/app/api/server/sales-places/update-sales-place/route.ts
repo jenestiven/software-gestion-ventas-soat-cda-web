@@ -6,6 +6,6 @@ export async function PUT(request: Request) {
   const data = await request.json();
 
   const salesPlace = await updateSalesPlace(data.id, data);
-  revalidatePath("/admin/managment");
+  revalidatePath("/admin/users");
   return NextResponse.json(salesPlace);
 }
