@@ -18,16 +18,16 @@ export default function SalesByPlaceTableClient({ dataSource }: Props) {
   const betterPlace = dataSource.reduce<SalesByPlaceData | null>(
     (max, item) => (item.sales_quantity > (max?.sales_quantity ?? 0) ? item : max),
     null
-  );
+  );    
 
   useEffect(() => {
     if (betterPlace) {
       setDataForDashboard({
         betterPlaceName: betterPlace?.place_name ?? "",
         salesCount: betterPlace?.sales_quantity ?? 0,
-        totalProfit: betterPlace?.sales_profit ?? 0,
-        cash_profit: betterPlace?.cash_profit ?? 0,
-        credit_profit: betterPlace?.credit_profit ?? 0,
+        totalProfit: dataSource.reduce((acc, item) => acc + item.sales_profit, 0),
+        cash_profit: dataSource.reduce((acc, item) => acc + item.cash_profit, 0),
+        credit_profit: dataSource.reduce((acc, item) => acc + item.credit_profit, 0),
       });
     }
   }, [betterPlace]); //eslint-disable-line react-hooks/exhaustive-deps
@@ -49,13 +49,22 @@ export default function SalesByPlaceTableClient({ dataSource }: Props) {
       key: "sales_amount",
       render: (item: { sales_amount: number; growth: number }) => (
         <div className="flex items-center justify-between gap-4">
-          <span>${item.sales_amount.toLocaleString()}</span>
-          <span style={{ color: item.growth > 0 ? "green" : "red" }}>
-            {item.growth.toFixed(0)}%
-          </span>
+          <span>${item.sales_amount.toLocaleString("es-CO")}</span>
         </div>
       ),
     },
+     {
+      title: "Utilidad",
+      dataIndex: "",
+      key: "profit",
+      render: (item: { sales_profit: number }) => (
+        <div className="flex items-center justify-between gap-4">
+          <span>
+           ${item.sales_profit.toLocaleString("es-CO")}
+          </span>
+        </div>
+      ),
+    }
   ];
 
   return (

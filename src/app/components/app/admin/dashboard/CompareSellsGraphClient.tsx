@@ -20,10 +20,11 @@ const CompareSellsGraphClient: React.FC<CompareSellsGraphClientProps> = ({
   const { setDataForDashboard } = useStore();
   const [chartOptions, setChartOptions] = useState<ApexCharts.ApexOptions>({});
   const [chartSeries, setChartSeries] = useState<ApexAxisChartSeries>([]);
-
+  
   // Recupera la cantidad y el monto de ventas del mes actual
   const currentMonthData =
     salesData.monthsData[salesData.monthsData.length - 1];
+    
   const salesCurrentMonth = currentMonthData
     ? currentMonthData.sales_quantity
     : 0;

@@ -238,7 +238,7 @@ export async function getAllSales(): Promise<Sale[]> {
 
 export async function getSalesByPayMethod(): Promise<SalesByPayMethodData[]> {
   try {
-    const sales = await getAllSales();
+    const sales = await getAllSales();    
 
     const now = new Date();
     const currentMonth = now.getMonth();
@@ -249,17 +249,19 @@ export async function getSalesByPayMethod(): Promise<SalesByPayMethodData[]> {
 
     const currentMonthSales: Record<
       string,
-      { sales_quantity: number; sales_amount: number }
+      { sales_quantity: number; sales_amount: number; profit: number }
     > = {};
+    
     const lastMonthSales: Record<
       string,
-      { sales_quantity: number; sales_amount: number }
+      { sales_quantity: number; sales_amount: number; profit: number }
     > = {};
 
     sales.forEach((sale) => {
       const saleDate = new Date(sale.created_at);
       const payMethodId = sale.payment_method_id;
       const totalPayed = sale.sale_sumary.total_payed;
+      const profit = sale.sale_sumary.profit || 0;
 
       if (
         saleDate.getMonth() === currentMonth &&
@@ -269,19 +271,22 @@ export async function getSalesByPayMethod(): Promise<SalesByPayMethodData[]> {
           currentMonthSales[payMethodId] = {
             sales_quantity: 0,
             sales_amount: 0,
+            profit: 0,
           };
         }
         currentMonthSales[payMethodId].sales_quantity += 1;
         currentMonthSales[payMethodId].sales_amount += totalPayed;
+        currentMonthSales[payMethodId].profit += profit;
       } else if (
         saleDate.getMonth() === lastMonth &&
         saleDate.getFullYear() === lastMonthYear
       ) {
         if (!lastMonthSales[payMethodId]) {
-          lastMonthSales[payMethodId] = { sales_quantity: 0, sales_amount: 0 };
+          lastMonthSales[payMethodId] = { sales_quantity: 0, sales_amount: 0, profit: 0 };
         }
         lastMonthSales[payMethodId].sales_quantity += 1;
         lastMonthSales[payMethodId].sales_amount += totalPayed;
+        lastMonthSales[payMethodId].profit += profit;
       }
     });
 
@@ -289,21 +294,7 @@ export async function getSalesByPayMethod(): Promise<SalesByPayMethodData[]> {
 
     for (const payMethodId in currentMonthSales) {
       const currentSales = currentMonthSales[payMethodId];
-      const lastSales = lastMonthSales[payMethodId] || {
-        sales_quantity: 0,
-        sales_amount: 0,
-      };
-
-      let growth = 0;
-      if (lastSales.sales_amount > 0) {
-        growth =
-          ((currentSales.sales_amount - lastSales.sales_amount) /
-            lastSales.sales_amount) *
-          100;
-      } else if (currentSales.sales_amount > 0) {
-        growth = 100; // Infinite growth from zero
-      }
-
+   
       // Find the payment method name from any sale that uses this payMethodId
       const payMethodName =
         sales.find((s) => s.payment_method_id === payMethodId)
@@ -313,8 +304,8 @@ export async function getSalesByPayMethod(): Promise<SalesByPayMethodData[]> {
         id: payMethodId,
         pay_method: payMethodName,
         sales_quantity: currentSales.sales_quantity,
-        sales_amount: currentSales.sales_amount,
-        growth: parseFloat(growth.toFixed(2)),
+        sales_amount: Math.round(currentSales.sales_amount),
+        profit: Math.round(currentSales.profit),
       });
     }
 
@@ -342,7 +333,7 @@ export async function getBetterSellers(): Promise<BetterSeller[]> {
         name: string;
         photo: string;
         place: string;
-        currentMonth: { sells: number; amount: number };
+        currentMonth: { sells: number; amount: number; profit: number };
         lastMonth: { sells: number; amount: number };
       }
     > = {};
@@ -354,13 +345,14 @@ export async function getBetterSellers(): Promise<BetterSeller[]> {
       const asesorPhoto = sale.asesor_data.thumnail;
       const salesPlace = sale.sale_place.place_name;
       const totalPayed = sale.sale_sumary.total_payed;
+      const profit = sale.sale_sumary.profit || 0;
 
       if (!asesorSales[asesorId]) {
         asesorSales[asesorId] = {
           name: asesorName,
           photo: asesorPhoto,
           place: salesPlace,
-          currentMonth: { sells: 0, amount: 0 },
+          currentMonth: { sells: 0, amount: 0, profit: 0 },
           lastMonth: { sells: 0, amount: 0 },
         };
       }
@@ -371,6 +363,7 @@ export async function getBetterSellers(): Promise<BetterSeller[]> {
       ) {
         asesorSales[asesorId].currentMonth.sells += 1;
         asesorSales[asesorId].currentMonth.amount += totalPayed;
+        asesorSales[asesorId].currentMonth.profit += profit;
       } else if (
         saleDate.getMonth() === lastMonth &&
         saleDate.getFullYear() === lastMonthYear
@@ -397,8 +390,8 @@ export async function getBetterSellers(): Promise<BetterSeller[]> {
           name: data.name,
           photo: data.photo,
           sells: data.currentMonth.sells,
-          amount: data.currentMonth.amount,
-          growth: parseFloat(growth.toFixed(2)),
+          amount: Math.round(data.currentMonth.amount),
+          profit: Math.round(data.currentMonth.profit),
           place: data.place,
         };
       })
@@ -458,7 +451,7 @@ export async function getSalesByPlace(): Promise<SalesByPlaceData[]> {
           placeSales[placeId].currentMonth.sales_amount += totalPayed;
           placeSales[placeId].currentMonth.sales_profit += profit;
 
-          if (sale.payment_method_id === 'efectivo' || sale.payment_method_id === 'datafono') {
+          if (sale.payment_method_id === 'cash' || sale.payment_method_id === 'dataphone') {
             placeSales[placeId].currentMonth.cash_profit += profit;
           } else if (['sistecredito', 'addi', 'brilla'].includes(sale.payment_method_id)) {
             placeSales[placeId].currentMonth.credit_profit += profit;
@@ -471,7 +464,7 @@ export async function getSalesByPlace(): Promise<SalesByPlaceData[]> {
           placeSales[placeId].lastMonth.sales_amount += totalPayed;
           placeSales[placeId].lastMonth.sales_profit += profit;
 
-          if (sale.payment_method_id === 'efectivo' || sale.payment_method_id === 'datafono') {
+          if (sale.payment_method_id === 'cash' || sale.payment_method_id === 'dataphone') {
             placeSales[placeId].lastMonth.cash_profit += profit;
           } else if (['sistecredito', 'addi', 'brilla'].includes(sale.payment_method_id)) {
             placeSales[placeId].lastMonth.credit_profit += profit;
@@ -496,11 +489,10 @@ export async function getSalesByPlace(): Promise<SalesByPlaceData[]> {
           id,
           place_name: data.place_name,
           sales_quantity: data.currentMonth.sales_quantity,
-          sales_profit: data.currentMonth.sales_profit,
-          sales_amount: data.currentMonth.sales_amount,
-          cash_profit: data.currentMonth.cash_profit,
-          credit_profit: data.currentMonth.credit_profit,
-          growth: parseFloat(growth.toFixed(2)),
+          sales_profit: Math.round(data.currentMonth.sales_profit),
+          sales_amount: Math.round(data.currentMonth.sales_amount),
+          cash_profit: Math.round(data.currentMonth.cash_profit),
+          credit_profit: Math.round(data.currentMonth.credit_profit),
         };
       })
       .sort((a, b) => b.sales_amount - a.sales_amount); // Sort by current month's sales amount (descending)
@@ -524,7 +516,7 @@ export async function getSalesForMonths(): Promise<SalesForMonthsResponse> {
     for (let i = 0; i < 6; i++) {
       const month = dayjs().subtract(i, "month");
       const monthKey = month.format("YYYY-MM");
-      salesByMonth[monthKey] = { sales_quantity: 0, sales_amount: 0 };
+      salesByMonth[monthKey] = { sales_quantity: 0, sales_amount: 0};
     }
 
     sales.forEach((sale) => {
@@ -540,7 +532,7 @@ export async function getSalesForMonths(): Promise<SalesForMonthsResponse> {
       .map((monthKey) => ({
         month: dayjs(monthKey).format("MMM YY"),
         sales_quantity: salesByMonth[monthKey].sales_quantity,
-        sales_amount: parseFloat(salesByMonth[monthKey].sales_amount.toFixed(2)),
+        sales_amount: Math.round(salesByMonth[monthKey].sales_amount),
       }));
 
     const currentMonthSalesAmount = salesByMonth[currentMonthKey]?.sales_amount || 0;
@@ -552,7 +544,7 @@ export async function getSalesForMonths(): Promise<SalesForMonthsResponse> {
     } else if (currentMonthSalesAmount > 0) {
       growth = 100; // Infinite growth from zero
     }
-
+    
     return {
       monthsData,
       growth: parseFloat(growth.toFixed(2)),

@@ -15,7 +15,7 @@ type Props = {};
 const { Title, Text } = Typography;
 
 export default function SellsCardSection({}: Props) {
-  const data = useStore((state) => state.dataForDashboard);    
+  const data = useStore((state) => state.dataForDashboard);
 
   return (
     <>
@@ -37,6 +37,7 @@ export default function SellsCardSection({}: Props) {
             {data.totalSalesAmount.toLocaleString("es-CO", {
               style: "currency",
               currency: "COP",
+              roundingPriority: "morePrecision",
             })}
           </Title>
         </span>
@@ -52,25 +53,35 @@ export default function SellsCardSection({}: Props) {
       </article>
       <article className="stat-3 admin-stat-card">
         <span className="flex items-center justify-between w-full">
-          <RiseOutlined className="icon earning" />
-          <Title level={3} style={{ margin: 0 }}>
-            {data.totalProfit.toLocaleString("es-CO", {
-              style: "currency",
-              currency: "COP",
-            })}
-          </Title>
-        </span>
-        <span className="flex items-center justify-between w-full">
-          <Text type="secondary">Utilidad</Text>
+          <div className="flex flex-col items-center">
+            <RiseOutlined className="icon earning" />
+            <Text type="secondary">Utilidad</Text>
+          </div>
           <span className="flex flex-col items-end">
-            <Text type="secondary">Credito {data.credit_profit.toLocaleString("es-CO", {
-              style: "currency",
-              currency: "COP",
-            })}</Text>
-            <Text type="secondary">Efectivo {data.cash_profit.toLocaleString("es-CO", {
-              style: "currency",
-              currency: "COP",
-            })}</Text>
+            <Text type="secondary">General</Text>{" "}
+            <Title level={3} style={{ margin: 0 }}>
+              {data.totalProfit.toLocaleString("es-CO", {
+                style: "currency",
+                currency: "COP",
+                roundingPriority: "morePrecision",
+              })}
+            </Title>
+            <Text type="secondary">Crédito</Text>{" "}
+            <Title level={3} style={{ margin: 0 }}>
+              {data.credit_profit.toLocaleString("es-CO", {
+                style: "currency",
+                currency: "COP",
+                roundingPriority: "morePrecision",
+              })}
+            </Title>
+            <Text type="secondary">Efectivo</Text>{" "}
+            <Title level={3} style={{ margin: 0 }}>
+              {data.cash_profit.toLocaleString("es-CO", {
+                style: "currency",
+                currency: "COP",
+                roundingPriority: "morePrecision",
+              })}
+            </Title>
           </span>
         </span>
       </article>
@@ -91,7 +102,7 @@ export default function SellsCardSection({}: Props) {
           </span>
         </article>
         <article className="stat-4 flex flex-col items-center justify-center bg-white p-5 rounded-lg shadow w-6/12">
-          <span className="flex flex-col items-center">
+          <span className="flex flex-col items-center text-center">
             <Text strong>{data.betterPlaceName}</Text>
             <Text type="secondary" className="text-xs mt-1">
               Sede con más ventas

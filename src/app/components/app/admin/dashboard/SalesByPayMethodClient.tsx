@@ -27,11 +27,20 @@ export default function SalesByPayMethodClient({ dataSource }: Props) {
       title: "Monto",
       dataIndex: "",
       key: "sales_amount",
-      render: (item: { sales_amount: number; growth: number }) => (
+      render: (item: { sales_amount: number}) => (
         <div className="flex items-center justify-between gap-4">
-          <span>${item.sales_amount.toLocaleString()}</span>
-          <span style={{ color: item.growth > 0 ? "green" : "red" }}>
-            {item.growth.toFixed(0)}%
+          <span>${item.sales_amount.toLocaleString("es-CO")}</span>
+        </div>
+      ),
+    },
+    {
+      title: "Utilidad",
+      dataIndex: "",
+      key: "profit",
+      render: (item: { profit: number }) => (
+        <div className="flex items-center justify-between gap-4">
+          <span>
+            ${item.profit.toLocaleString("es-CO")}
           </span>
         </div>
       ),

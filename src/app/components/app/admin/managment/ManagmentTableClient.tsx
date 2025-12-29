@@ -103,6 +103,8 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
       );
     }
     if (filters.payment_method) {
+      console.log(filters.payment_method);
+      
       data = data.filter(
         (item) => item.payment_method_id === filters.payment_method
       );
@@ -422,7 +424,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
             allowClear
           >
             <Option value="cash">Efectivo</Option>
-            <Option value="credit_card">Datafono</Option>
+            <Option value="dataphone">Datafono</Option>
             <Option value="brilla">Brilla</Option>
             <Option value="sistecredito">Sistecredito</Option>
             <Option value="addi">Addi</Option>

@@ -354,7 +354,7 @@ export interface SalesByPayMethodData {
   pay_method: string;
   sales_quantity: number;
   sales_amount: number;
-  growth: number;
+  profit: number;
 }
 
 export interface BetterSeller {
@@ -363,7 +363,7 @@ export interface BetterSeller {
   photo: string;
   sells: number;
   amount: number;
-  growth: number;
+  growth?: number;
   place: string;
 }
 
@@ -375,7 +375,7 @@ export interface SalesByPlaceData {
   sales_profit: number;
   cash_profit: number;
   credit_profit: number;
-  growth: number;
+  growth?: number;
 }
 
 export interface SalesForMonthsData {

@@ -2,8 +2,8 @@
 
 import React, { useEffect } from "react";
 import { Avatar, Table, Typography } from "antd";
-import "@/app/admin/page.css";
 import useStore from "@/store";
+import "@/app/admin/page.css";
 
 const { Title } = Typography;
 
@@ -55,10 +55,17 @@ export default function BetterSellerTableClient({ dataSource }: Props) {
       key: "amount",
       render: (item: { amount: number; growth: number }) => (
         <div className="flex items-center justify-between gap-4">
-          <span>${item.amount.toLocaleString()}</span>
-          <span style={{ color: item.growth > 0 ? "green" : "red" }}>
-            {item.growth.toFixed(0)}%
-          </span>
+          <span>${item.amount.toLocaleString("es-CO")}</span>
+        </div>
+      ),
+    },
+    {
+      title: "Utilidad",
+      dataIndex: "",
+      key: "profit",
+      render: (item: { profit: number }) => (
+        <div className="flex items-center justify-between gap-4">
+          <span>${item.profit.toLocaleString("es-CO")}</span>
         </div>
       ),
     },
@@ -72,7 +79,7 @@ export default function BetterSellerTableClient({ dataSource }: Props) {
       <Table
         dataSource={dataSource}
         columns={columns}
-        pagination={false}
+        pagination={{ pageSize: 3 }}
         rowKey={(record) => record.id || record.name}
       />
     </div>
