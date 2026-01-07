@@ -1,10 +1,12 @@
-import { Suspense } from "react";
-import SellsCardSection from "../components/app/admin/dashboard/SellsCardSection";
-import CompareSellsGraph from "../components/app/admin/dashboard/CompareSellsGraph";
-import BetterSellerTable from "../components/app/admin/dashboard/BetterSellerTable";
-import SalesByPlaceTable from "../components/app/admin/dashboard/SalesByPlaceTable";
-import SalesByPayMethod from "../components/app/admin/dashboard/SalesByPayMethod";
-import "./page.css";
+'use client';
+
+import { Suspense, useState } from 'react';
+import SellsCardSection from '../components/app/admin/dashboard/SellsCardSection';
+import CompareSellsGraph from '../components/app/admin/dashboard/CompareSellsGraph';
+import BetterSellerTable from '../components/app/admin/dashboard/BetterSellerTable';
+import SalesByPlaceTable from '../components/app/admin/dashboard/SalesByPlaceTable';
+import SalesByPayMethod from '../components/app/admin/dashboard/SalesByPayMethod';
+import './page.css';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,36 +22,37 @@ const HeaderSkeleton = () => (
   <div className="w-full h-16 bg-gray-100 animate-pulse rounded-lg grid grid-cols-4 gap-4">
     <div
       className="col-span-2 flex items-center justify-center"
-      style={{ width: "70%" }}
+      style={{ width: '70%' }}
     >
       <div className="w-full h-3 bg-gray-200 rounded" />
     </div>
     <div
       className="col-span-2 flex items-center justify-center"
-      style={{ width: "30%" }}
+      style={{ width: '30%' }}
     >
       <div className="w-full h-3 bg-gray-200 rounded" />
     </div>
   </div>
 );
 
-export default async function AdminHomePage({}: Props) {
+export default function AdminHomePage({}: Props) {
+  const [dateRange, setDateRange] = useState(null);
   return (
     <div className="admin-home-page">
       <Suspense fallback={<HeaderSkeleton />}>
-        <SellsCardSection />
+        <SellsCardSection onDateRangeChange={setDateRange} />
       </Suspense>
       <Suspense fallback={<Skeleton />}>
-        <CompareSellsGraph />
+        <CompareSellsGraph dateRange={dateRange} />
       </Suspense>
       <Suspense fallback={<Skeleton />}>
-        <BetterSellerTable />
+        <BetterSellerTable dateRange={dateRange} />
       </Suspense>
       <Suspense fallback={<Skeleton />}>
-        <SalesByPlaceTable />
+        <SalesByPlaceTable dateRange={dateRange} />
       </Suspense>
       <Suspense fallback={<Skeleton />}>
-        <SalesByPayMethod />
+        <SalesByPayMethod dateRange={dateRange} />
       </Suspense>
     </div>
   );

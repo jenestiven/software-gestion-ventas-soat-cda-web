@@ -1,10 +1,10 @@
-import React from "react";
-import BetterSellerTableClient from "./BetterSellerTableClient";
-import { getBetterSellers } from "@/services/sales/sales";
+import React from 'react';
+import BetterSellerTableClient from './BetterSellerTableClient';
 
-type Props = {};
+type Props = {
+  dateRange: any;
+};
 
-export default async function BetterSellerTable({}: Props) {
-  const sells = await getBetterSellers();
-  return <BetterSellerTableClient dataSource={sells} />;
+export default function BetterSellerTable({ dateRange }: Props) {
+  return <BetterSellerTableClient dataSource={[]} dateRange={dateRange} />;
 }

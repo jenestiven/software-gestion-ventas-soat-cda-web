@@ -6,45 +6,59 @@ import {
   PieChartOutlined,
   RiseOutlined,
 } from "@ant-design/icons";
-import { Typography } from "antd";
+import { DatePicker, Divider, Typography } from "antd";
 import useStore from "@/store";
 import Logo from "@/images/logo.png";
 
-type Props = {};
+type Props = {
+  onDateRangeChange: (dates: any) => void;
+};
 
 const { Title, Text } = Typography;
+const { RangePicker } = DatePicker;
 
-export default function SellsCardSection({}: Props) {
+export default function SellsCardSection({ onDateRangeChange }: Props) {
   const data = useStore((state) => state.dataForDashboard);
 
   return (
     <>
-      <article className="stat-1 admin-stat-card">
-        <span className="flex items-center justify-between w-full">
-          <PieChartOutlined className="icon utility" />
-          <Title level={3} style={{ margin: 0 }}>
-            {data.totalSalesCount}
-          </Title>
-        </span>
-        <span className="flex items-center justify-between w-full">
-          <Text type="secondary">Cantidad de ventas</Text>
-        </span>
-      </article>
+      <div className="flex flex-col justify-between gap-4">
+        <div className="flex flex-col">
+          <Title level={5}>Filtro por mes</Title>
+          <RangePicker
+            placeholder={['Fecha inicio', 'Fecha fin']}
+            onChange={(dates) => onDateRangeChange(dates)}
+          />
+        </div>
+        <article className="stat-1 admin-stat-card">
+          <span className="flex items-center justify-between w-full">
+            <PieChartOutlined className="icon utility" />
+            <Title level={3} style={{ margin: 0 }}>
+              {data.totalSalesCount}
+            </Title>
+          </span>
+          <span className="flex items-center justify-between w-full">
+            <Text type="secondary">Cantidad de ventas</Text>
+          </span>
+        </article>
+      </div>
       <article className="stat-2 admin-stat-card">
         <span className="flex items-center justify-between w-full">
           <DollarOutlined className="icon earning" />
           <Title level={3} style={{ margin: 0 }}>
-            {data.totalSalesAmount.toLocaleString("es-CO", {
-              style: "currency",
-              currency: "COP",
-              roundingPriority: "morePrecision",
+            {data.totalSalesAmount.toLocaleString('es-CO', {
+              style: 'currency',
+              currency: 'COP',
+              roundingPriority: 'morePrecision',
             })}
           </Title>
         </span>
         <span className="flex items-center justify-between w-full">
           <Text type="secondary">Total en ventas</Text>
           <Text
-            className={`stat-growth ${data.amountGrowth < 0 ? "negative" : ""}`}
+            className={`stat-growth ${
+              data.amountGrowth < 0 ? 'negative' : ''
+            }`}
             type="secondary"
           >
             {data.amountGrowth.toFixed(0)}%
@@ -58,28 +72,29 @@ export default function SellsCardSection({}: Props) {
             <Text type="secondary">Utilidad</Text>
           </div>
           <span className="flex flex-col items-end">
-            <Text type="secondary">General</Text>{" "}
+            <Text type="secondary">General</Text>{' '}
             <Title level={3} style={{ margin: 0 }}>
-              {data.totalProfit.toLocaleString("es-CO", {
-                style: "currency",
-                currency: "COP",
-                roundingPriority: "morePrecision",
+              {data.totalProfit.toLocaleString('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                roundingPriority: 'morePrecision',
               })}
             </Title>
-            <Text type="secondary">Crédito</Text>{" "}
+            <Divider className="my-1" />
+            <Text type="secondary">Crédito</Text>{' '}
             <Title level={3} style={{ margin: 0 }}>
-              {data.credit_profit.toLocaleString("es-CO", {
-                style: "currency",
-                currency: "COP",
-                roundingPriority: "morePrecision",
+              {data.credit_profit.toLocaleString('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                roundingPriority: 'morePrecision',
               })}
             </Title>
-            <Text type="secondary">Efectivo</Text>{" "}
+            <Text type="secondary">Efectivo</Text>{' '}
             <Title level={3} style={{ margin: 0 }}>
-              {data.cash_profit.toLocaleString("es-CO", {
-                style: "currency",
-                currency: "COP",
-                roundingPriority: "morePrecision",
+              {data.cash_profit.toLocaleString('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                roundingPriority: 'morePrecision',
               })}
             </Title>
           </span>
@@ -90,8 +105,8 @@ export default function SellsCardSection({}: Props) {
           className="stat-4 flex flex-col items-center justify-center bg-white p-5 rounded-lg shadow w-6/12"
           style={{
             backgroundImage: `url(${data.betterSellerImage ?? Logo})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
           }}
         >
           <span className="flex flex-col items-center bg-white/80 rounded p-2">
