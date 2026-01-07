@@ -85,6 +85,7 @@ export default function SalesByPlaceTableClient({ dataSource }: Props) {
         pagination={{ pageSize: 5 }}
         rowKey="place_name"
         summary={summary}
+        scroll={{ x: 'max-content' }}
       />
     </div>
   );

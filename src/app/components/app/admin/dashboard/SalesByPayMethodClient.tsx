@@ -75,6 +75,7 @@ export default function SalesByPayMethodClient({ dataSource }: Props) {
         pagination={false}
         rowKey="pay_method"
         summary={summary}
+        scroll={{ x: 'max-content' }}
       />
     </div>
   );

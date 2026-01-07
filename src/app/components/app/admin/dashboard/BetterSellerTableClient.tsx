@@ -78,7 +78,9 @@ export default function BetterSellerTableClient({
       key: 'name',
       render: (text: string, record: any) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar src={record.photo} style={{ marginRight: 8 }} />
+          <Avatar src={record.photo} style={{ marginRight: 8 }}>
+            {record.photo ? '' : text.charAt(0).toUpperCase()}
+          </Avatar>
           {text}
         </div>
       ),
@@ -146,6 +148,7 @@ export default function BetterSellerTableClient({
         rowKey={(record) => record.id || record.name}
         loading={loading}
         summary={summary}
+        scroll={{ x: 'max-content' }}
       />
     </div>
   );
