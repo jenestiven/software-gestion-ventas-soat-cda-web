@@ -33,6 +33,7 @@ import { generateSalesReport } from "@/utils/excel";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebase/firebaseClient";
 import { useRouter } from "next/navigation";
+import CreateNewSellHandler from "../../asesor/modal/CreateNewSellHandler";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -386,12 +387,17 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
-      <Button icon={<AuditOutlined />} type="primary" onClick={() => setIsConciliationModalVisible(true)}>
-        Conciliar facturas
-      </Button>
-      <Button className="ml-4" icon={<DownloadOutlined />} type="dashed" onClick={() => setIsReportModalOpen(true)}>
-        Descargar reporte de ventas
-      </Button>
+      <div className="flex justify-between">
+        <div>
+          <Button icon={<AuditOutlined />} type="primary" onClick={() => setIsConciliationModalVisible(true)}>
+            Conciliar facturas
+          </Button>
+          <Button className="ml-4" icon={<DownloadOutlined />} type="dashed" onClick={() => setIsReportModalOpen(true)}>
+            Descargar reporte de ventas
+          </Button>
+        </div>
+        <CreateNewSellHandler />
+      </div>
       <Divider />
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col>
