@@ -95,25 +95,44 @@ export default function BetterSellerTableClient({
     },
     {
       title: 'Monto',
-      dataIndex: '',
+      dataIndex: 'amount',
       key: 'amount',
-      render: (item: { amount: number; growth: number }) => (
+      render: (amount: number) => (
         <div className="flex items-center justify-between gap-4">
-          <span>${item.amount.toLocaleString('es-CO')}</span>
+          <span>${amount.toLocaleString('es-CO')}</span>
         </div>
       ),
     },
     {
       title: 'Utilidad',
-      dataIndex: '',
+      dataIndex: 'profit',
       key: 'profit',
-      render: (item: { profit: number }) => (
+      render: (profit: number) => (
         <div className="flex items-center justify-between gap-4">
-          <span>${item.profit.toLocaleString('es-CO')}</span>
+          <span>${profit.toLocaleString('es-CO')}</span>
         </div>
       ),
     },
   ];
+
+  const summary = () => {
+    const totalAmount = sellersData.reduce((sum, item) => sum + item.amount, 0);
+    const totalProfit = sellersData.reduce((sum, item) => sum + item.profit, 0);
+
+    return (
+      <Table.Summary.Row>
+        <Table.Summary.Cell index={0} colSpan={3}>
+          <strong>Total</strong>
+        </Table.Summary.Cell>
+        <Table.Summary.Cell index={3}>
+          <strong>${totalAmount.toLocaleString('es-CO')}</strong>
+        </Table.Summary.Cell>
+        <Table.Summary.Cell index={4}>
+          <strong>${totalProfit.toLocaleString('es-CO')}</strong>
+        </Table.Summary.Cell>
+      </Table.Summary.Row>
+    );
+  };
 
   return (
     <div className="better-seller table-card shadow bg-white rounded-lg">
@@ -126,6 +145,7 @@ export default function BetterSellerTableClient({
         pagination={{ pageSize: 3 }}
         rowKey={(record) => record.id || record.name}
         loading={loading}
+        summary={summary}
       />
     </div>
   );
