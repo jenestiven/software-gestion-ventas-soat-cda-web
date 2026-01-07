@@ -11,6 +11,10 @@ import {
 import { uploadBase64FileAndGetUrl } from "../storage";
 import { getSalesPlaces } from "../sales-places";
 import dayjs from "dayjs";
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 export async function createSale(saleData: Omit<Sale, "id" | "receipts">) {
   try {
@@ -604,9 +608,178 @@ export async function addReceiptToSale(
 
     await saleRef.update({ receipts: updatedReceipts, receipt_status: "delivered" });
 
-    return newReceipt;
-  } catch (error) {
-    console.error("Error adding receipt to sale:", error);
-    throw new Error("Unable to add receipt to sale");
-  }
-}
+        return newReceipt;
+
+      } catch (error) {
+
+        console.error("Error adding receipt to sale:", error);
+
+        throw new Error("Unable to add receipt to sale");
+
+      }
+
+    }
+
+    
+
+    export async function getSalesByYear(): Promise<Record<string, SalesForMonthsData[]>> {
+
+    
+
+      try {
+
+    
+
+        const sales = await getAllSales();
+
+    
+
+        const salesByYear: Record<string, Record<string, { sales_quantity: number; sales_amount: number; profit: number }>> = {};
+
+    
+
+    
+
+    
+
+        sales.forEach((sale) => {
+
+    
+
+          const saleDate = dayjs(sale.created_at);
+
+    
+
+          const year = saleDate.format('YYYY');
+
+    
+
+          const month = saleDate.format('MMM');
+
+    
+
+    
+
+    
+
+          if (!salesByYear[year]) {
+
+    
+
+            salesByYear[year] = {};
+
+    
+
+            for (let i = 0; i < 12; i++) {
+
+    
+
+              const monthName = dayjs().month(i).format('MMM');
+
+    
+
+              salesByYear[year][monthName] = { sales_quantity: 0, sales_amount: 0, profit: 0 };
+
+    
+
+            }
+
+    
+
+          }
+
+    
+
+          
+
+    
+
+          salesByYear[year][month].sales_quantity += 1;
+
+    
+
+          salesByYear[year][month].sales_amount += sale.sale_sumary.total_payed;
+
+    
+
+          salesByYear[year][month].profit += sale.sale_sumary.profit || 0;
+
+    
+
+        });
+
+    
+
+    
+
+    
+
+        const result: Record<string, SalesForMonthsData[]> = {};
+
+    
+
+        for (const year in salesByYear) {
+
+    
+
+          result[year] = Object.keys(salesByYear[year])
+
+    
+
+            .map((month) => ({
+
+    
+
+              month,
+
+    
+
+              sales_quantity: salesByYear[year][month].sales_quantity,
+
+    
+
+              sales_amount: Math.round(salesByYear[year][month].sales_amount),
+
+    
+
+              profit: Math.round(salesByYear[year][month].profit),
+
+    
+
+            }))
+
+    
+
+            .sort((a, b) => dayjs(a.month, 'MMM').month() - dayjs(b.month, 'MMM').month());
+
+    
+
+        }
+
+    
+
+    
+
+    
+
+        return result;
+
+    
+
+      } catch (error) {
+
+    
+
+        console.error('Error getting sales by year:', error);
+
+    
+
+        throw new Error('Unable to get sales by year');
+
+    
+
+      }
+
+    
+
+    }

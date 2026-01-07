@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { Avatar, Table, Typography } from 'antd';
-import useStore from '@/store';
 import '@/app/admin/page.css';
 
 const { Title } = Typography;
@@ -16,7 +15,6 @@ export default function BetterSellerTableClient({
   dataSource,
   dateRange,
 }: Props) {
-  const { setDataForDashboard } = useStore();
   const [sellersData, setSellersData] = useState(dataSource);
   const [loading, setLoading] = useState(true); // Start with loading true
 
@@ -62,14 +60,6 @@ export default function BetterSellerTableClient({
         setLoading(false);
       });
   }, []);
-
-
-  const betterSeller = sellersData.reduce(
-    (max, item) => (item.sells > (max?.sells ?? 0) ? item : max),
-    null
-  );
-
-
 
   const columns = [
     {
