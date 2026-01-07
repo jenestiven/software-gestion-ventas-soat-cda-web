@@ -20,17 +20,7 @@ export default function SalesByPlaceTableClient({ dataSource }: Props) {
     null
   );    
 
-  useEffect(() => {
-    if (betterPlace) {
-      setDataForDashboard({
-        betterPlaceName: betterPlace?.place_name ?? "",
-        salesCount: betterPlace?.sales_quantity ?? 0,
-        totalProfit: dataSource.reduce((acc, item) => acc + item.sales_profit, 0),
-        cash_profit: dataSource.reduce((acc, item) => acc + item.cash_profit, 0),
-        credit_profit: dataSource.reduce((acc, item) => acc + item.credit_profit, 0),
-      });
-    }
-  }, [betterPlace]); //eslint-disable-line react-hooks/exhaustive-deps
+
 
   const columns = [
     {

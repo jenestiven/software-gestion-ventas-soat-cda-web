@@ -32,15 +32,7 @@ const CompareSellsGraphClient: React.FC<CompareSellsGraphClientProps> = ({
     ? currentMonthData.sales_amount
     : 0;
 
-  useEffect(() => {
-    if (salesCurrentMonth && amountCurrentMonth) {
-      setDataForDashboard({
-        totalSalesCount: salesCurrentMonth,
-        totalSalesAmount: amountCurrentMonth,
-        amountGrowth: salesData.growth,
-      });
-    }
-  }, [salesCurrentMonth, amountCurrentMonth]); //eslint-disable-line react-hooks/exhaustive-deps
+
 
   useEffect(() => {
     if (salesData.monthsData.length === 0) return;

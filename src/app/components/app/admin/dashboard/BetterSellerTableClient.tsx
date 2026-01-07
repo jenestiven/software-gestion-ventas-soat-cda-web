@@ -69,14 +69,7 @@ export default function BetterSellerTableClient({
     null
   );
 
-  useEffect(() => {
-    if (betterSeller) {
-      setDataForDashboard({
-        betterSellerImage: betterSeller?.photo ?? '',
-        betterSellerName: betterSeller?.name ?? '',
-      });
-    }
-  }, [betterSeller, setDataForDashboard]);
+
 
   const columns = [
     {

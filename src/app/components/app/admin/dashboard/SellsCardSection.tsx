@@ -24,7 +24,7 @@ export default function SellsCardSection({ onDateRangeChange }: Props) {
     <>
       <div className="flex flex-col justify-between gap-4">
         <div className="flex flex-col">
-          <Title level={5}>Filtro por mes</Title>
+          <Title level={5}>Filtrar por fecha</Title>
           <RangePicker
             placeholder={['Fecha inicio', 'Fecha fin']}
             onChange={(dates) => onDateRangeChange(dates)}
@@ -49,7 +49,8 @@ export default function SellsCardSection({ onDateRangeChange }: Props) {
             {data.totalSalesAmount.toLocaleString('es-CO', {
               style: 'currency',
               currency: 'COP',
-              roundingPriority: 'morePrecision',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
             })}
           </Title>
         </span>
@@ -77,7 +78,8 @@ export default function SellsCardSection({ onDateRangeChange }: Props) {
               {data.totalProfit.toLocaleString('es-CO', {
                 style: 'currency',
                 currency: 'COP',
-                roundingPriority: 'morePrecision',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
               })}
             </Title>
             <Divider className="my-1" />
@@ -86,7 +88,8 @@ export default function SellsCardSection({ onDateRangeChange }: Props) {
               {data.credit_profit.toLocaleString('es-CO', {
                 style: 'currency',
                 currency: 'COP',
-                roundingPriority: 'morePrecision',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
               })}
             </Title>
             <Text type="secondary">Efectivo</Text>{' '}
@@ -94,7 +97,8 @@ export default function SellsCardSection({ onDateRangeChange }: Props) {
               {data.cash_profit.toLocaleString('es-CO', {
                 style: 'currency',
                 currency: 'COP',
-                roundingPriority: 'morePrecision',
+                maximumFractionDigits: 0,
+                minimumFractionDigits: 0,
               })}
             </Title>
           </span>
