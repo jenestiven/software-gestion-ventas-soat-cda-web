@@ -385,7 +385,7 @@ export interface SalesForMonthsData {
   month: string;
   sales_quantity: number;
   sales_amount: number;
-  profit: number;
+  profit?: number;
 }
 
 export interface SalesForMonthsResponse {
