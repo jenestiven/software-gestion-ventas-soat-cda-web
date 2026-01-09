@@ -137,6 +137,8 @@ export async function getSalesByAsesor(asesorId: string): Promise<Sell[]> {
         place_profit: saleData.sale_sumary.place_total_gains,
         payment_method: saleData.payment_method_name,
         doc_state: saleData.receipt_status || "pending", // Default to 'pending' if null
+        receipt_required: saleData.receipt_required,
+        payment_method_id: saleData.payment_method_id,
       });
     });
     return sales;
@@ -195,6 +197,11 @@ export async function getStatsByAsesor(asesorId: string) {
       (acc, sale) => acc + (sale?.place_profit ?? 0),
       0
     );
+
+    const mainProfit = salesCurrentMonth.reduce(
+      (acc, sale) => acc + (sale?.profit ?? 0),
+      0
+    );
     const totalUtilityLastMonth = salesLastMonth.reduce(
       (acc, sale) => acc + (sale?.place_profit ?? 0),
       0
@@ -215,6 +222,7 @@ export async function getStatsByAsesor(asesorId: string) {
     return {
       totalSalesValue: Math.round(totalSalesCurrentMonth),
       netEarnings: Math.round(netEarningsCurrentMonth),
+      mainProfit: mainProfit,
       salesGrowth,
       salesQuantity: salesCurrentMonth.length,
       earningsGrowth: netEarningsGrowth,

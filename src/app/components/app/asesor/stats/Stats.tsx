@@ -1,6 +1,5 @@
 "use client";
 
-import "@/app/asesor/page.css";
 import {
   DollarOutlined,
   PieChartOutlined,
@@ -10,6 +9,7 @@ import {
 import { Typography } from "antd";
 import React from "react";
 import { AsesorStats } from "@/types/types";
+import "@/app/asesor/page.css";
 
 const { Title, Text } = Typography;
 
@@ -46,6 +46,7 @@ export default function Stats({
   salesGrowth = 0,
   salesQuantity = 0,
   earningsGrowth = 0,
+  mainProfit = 0,
 }: AsesorStats) {
   const stats: StatCardProps[] = [
     {
@@ -56,13 +57,19 @@ export default function Stats({
     {
       icon: <ShoppingOutlined className="icon sell" />,
       title: "Total en ventas del mes",
-      value: `$${Number(totalSalesValue).toLocaleString()}`,
+      value: `$${Number(totalSalesValue).toLocaleString("es-CO", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })}`,
       growth: salesGrowth,
     },
     {
       icon: <RiseOutlined className="icon earning" />,
       title: "Ganancias en el mes",
-      value: `$${Number(netEarnings).toLocaleString()}`,
+      value: `$${Number(netEarnings === 0 && totalSalesValue > 0 ? mainProfit: netEarnings).toLocaleString("es-CO", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })}`,
       growth: earningsGrowth,
     },
   ];

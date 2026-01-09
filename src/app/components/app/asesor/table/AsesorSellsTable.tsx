@@ -201,13 +201,13 @@ export default function AsesorSellsTable({ data }: Props) {
       title: 'Valor SOAT',
       dataIndex: 'soat_value',
       key: 'soat_value',
-      render: (item: number) => <span>${item.toLocaleString()}</span>,
+      render: (item: number) => <span>${item.toLocaleString("es-CO")}</span>,
     },
     {
       title: 'Valor de venta',
       dataIndex: 'total_value',
       key: 'total_value',
-      render: (item: number) => <span>${item.toLocaleString()}</span>,
+      render: (item: number) => <span>${item.toLocaleString("es-CO")}</span>,
     },
     {
       title: 'Método de pago',
@@ -222,11 +222,14 @@ export default function AsesorSellsTable({ data }: Props) {
       title: 'Comprobante',
       dataIndex: 'doc_state',
       key: 'doc_state',
-      render: (item: string) => (
-        <Tag color={item === 'pending' ? 'volcano' : 'green'}>
-          {item === 'pending' ? 'Pendiente' : 'Completado'}
-        </Tag>
-      ),
+      render: (item: string, record: Sell) => {
+        if (!record.receipt_required) return null;
+        return (
+          <Tag color={item === 'pending' ? 'volcano' : 'green'}>
+            {item === 'pending' ? 'Pendiente' : 'Completado'}
+          </Tag>
+        );
+      },
       filters: [
         { text: 'Pendiente', value: 'pending' },
         { text: 'Completado', value: 'completed' },
@@ -236,16 +239,19 @@ export default function AsesorSellsTable({ data }: Props) {
     {
       title: 'Acciones',
       key: 'actions',
-      render: (_, record) => (
-        <span className="flex gap-2">
-          <Tooltip title="Subir comprobante">
-            <Button
-              icon={<CloudUploadOutlined />}
-              onClick={() => showUploadModal(record.id)}
-            />
-          </Tooltip>
-        </span>
-      ),
+      render: (_, record: Sell) => {
+        if (!record.receipt_required) return null;
+        return (
+          <span className="flex gap-2">
+            <Tooltip title="Subir comprobante">
+              <Button
+                icon={<CloudUploadOutlined />}
+                onClick={() => showUploadModal(record.id)}
+              />
+            </Tooltip>
+          </span>
+        );
+      },
     },
   ];
 

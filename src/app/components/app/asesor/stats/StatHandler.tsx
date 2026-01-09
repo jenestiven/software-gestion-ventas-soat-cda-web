@@ -20,6 +20,7 @@ export default async function StatHandler({}: Props) {
     salesGrowth: 0,
     salesQuantity: 0,
     earningsGrowth: 0,
+    mainProfit: 0,
   };
 
   if (!sessionCookie) {

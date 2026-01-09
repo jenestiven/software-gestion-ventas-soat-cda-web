@@ -204,13 +204,16 @@ export interface Sell {
   fixed_commission?: number; 
   profit?: number; 
   place_profit?: number;
-  asesor_sale_commission?: number; 
+  asesor_sale_commission?: number;
+  receipt_required?: boolean;
+  payment_method_id?: string;
 }
 export interface AsesorStats {
   totalSalesValue: number;
   netEarnings: number;
   salesGrowth: number;
   salesQuantity: number;
+  mainProfit: number;
   earningsGrowth: number;
 };
 export interface Sale {
