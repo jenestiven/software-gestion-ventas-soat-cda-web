@@ -37,7 +37,6 @@ export default function CreateNewSellHandler() {
         try {
           const tariffSchedule = await getTariffScheduleApi();          
           const placeData = await getSalesPlaceByIdApi(user.sales_place_id);
-          console.log(placeData);
           
           setTariffSchedule(tariffSchedule);
           setSalesPlace(placeData);
@@ -48,7 +47,7 @@ export default function CreateNewSellHandler() {
     };
 
     getInitialData();
-  }, [user]);
+  }, []);
 
   const paymentsMethods: PaymentMethod[] = PAYMENTS_METHODS.map(
     (method: { id: string; name: string; description: string }) => {

@@ -70,9 +70,7 @@ const ManagmentTableClient: React.FC<ManagmentTableClientProps> = ({
   }, []);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "sales"), (snapshot) => {
-      console.log("Received sales snapshot with", snapshot.docs.length, "documents");
-      
+    const unsubscribe = onSnapshot(collection(db, "sales"), (snapshot) => {      
       const salesData = snapshot.docs.map(
         (doc) =>
           ({

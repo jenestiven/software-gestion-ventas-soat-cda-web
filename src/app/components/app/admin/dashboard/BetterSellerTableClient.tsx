@@ -19,7 +19,6 @@ export default function BetterSellerTableClient({
   const [loading, setLoading] = useState(true); // Start with loading true
 
   useEffect(() => {
-    console.log('Rango de fechas recibido:', dateRange);
     setLoading(true);
     let year, month, endYear, endMonth;
 
