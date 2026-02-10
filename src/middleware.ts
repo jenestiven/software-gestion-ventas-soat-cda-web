@@ -5,7 +5,8 @@ export function middleware(request: NextRequest) {
 
   if (!sessionCookie) {
     console.log("MIDDLEWARE | Redirecting to /auth: No session cookie");
-    return NextResponse.redirect(new URL("/auth", request.url));
+    //return NextResponse.redirect(new URL("/auth", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // If session cookie exists, allow the request to proceed.

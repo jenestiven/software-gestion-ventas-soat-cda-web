@@ -32,7 +32,7 @@ export default function HomeLayout({
     if (user.role === "asesor") {
       router.push("/asesor");
     } else if (user.role !== "admin") {
-      router.push("/auth");
+      router.push("/");
     }
   }, [user, router]);
 

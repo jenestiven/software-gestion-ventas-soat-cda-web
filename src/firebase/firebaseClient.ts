@@ -37,7 +37,7 @@ const logout = async () => {
   try {
     await signOut(auth);
     // Call the server-side logout API to clear the session cookie
-    window.location.href = "/auth"; // Redirect to login page after logout
+    window.location.href = "/"; // Redirect to login page after logout
     await fetch("/api/server/logout", {
       method: "POST",
     });
