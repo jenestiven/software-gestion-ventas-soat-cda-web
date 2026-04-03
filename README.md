@@ -28,7 +28,7 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
 1.  **Clona el repositorio:**
 
     ```bash
-    git clone https://github.com/TU_USUARIO/TU_REPOSITORIO.git
+    git clone https://github.com/jenestiven/software-gestion-ventas-soat-cda-web.git
     cd software-gestion-ventas-soat-cda-web
     ```
 
